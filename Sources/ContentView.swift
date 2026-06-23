@@ -204,6 +204,11 @@ struct ContentView: View {
         .contentShape(Rectangle())
         .onTapGesture(count: 2) { engine.play(index: idx) }
         .onTapGesture(count: 1) { engine.select(idx) }
+        .contextMenu {
+            Button(role: .destructive) { engine.remove(at: idx) } label: {
+                Label("Remove from Queue", systemImage: "trash")
+            }
+        }
     }
 
     // MARK: Helpers

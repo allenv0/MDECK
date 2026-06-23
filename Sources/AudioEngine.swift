@@ -270,6 +270,31 @@ final class AudioEngine: ObservableObject {
         load(index: p, autoplay: true)
     }
 
+    func remove(at index: Int) {
+        guard playlist.indices.contains(index) else { return }
+        let wasCurrent = currentIndex == index
+        playlist.remove(at: index)
+        func adjust(_ idx: Int?) -> Int? {
+            guard let i = idx else { return nil }
+            if i == index { return nil }
+            return i > index ? i - 1 : i
+        }
+        if wasCurrent {
+            stopEngineOnly()
+            isPlaying = false
+            file = nil
+            currentIndex = nil
+            currentTime = 0
+            duration = 0
+            bands = bands.map { _ in 0 }
+            level = 0
+        } else {
+            currentIndex = adjust(currentIndex)
+        }
+        selectedIndex = adjust(selectedIndex)
+        persist()
+    }
+
     private func randomOtherIndex(from i: Int) -> Int {
         guard playlist.count > 1 else { return i }
         var r = i
