@@ -81,6 +81,16 @@ struct DotText: View {
     }
     private var totalHeight: CGFloat { CGFloat(DotFont.h) * cell }
 
+    // Geometry helpers for layout (e.g. marquee).
+    static func width(_ text: String, dot: CGFloat, gap: CGFloat, spacing: CGFloat) -> CGFloat {
+        guard !text.isEmpty else { return 0 }
+        let cell = dot + gap
+        let charWidth = CGFloat(DotFont.w) * cell
+        let glyphGap = gap + spacing
+        return CGFloat(text.count) * charWidth + CGFloat(text.count - 1) * glyphGap
+    }
+    static func height(dot: CGFloat, gap: CGFloat) -> CGFloat { CGFloat(DotFont.h) * (dot + gap) }
+
     var body: some View {
         Canvas { ctx, _ in
             var x: CGFloat = 0
@@ -101,5 +111,48 @@ struct DotText: View {
             }
         }
         .frame(width: totalWidth, height: totalHeight)
+    }
+}
+
+// Scrolls the dot-matrix text horizontally when it overflows the available width.
+struct MarqueeDotText: View {
+    let text: String
+    var dot: CGFloat = 4
+    var gap: CGFloat = 2
+    var spacing: CGFloat = 5
+    var color: Color = Theme.dotOn
+    var speed: CGFloat = 36      // points per second
+    var ghost: Bool = false
+
+    private var contentW: CGFloat { DotText.width(text, dot: dot, gap: gap, spacing: spacing) }
+    private var h: CGFloat { DotText.height(dot: dot, gap: gap) }
+    private var glyph: some View { DotText(text: text, dot: dot, gap: gap, spacing: spacing, color: color, ghost: ghost) }
+
+    var body: some View {
+        GeometryReader { geo in
+            let avail = geo.size.width
+            let gapBetween = max(40, avail * 0.35)
+            let period = max(0.5, Double((contentW + gapBetween) / speed))
+            Group {
+                if contentW <= avail {
+                    glyph
+                } else {
+                    TimelineView(.animation) { tl in
+                        let t = tl.date.timeIntervalSinceReferenceDate
+                        let phase = t.truncatingRemainder(dividingBy: period) / period
+                        let x = -CGFloat(phase) * (contentW + gapBetween)
+                        HStack(spacing: gapBetween) {
+                            glyph
+                            glyph
+                        }
+                        .offset(x: x)
+                    }
+                    .frame(width: avail, alignment: .leading)
+                    .clipped()
+                }
+            }
+            .frame(width: avail, height: h, alignment: .leading)
+        }
+        .frame(height: h)
     }
 }

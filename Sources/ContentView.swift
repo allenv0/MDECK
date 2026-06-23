@@ -52,8 +52,9 @@ struct ContentView: View {
     private var nowPlaying: some View {
         Panel(label: "Now Playing") {
             VStack(alignment: .leading, spacing: 12) {
-                DotText(text: shortened(engine.currentTrack?.title ?? "NO SIGNAL", 16),
-                        dot: 3.6, gap: 1.8, spacing: 4, color: Theme.dotOn)
+                MarqueeDotText(text: (engine.currentTrack?.title ?? "NO SIGNAL").uppercased(),
+                               dot: 3.6, gap: 1.8, spacing: 4, color: Theme.dotOn)
+                    .id(engine.currentIndex ?? -1)
                 Text((engine.currentTrack?.artist ?? "—").uppercased())
                     .font(.grotesk(13, .semibold)).foregroundStyle(Theme.ink)
                 Text((engine.currentTrack?.album ?? "—").uppercased())
