@@ -38,8 +38,8 @@ struct WaveHistory: View {
         Canvas { ctx, size in
             guard capacity > 0 else { return }
             let cw = size.width / CGFloat(capacity)
-            let bw = cw * 0.5
-            let radius = bw * 0.4
+            let bw = cw * 0.62
+            let radius = bw * 0.45
             let offset = capacity - levels.count        // right-align newest
             for (idx, lv) in levels.enumerated() {
                 let i = offset + idx

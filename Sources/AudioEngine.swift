@@ -26,7 +26,7 @@ final class AudioEngine: ObservableObject {
     @Published var bands: [Float] = Array(repeating: 0, count: 16)
     @Published var level: Float = 0          // overall RMS level 0...1
     @Published var levels: [Float] = []      // rolling history of level for the waveform
-    let levelCapacity = 44
+    let levelCapacity = 80
     private var tickCount = 0
 
     var currentTrack: Track? { currentIndex.flatMap { playlist.indices.contains($0) ? playlist[$0] : nil } }
@@ -219,7 +219,7 @@ final class AudioEngine: ObservableObject {
 
         // Sample the level into the rolling waveform history (~7.5 Hz).
         tickCount += 1
-        if tickCount % 4 == 0 {
+        if tickCount % 3 == 0 {
             levels.append(level)
             if levels.count > levelCapacity { levels.removeFirst(levels.count - levelCapacity) }
         }
