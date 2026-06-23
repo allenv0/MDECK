@@ -266,7 +266,9 @@ final class AudioEngine: ObservableObject {
             let meanPower = sum / Float(z - a)
             // Normalize to ~0...1 amplitude (zvmags is unscaled power for an N-pt zrip FFT).
             let amp = sqrtf(meanPower) * 2 / Float(fftSize)
-            let db = 20 * log10f(amp + 1e-7)
+            // Spectral tilt: lift higher bands so bass doesn't dominate the left side.
+            let tilt = Float(b) * 1.7
+            let db = 20 * log10f(amp + 1e-7) + tilt
             // Map a -58dB...-12dB window onto the meter so peaks rarely peg.
             let norm = max(0, min(1, (db + 58) / 46))
             out[b] = norm
