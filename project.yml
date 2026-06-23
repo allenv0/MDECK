@@ -1,0 +1,47 @@
+name: DotMP3
+options:
+  bundleIdPrefix: com.moerdowo
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.0"
+    DEVELOPMENT_TEAM: ""
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_HARDENED_RUNTIME: YES
+targets:
+  DotMP3:
+    type: application
+    platform: macOS
+    sources:
+      - Sources
+    info:
+      path: Resources/Info.plist
+      properties:
+        CFBundleName: DotMP3
+        CFBundleDisplayName: DotMP3
+        CFBundleShortVersionString: "1.0"
+        CFBundleVersion: "1"
+        LSMinimumSystemVersion: "14.0"
+        NSHumanReadableCopyright: ""
+        NSMainNibFile: ""
+        NSPrincipalClass: NSApplication
+        LSApplicationCategoryType: public.app-category.music
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoads: true
+    entitlements:
+      path: Resources/DotMP3.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.files.user-selected.read-only: true
+        com.apple.security.assets.music.read-only: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.moerdowo.DotMP3
+        GENERATE_INFOPLIST_FILE: NO
+        COMBINE_HIDPI_IMAGES: YES
+        ENABLE_PREVIEWS: YES
+        CODE_SIGN_ENTITLEMENTS: Resources/DotMP3.entitlements
