@@ -48,9 +48,10 @@ struct ContentView: View {
                     .opacity(engine.isPlaying ? (on ? 1 : 0.12) : 1)
             }
             Spacer()
-            Text("AUDIO · TELEMETRY")
-                .font(.mono(9)).tracking(3).foregroundStyle(Theme.inkFaint)
             statusDot
+            Text("PLAYLIST")
+                .font(.mono(9)).tracking(2).foregroundStyle(Theme.inkDim)
+                .padding(.leading, 8)
             GridToggle(on: $showPlaylist)
         }
         .frame(height: 28)
