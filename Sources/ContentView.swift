@@ -85,7 +85,7 @@ struct ContentView: View {
         Panel(label: "Transport") {
             VStack(spacing: 16) {
                 HStack(alignment: .bottom) {
-                    DotText(text: fmt(engine.currentTime), dot: 6, gap: 3, color: Theme.dotOn)
+                    DotText(text: fmt(engine.currentTime), dot: 4, gap: 2, color: Theme.dotOn)
                     Spacer()
                     DotText(text: fmt(engine.duration), dot: 4, gap: 2, color: Theme.inkDim)
                 }
