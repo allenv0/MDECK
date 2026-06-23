@@ -80,13 +80,24 @@ struct GlyphButton: View {
     }
 
     private func drawGlyph(ctx: GraphicsContext, size: CGSize) {
-        // Render an 8-wide x 8-tall bitmap into the button as dots.
+        // Render an 8-wide x 8-tall bitmap, centered on its FILLED pixels (not the full grid).
         let grid = bitmap()
         let g = grid.count
         let cw = size.width * 0.5 / CGFloat(g)
         let d = cw * 0.74
-        let originX = (size.width - cw * CGFloat(g)) / 2 + cw/2
-        let originY = (size.height - cw * CGFloat(g)) / 2 + cw/2
+
+        var minC = g, maxC = -1, minR = g, maxR = -1
+        for (r, row) in grid.enumerated() {
+            for (c, bit) in row.enumerated() where bit == 1 {
+                minC = min(minC, c); maxC = max(maxC, c)
+                minR = min(minR, r); maxR = max(maxR, r)
+            }
+        }
+        guard maxC >= 0 else { return }
+        let contentW = CGFloat(maxC - minC + 1) * cw
+        let contentH = CGFloat(maxR - minR + 1) * cw
+        let originX = (size.width - contentW) / 2 + cw/2 - CGFloat(minC) * cw
+        let originY = (size.height - contentH) / 2 + cw/2 - CGFloat(minR) * cw
         let col: Color = accent ? .white : Theme.ink
         for (r, row) in grid.enumerated() {
             for (c, bit) in row.enumerated() where bit == 1 {
