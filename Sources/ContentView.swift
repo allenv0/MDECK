@@ -260,7 +260,7 @@ struct GridToggle: View {
                 let span = size.width - pad * 2
                 let cell = span / CGFloat(n)
                 let s = cell * 0.62
-                let cellColor: Color = on ? .white : Theme.orange   // blends into orange bg when off
+                let cellColor: Color = on ? Theme.orange : .white   // blends into orange bg when on
                 for r in 0..<n {
                     for c in 0..<n {
                         let cx = pad + cell * (CGFloat(c) + 0.5)
@@ -272,10 +272,10 @@ struct GridToggle: View {
                 }
             }
             .frame(width: 26, height: 26)
-            .background(on ? Theme.panel : Theme.orange)
+            .background(on ? Theme.orange : Theme.panel)
             .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
             .overlay(RoundedRectangle(cornerRadius: 6, style: .continuous)
-                .stroke(Theme.panelStroke, lineWidth: on ? 1 : 0))
+                .stroke(Theme.panelStroke, lineWidth: on ? 0 : 1))
         }
         .buttonStyle(.plain)
         .help(on ? "Hide queue" : "Show queue")
