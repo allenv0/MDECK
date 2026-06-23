@@ -27,13 +27,13 @@ struct ContentView: View {
 
     private var header: some View {
         HStack(alignment: .center) {
-            DotText(text: "DOTMP3", dot: 2.4, gap: 1.4, spacing: 3, color: Theme.dotOn)
+            DotText(text: "DOTMP3", dot: 1.8, gap: 1.1, spacing: 2.4, color: Theme.dotOn)
             // brand red, exactly once — blinks while playing
             TimelineView(.periodic(from: .now, by: 0.45)) { tl in
                 let on = Int(tl.date.timeIntervalSinceReferenceDate / 0.45) % 2 == 0
                 Rectangle()
                     .fill(Theme.red)
-                    .frame(width: 5, height: 5)
+                    .frame(width: 4, height: 4)
                     .opacity(engine.isPlaying ? (on ? 1 : 0.12) : 1)
             }
             Spacer()
@@ -82,9 +82,9 @@ struct ContentView: View {
         Panel(label: "Transport") {
             VStack(spacing: 16) {
                 HStack(alignment: .bottom) {
-                    DotText(text: fmt(engine.currentTime), dot: 4, gap: 2, color: Theme.dotOn)
+                    DotText(text: fmt(engine.currentTime), dot: 3, gap: 1.5, color: Theme.dotOn)
                     Spacer()
-                    DotText(text: fmt(engine.duration), dot: 4, gap: 2, color: Theme.inkDim)
+                    DotText(text: fmt(engine.duration), dot: 3, gap: 1.5, color: Theme.inkDim)
                 }
                 Scrubber(value: engine.currentTime, total: max(engine.duration, 0.01)) { t in
                     engine.seek(to: t)
