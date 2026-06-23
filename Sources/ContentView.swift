@@ -108,7 +108,7 @@ struct ContentView: View {
         HStack(spacing: 10) {
             Text("VOL").font(.mono(9)).tracking(2).foregroundStyle(Theme.inkFaint)
             VolumeDots(value: $engine.volume)
-                .frame(width: 120, height: 16)
+                .frame(width: 168, height: 14)
         }
     }
 
@@ -225,18 +225,33 @@ struct Scrubber: View {
 
 struct VolumeDots: View {
     @Binding var value: Float
+
+    // Warm segment palette: bright orange (left) fading to dark brown (right/unlit).
+    private static let onHot  = Color(red: 0.96, green: 0.56, blue: 0.26)
+    private static let onCool = Color(red: 0.86, green: 0.36, blue: 0.12)
+    private static let off    = Color(red: 0.24, green: 0.12, blue: 0.05)
+
     var body: some View {
         GeometryReader { geo in
             let w = geo.size.width
-            let dots = 10
+            let segs = 7
             Canvas { ctx, size in
-                let lit = Int((Float(dots) * value).rounded())
-                for i in 0..<dots {
-                    let x = (CGFloat(i) + 0.5) * (size.width / CGFloat(dots))
+                let lit = Int((Float(segs) * value).rounded())
+                let cell = size.width / CGFloat(segs)
+                let bw = cell * 0.84
+                let gap = cell - bw
+                for i in 0..<segs {
                     let on = i < lit
-                    let d: CGFloat = 5
-                    ctx.fill(Path(ellipseIn: CGRect(x: x-d/2, y: size.height/2 - d/2, width: d, height: d)),
-                             with: .color(on ? Theme.dotOn : Theme.dotOff))
+                    let x = CGFloat(i) * cell + gap / 2
+                    let rect = CGRect(x: x, y: 0, width: bw, height: size.height)
+                    let color: Color
+                    if on {
+                        let t = lit > 1 ? Double(i) / Double(lit - 1) : 0   // bright → cool across active region
+                        color = Self.lerp(Self.onHot, Self.onCool, t)
+                    } else {
+                        color = Self.off
+                    }
+                    ctx.fill(Path(rect), with: .color(color))   // sharp corners, no radius
                 }
             }
             .contentShape(Rectangle())
@@ -244,5 +259,14 @@ struct VolumeDots: View {
                 value = Float(min(1, max(0, g.location.x / w)))
             })
         }
+    }
+
+    private static func lerp(_ a: Color, _ b: Color, _ t: Double) -> Color {
+        let ca = NSColor(a).usingColorSpace(.sRGB) ?? .orange
+        let cb = NSColor(b).usingColorSpace(.sRGB) ?? .orange
+        let f = CGFloat(max(0, min(1, t)))
+        return Color(red: Double(ca.redComponent + (cb.redComponent - ca.redComponent) * f),
+                     green: Double(ca.greenComponent + (cb.greenComponent - ca.greenComponent) * f),
+                     blue: Double(ca.blueComponent + (cb.blueComponent - ca.blueComponent) * f))
     }
 }
