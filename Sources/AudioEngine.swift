@@ -3,6 +3,8 @@ import AVFoundation
 import Accelerate
 import AppKit
 
+enum RepeatMode { case off, all, one }
+
 struct Track: Identifiable, Equatable {
     let id = UUID()
     let url: URL
@@ -29,6 +31,8 @@ final class AudioEngine: ObservableObject {
     }
     @Published var bands: [Float] = Array(repeating: 0, count: 16)
     @Published var level: Float = 0          // overall RMS level 0...1
+    @Published var repeatMode: RepeatMode = .off
+    @Published var shuffle: Bool = false
     @Published var levels: [Float] = []      // rolling history of level for the waveform
     let levelCapacity = 80
     private var tickCount = 0
@@ -234,19 +238,42 @@ final class AudioEngine: ObservableObject {
         level = 0
     }
 
-    func next() {
-        guard let i = currentIndex else { return }
-        let n = i + 1
-        if playlist.indices.contains(n) { load(index: n, autoplay: true) }
-        else { pause(); seek(to: 0) }
+    func next() { advance(auto: false) }
+
+    func cycleRepeat() {
+        switch repeatMode {
+        case .off: repeatMode = .all
+        case .all: repeatMode = .one
+        case .one: repeatMode = .off
+        }
+    }
+
+    private func advance(auto: Bool) {
+        guard let i = currentIndex, !playlist.isEmpty else { return }
+        if auto && repeatMode == .one { seek(to: 0); play(); return }
+        var n = shuffle ? randomOtherIndex(from: i) : i + 1
+        if !playlist.indices.contains(n) {
+            if repeatMode == .all { n = shuffle ? randomOtherIndex(from: i) : 0 }
+            else { pause(); seek(to: 0); return }
+        }
+        load(index: n, autoplay: true)
     }
 
     func prev() {
-        guard let i = currentIndex else { return }
+        guard let i = currentIndex, !playlist.isEmpty else { return }
         if currentTime > 3 { seek(to: 0); return }
-        let p = i - 1
-        if playlist.indices.contains(p) { load(index: p, autoplay: true) }
-        else { seek(to: 0) }
+        var p = shuffle ? randomOtherIndex(from: i) : i - 1
+        if !playlist.indices.contains(p) {
+            if repeatMode == .all { p = playlist.count - 1 } else { seek(to: 0); return }
+        }
+        load(index: p, autoplay: true)
+    }
+
+    private func randomOtherIndex(from i: Int) -> Int {
+        guard playlist.count > 1 else { return i }
+        var r = i
+        while r == i { r = Int.random(in: 0..<playlist.count) }
+        return r
     }
 
     func seek(to time: Double) {
@@ -276,7 +303,7 @@ final class AudioEngine: ObservableObject {
     private func handleSegmentEnd() {
         // Fired when the scheduled buffer drains. Only treat as track-end if we're near the end.
         guard isPlaying else { return }
-        if currentTime >= duration - 0.5 { next() }
+        if currentTime >= duration - 0.5 { advance(auto: true) }
     }
 
     private func stopEngineOnly() {

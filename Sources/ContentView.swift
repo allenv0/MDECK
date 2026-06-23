@@ -103,12 +103,14 @@ struct ContentView: View {
                     engine.seek(to: t)
                 }
                 .frame(height: 16)
-                HStack(spacing: 14) {
+                HStack(spacing: 12) {
                     GlyphButton(kind: .prev) { engine.prev() }
                     GlyphButton(kind: engine.isPlaying ? .pause : .play, accent: true, size: 56) {
                         engine.togglePlay()
                     }
                     GlyphButton(kind: .next) { engine.next() }
+                    ModeButton(label: "SHUF", active: engine.shuffle) { engine.shuffle.toggle() }
+                    ModeButton(label: repeatLabel, active: engine.repeatMode != .off) { engine.cycleRepeat() }
                     Spacer()
                     volume
                 }
@@ -193,12 +195,19 @@ struct ContentView: View {
         .clipShape(RoundedRectangle(cornerRadius: 6))
         .overlay(RoundedRectangle(cornerRadius: 6)
             .stroke(Theme.panelStroke, lineWidth: isSel ? 1 : 0))
+        .overlay(alignment: .top) {
+            if draggingIndex != nil && draggingIndex == idx {
+                Rectangle().fill(Theme.orange).frame(height: 2)
+            }
+        }
         .contentShape(Rectangle())
         .onTapGesture(count: 2) { engine.play(index: idx) }
         .onTapGesture(count: 1) { engine.select(idx) }
     }
 
     // MARK: Helpers
+
+    private var repeatLabel: String { engine.repeatMode == .one ? "LOOP·1" : "LOOP" }
 
     private func fmt(_ t: Double) -> String {
         guard t.isFinite, t >= 0 else { return "00:00" }
@@ -248,6 +257,26 @@ struct Scrubber: View {
                 onSeek(Double(f) * total)
             })
         }
+    }
+}
+
+// Compact mono-text toggle for shuffle / repeat modes.
+struct ModeButton: View {
+    let label: String
+    let active: Bool
+    let action: () -> Void
+    var body: some View {
+        Button(action: action) {
+            Text(label)
+                .font(.mono(8, .bold)).tracking(0.5)
+                .foregroundStyle(active ? .white : Theme.inkFaint)
+                .padding(.horizontal, 7).padding(.vertical, 6)
+                .background((active ? Theme.orange : Color.clear).opacity(active ? 0.18 : 0))
+                .overlay(RoundedRectangle(cornerRadius: 5, style: .continuous)
+                    .stroke(active ? Theme.orange : Theme.panelStroke, lineWidth: 1))
+                .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
+        }
+        .buttonStyle(.plain)
     }
 }
 
