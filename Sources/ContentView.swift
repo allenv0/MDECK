@@ -249,36 +249,46 @@ struct Scrubber: View {
     }
 }
 
-// Grid-style toggle for the playlist: solid orange when hidden, white grid on dark when shown.
+// Nothing-style pixel switch (port of nullframe's Toggle): sharp track that turns
+// orange when on, with a 3x3 white-pixel-grid knob that slides left↔right.
 struct GridToggle: View {
     @Binding var on: Bool
+    private let trackW: CGFloat = 36
+    private let trackH: CGFloat = 17
+    private let thumb: CGFloat = 13
+
     var body: some View {
-        Button { on.toggle() } label: {
-            Canvas { ctx, size in
-                let n = 3
-                let pad = size.width * 0.22
-                let span = size.width - pad * 2
-                let cell = span / CGFloat(n)
-                let s = cell * 0.62
-                let cellColor: Color = on ? Theme.orange : .white   // blends into orange bg when on
-                for r in 0..<n {
-                    for c in 0..<n {
-                        let cx = pad + cell * (CGFloat(c) + 0.5)
-                        let cy = pad + cell * (CGFloat(r) + 0.5)
-                        ctx.fill(Path(roundedRect: CGRect(x: cx - s/2, y: cy - s/2, width: s, height: s),
-                                      cornerRadius: s * 0.28),
-                                 with: .color(cellColor))
-                    }
-                }
+        Button {
+            withAnimation(.easeInOut(duration: 0.28)) { on.toggle() }
+        } label: {
+            ZStack(alignment: .leading) {
+                Rectangle()
+                    .fill(on ? Theme.orange : Theme.trackOff)   // #f26522 / #333
+                pixelKnob
+                    .frame(width: thumb, height: thumb)
+                    .offset(x: on ? trackW - thumb - 2 : 2)
             }
-            .frame(width: 26, height: 26)
-            .background(on ? Theme.orange : Theme.panel)
-            .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: 6, style: .continuous)
-                .stroke(Theme.panelStroke, lineWidth: on ? 0 : 1))
+            .frame(width: trackW, height: trackH)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .help(on ? "Hide queue" : "Show queue")
+    }
+
+    private var pixelKnob: some View {
+        Canvas { ctx, size in
+            let n = 3
+            let gap: CGFloat = 1
+            let cell = (size.width - gap * CGFloat(n - 1)) / CGFloat(n)
+            for r in 0..<n {
+                for c in 0..<n {
+                    let x = CGFloat(c) * (cell + gap)
+                    let y = CGFloat(r) * (cell + gap)
+                    ctx.fill(Path(CGRect(x: x, y: y, width: cell, height: cell)),
+                             with: .color(.white))
+                }
+            }
+        }
     }
 }
 

@@ -13,7 +13,8 @@ enum Theme {
     static let inkDim      = Color.white.opacity(0.42)
     static let inkFaint    = Color.white.opacity(0.22)
     static let red         = Color(red: 0.86, green: 0.12, blue: 0.10)     // used exactly once: the active accent
-    static let orange      = Color(red: 0.94, green: 0.46, blue: 0.18)     // playhead marker
+    static let orange      = Color(red: 0.949, green: 0.396, blue: 0.133)  // #f26522 — utility orange
+    static let trackOff    = Color(red: 0.2, green: 0.2, blue: 0.2)        // #333 — switch track (off)
     static let grid: CGFloat = 16                                          // 16px base grid
 }
 
