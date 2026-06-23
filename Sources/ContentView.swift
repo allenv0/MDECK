@@ -67,12 +67,9 @@ struct ContentView: View {
                 Text((engine.currentTrack?.album ?? "—").uppercased())
                     .font(.mono(10)).tracking(1).foregroundStyle(Theme.inkDim)
                 Spacer()
-                SpectrumView(bands: engine.bands, rows: 8, active: engine.isPlaying)
+                SpectrumView(bands: engine.bands, rows: 14, active: engine.isPlaying)
                     .frame(maxWidth: .infinity)
-                    .frame(height: 84)
-                WaveHistory(levels: engine.levels, capacity: engine.levelCapacity)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 36)
+                    .frame(height: 120)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         }

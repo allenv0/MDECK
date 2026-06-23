@@ -12,15 +12,16 @@ struct SpectrumView: View {
             guard cols > 0 else { return }
             let cw = size.width / CGFloat(cols)
             let rh = size.height / CGFloat(rows)
-            let side = min(cw, rh) * 0.86          // chunky pixel cells, small gaps
-            let radius = side * 0.24               // softly-rounded squares
+            let bw = cw * 0.82                      // wide, thin horizontal lines
+            let bh = min(rh * 0.34, 4)              // thin line height
+            let radius = bh / 2                     // pill ends
             for c in 0..<cols {
                 let lit = Int((CGFloat(bands[c]) * CGFloat(rows)).rounded())
                 for r in 0..<rows {
                     let on = (rows - 1 - r) < lit && active
                     let cx = cw * (CGFloat(c) + 0.5)
                     let cy = rh * (CGFloat(r) + 0.5)
-                    let rect = CGRect(x: cx - side/2, y: cy - side/2, width: side, height: side)
+                    let rect = CGRect(x: cx - bw/2, y: cy - bh/2, width: bw, height: bh)
                     let color: Color = on ? Theme.dotOn : Theme.pixelOff
                     ctx.fill(Path(roundedRect: rect, cornerRadius: radius), with: .color(color))
                 }
