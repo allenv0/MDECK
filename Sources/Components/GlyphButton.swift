@@ -12,7 +12,7 @@ struct GlyphButton: View {
         Button(action: action) {
             Canvas { ctx, sz in drawGlyph(ctx: ctx, size: sz) }
                 .frame(width: size, height: size)
-                .background(accent ? Theme.red : Theme.panel)
+                .background(accent ? Theme.orange.opacity(0.65) : Theme.panel)
                 .clipShape(RoundedRectangle(cornerRadius: Radius.art, style: .continuous))
                 .overlay(RoundedRectangle(cornerRadius: Radius.art, style: .continuous)
                     .stroke(accent ? Color.clear : Theme.panelStroke, lineWidth: 1))
@@ -42,7 +42,7 @@ struct GlyphButton: View {
         let contentH = CGFloat(maxR - minR + 1) * cw
         let originX = (size.width - contentW) / 2 + cw/2 - CGFloat(minC) * cw
         let originY = (size.height - contentH) / 2 + cw/2 - CGFloat(minR) * cw
-        let col: Color = accent ? .white : Theme.ink
+        let col: Color = accent ? Theme.dotOn : Theme.ink
         for (r, row) in grid.enumerated() {
             for (c, bit) in row.enumerated() where bit == 1 {
                 let cx = originX + CGFloat(c) * cw

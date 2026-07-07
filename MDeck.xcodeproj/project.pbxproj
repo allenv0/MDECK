@@ -17,6 +17,7 @@
 		7918FCC6E3954872B61CDC9C /* GlyphButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01629C7F80BDAFDDBF11CE6D /* GlyphButton.swift */; };
 		7C9FAEA539A201899BC0ED1D /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56431F6C881CC566E952173D /* Theme.swift */; };
 		89AAB1B2ADAC4A487B6B2D2A /* AudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4566AFE05B4E90384A65D97 /* AudioEngine.swift */; };
+		A551115EAEAE778412F91CFE /* RotaryKnob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E6173E75B2C7CFA5180D84C /* RotaryKnob.swift */; };
 		BF4265EC1EB315501D42F48C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28897236F82597812E48B4F6 /* ContentView.swift */; };
 		C538F3C313C6517B80EA36F2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 822CAAF7EE62D917BA36CE66 /* SettingsView.swift */; };
 		CD74EC1B3582769FF4FA699C /* GridToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E063BD9BEADE04212BD7D764 /* GridToggle.swift */; };
@@ -44,6 +45,7 @@
 		28897236F82597812E48B4F6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		2AE171A17AA2DE0291134993 /* MDeckTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDeckTests.swift; sourceTree = "<group>"; };
 		56431F6C881CC566E952173D /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		5E6173E75B2C7CFA5180D84C /* RotaryKnob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotaryKnob.swift; sourceTree = "<group>"; };
 		61C12CEF11E9AC1789EABB58 /* mdeck.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = mdeck.icns; sourceTree = "<group>"; };
 		822CAAF7EE62D917BA36CE66 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		8C5C639523DE21CC81AB6260 /* MDeck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MDeck.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -128,6 +130,7 @@
 				E063BD9BEADE04212BD7D764 /* GridToggle.swift */,
 				FC56FC06BEA460A0A1E1C388 /* ModeButton.swift */,
 				9AAEDD6E162F15394BFF58CC /* ReorderDelegate.swift */,
+				5E6173E75B2C7CFA5180D84C /* RotaryKnob.swift */,
 				D350A810608784C32E6B307A /* Scrubber.swift */,
 				BD939C4C8B7EB1DAFEBD02E9 /* VolumeDots.swift */,
 			);
@@ -256,6 +259,7 @@
 				F8C2464FA46F7BB0FD0AC275 /* MDeckApp.swift in Sources */,
 				3508967FE0BBD55E54FA9DAC /* ModeButton.swift in Sources */,
 				CFA8555CF49BA7AC6FB02113 /* ReorderDelegate.swift in Sources */,
+				A551115EAEAE778412F91CFE /* RotaryKnob.swift in Sources */,
 				F4C2062FBE69925EAA62A8ED /* Scrubber.swift in Sources */,
 				C538F3C313C6517B80EA36F2 /* SettingsView.swift in Sources */,
 				5E33C8D0F98FAD6E50778D14 /* SpectrumView.swift in Sources */,

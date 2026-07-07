@@ -31,11 +31,24 @@ struct ContentView: View {
         .background(Theme.bg)
         .overlay(alignment: .top) {
             LinearGradient(
-                gradient: Gradient(colors: [.white.opacity(0.04), .clear]),
+                gradient: Gradient(colors: [
+                    .white.opacity(0.07),
+                    .white.opacity(0.03),
+                    .clear,
+                ]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .frame(height: 160)
+            .allowsHitTesting(false)
+        }
+        .overlay(alignment: .top) {
+            LinearGradient(
+                colors: [.white.opacity(0.04), .clear],
                 startPoint: .top,
                 endPoint: .bottom
             )
-            .frame(height: 80)
+            .frame(height: 2)
             .allowsHitTesting(false)
         }
         .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
@@ -64,13 +77,9 @@ struct ContentView: View {
         HStack(alignment: .center) {
             DotText(text: "MDeck", dot: 1.8, gap: 1.1, spacing: 2.4, color: Theme.dotOn)
             modelBadge
-            TimelineView(.periodic(from: .now, by: 0.45)) { tl in
-                let on = Int(tl.date.timeIntervalSinceReferenceDate / 0.45) % 2 == 0
-                RoundedRectangle(cornerRadius: 1)
-                    .fill(Theme.red)
-                    .frame(width: 5, height: 5)
-                    .opacity(engine.isPlaying ? (on ? 1 : 0.12) : 1)
-            }
+
+            controlStrip
+
             Spacer()
             statusLED
             Text("PLAYLIST")
@@ -88,11 +97,27 @@ struct ContentView: View {
             }
             .padding(.leading, Spacing.snug)
         }
-        .frame(height: 28)
+        .frame(height: 40)
+    }
+
+    private var controlStrip: some View {
+        HStack(spacing: 6) {
+            RotaryKnob(size: 18)
+            RotaryKnob(size: 18)
+            PowerLED()
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 2)
+        .background(Theme.bg.opacity(0.5))
+        .clipShape(RoundedRectangle(cornerRadius: 6))
+        .overlay(
+            RoundedRectangle(cornerRadius: 6)
+                .stroke(Color.white.opacity(0.04), lineWidth: 1)
+        )
     }
 
     private var modelBadge: some View {
-        Text("MD-990")
+        Text("Fontier-Systems")
             .font(.mono(8, .bold))
             .tracking(1.5)
             .foregroundStyle(Theme.inkFaint.opacity(0.7))
@@ -105,12 +130,35 @@ struct ContentView: View {
             .padding(.leading, 6)
     }
 
+    private struct PowerLED: View {
+        @Environment(\.palette) private var palette
+        var body: some View {
+            ZStack {
+                Circle()
+                    .fill(Color(hex: palette.accent2).opacity(0.2))
+                    .frame(width: 12, height: 12)
+                    .blur(radius: 2)
+                Circle()
+                    .fill(Color(hex: palette.accent2).opacity(0.35))
+                    .frame(width: 8, height: 8)
+                    .blur(radius: 1.5)
+                Circle()
+                    .fill(Color(hex: palette.accent2))
+                    .frame(width: 5, height: 5)
+                Circle()
+                    .fill(.white.opacity(0.5))
+                    .frame(width: 2, height: 2)
+                    .offset(x: -1, y: -1)
+            }
+        }
+    }
+
     private var statusLED: some View {
         HStack(spacing: 5) {
             Circle()
                 .fill(engine.isPlaying ? Theme.dotOn : Theme.inkFaint)
                 .frame(width: 5, height: 5)
-            Text(engine.isPlaying ? "RUN" : "IDLE")
+            Text(engine.isPlaying ? "PLAYING" : "IDLE")
                 .font(.mono(Typography.label)).tracking(2).foregroundStyle(Theme.inkDim)
         }
     }
