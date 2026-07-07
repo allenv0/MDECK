@@ -497,11 +497,15 @@ final class AudioEngine: ObservableObject {
     private func process(_ buffer: AVAudioPCMBuffer) {
         let result = fftAnalyzer.process(buffer)
         Task { @MainActor in
-            for i in 0..<self.bands.count {
+            let s = Float(AppSettings.shared.spectrumSmoothing)
+            let inv = 1 - s
+            let bands = self.bands
+            for i in 0..<bands.count {
                 let target = i < result.bands.count ? result.bands[i] : 0
-                self.bands[i] = self.bands[i] * 0.6 + target * 0.4
+                self.bands[i] = bands[i] * s + target * inv
             }
-            self.level = self.level * 0.7 + result.level * 0.3
+            let levelSmooth = 0.5 + s * 0.4
+            self.level = self.level * levelSmooth + result.level * (1 - levelSmooth)
         }
     }
 }

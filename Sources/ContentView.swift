@@ -128,11 +128,22 @@ struct ContentView: View {
                 Text((engine.currentTrack?.album ?? "—").uppercased())
                     .font(.mono(Typography.caption)).tracking(1).foregroundStyle(Theme.inkDim)
 
-                albumArtSection
+                if settings.showAlbumArt {
+                    albumArtSection
+                }
 
-                SpectrumView(bands: engine.bands, rows: 14, active: engine.isPlaying)
+                if settings.showSpectrum {
+                    SpectrumView(
+                        bands: engine.bands,
+                        levels: engine.levels,
+                        rows: settings.spectrumRows,
+                        active: engine.isPlaying,
+                        style: settings.spectrumStyle
+                    )
                     .frame(maxWidth: .infinity)
                     .frame(height: 120)
+                    .transition(.opacity)
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         }
@@ -163,7 +174,10 @@ struct ContentView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
             } else {
-                albumArtPlaceholder
+                Image(nsImage: defaultArtwork)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .opacity(0.5)
             }
         }
         .clipShape(RoundedRectangle(cornerRadius: Radius.art))
@@ -182,21 +196,13 @@ struct ContentView: View {
         }
     }
 
-    private var albumArtPlaceholder: some View {
-        ZStack {
-            if artDropTargeted {
-                Theme.orange.opacity(0.1)
-            }
-            VStack(spacing: 14) {
-                Image(systemName: "music.note")
-                    .font(.system(size: 44, weight: .light))
-                    .foregroundStyle(artDropTargeted ? Theme.orange : Theme.inkFaint)
-                Text(artDropTargeted ? "DROP COVER" : "NO COVER")
-                    .font(.mono(11)).tracking(2.5)
-                    .foregroundStyle(artDropTargeted ? Theme.orange : Theme.inkFaint)
-            }
+    private static let _defaultArtwork: NSImage = {
+        if let appIcon = NSImage(named: NSImage.applicationIconName) {
+            return appIcon
         }
-    }
+        return NSImage(systemSymbolName: "music.note", accessibilityDescription: nil)!
+    }()
+    private var defaultArtwork: NSImage { Self._defaultArtwork }
 
     private func handleArtDrop(_ providers: [NSItemProvider]) -> Bool {
         guard engine.currentTrack != nil else { return false }

@@ -411,8 +411,19 @@ final class DesignTokensTests: XCTestCase {
 final class AppSettingsTests: XCTestCase {
     private let defaults = UserDefaults(suiteName: "test.appsettings.MDeck")!
 
+    private let appSettingKeys = ["MDeck.spectrumStyle", "MDeck.spectrumRows",
+                                   "MDeck.spectrumSmoothing", "MDeck.accentOverrideEnabled",
+                                   "MDeck.accentOverrideHex", "MDeck.showAlbumArt",
+                                   "MDeck.showSpectrum", "MDeck.layoutDensity"]
+
+    override func setUp() {
+        super.setUp()
+        for key in appSettingKeys { UserDefaults.standard.removeObject(forKey: key) }
+    }
+
     override func tearDown() {
         defaults.removePersistentDomain(forName: "test.appsettings.MDeck")
+        for key in appSettingKeys { UserDefaults.standard.removeObject(forKey: key) }
         Theme.customAccentEnabled = false
         Theme.customAccent = nil
         Theme.current = ThemeCatalog.classic
