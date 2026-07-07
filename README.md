@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="assets/icon.png" width="128" alt="DotMP3 icon" />
+<img src="assets/icon.png" width="128" alt="MDeck icon" />
 
-# DotMP3
+# MDeck
 
 **A native macOS MP3 player with a dot-matrix, instrument-panel aesthetic.**
 
@@ -13,7 +13,7 @@ splash of red — built entirely in SwiftUI.
 
 <div align="center">
 
-![DotMP3 playing a track](assets/screenshot.png)
+![MDeck playing a track](assets/screenshot.png)
 
 </div>
 
@@ -38,7 +38,7 @@ splash of red — built entirely in SwiftUI.
 
 ## Design
 
-DotMP3 follows the "Nothing" design language: a near-black panel, off-white lit dots over
+MDeck follows the "Nothing" design language: a near-black panel, off-white lit dots over
 faint ghost dots, `Space Mono` / `Space Grotesk` typography (with monospaced fallbacks),
 a 16px bento grid, and the brand red used **exactly once** — the blinking status dot that
 pulses while audio is playing.
@@ -54,14 +54,14 @@ pulses while audio is playing.
 
 ```bash
 xcodegen generate
-open DotMP3.xcodeproj   # then ⌘R in Xcode
+open MDeck.xcodeproj   # then ⌘R in Xcode
 ```
 
 Or from the command line:
 
 ```bash
 xcodegen generate
-xcodebuild -project DotMP3.xcodeproj -scheme DotMP3 -configuration Debug build
+xcodebuild -project MDeck.xcodeproj -scheme MDeck -configuration Debug build
 ```
 
 ## Usage

@@ -3,15 +3,19 @@ import UniformTypeIdentifiers
 
 struct ContentView: View {
     @EnvironmentObject var engine: AudioEngine
+    @StateObject private var theme = ThemeManager()
+    @ObservedObject private var settings = AppSettings.shared
     @State private var dropTargeted = false
+    @State private var artDropTargeted = false
     @State private var draggingIndex: Int? = nil
     @State private var showPlaylist = true
+    @State private var showSettings = false
 
     var body: some View {
-        VStack(spacing: Theme.grid) {
+        VStack(spacing: AppSettings.shared.layoutDensity.spacing) {
             header
-            HStack(spacing: Theme.grid) {
-                VStack(spacing: Theme.grid) {
+            HStack(spacing: AppSettings.shared.layoutDensity.spacing) {
+                VStack(spacing: AppSettings.shared.layoutDensity.spacing) {
                     nowPlaying
                     transport
                 }
@@ -23,8 +27,28 @@ struct ContentView: View {
             }
         }
         .animation(.spring(response: 0.32, dampingFraction: 0.82), value: showPlaylist)
-        .padding(Theme.grid)
+        .padding(AppSettings.shared.layoutDensity.spacing)
         .background(Theme.bg)
+        .overlay(alignment: .top) {
+            LinearGradient(
+                gradient: Gradient(colors: [.white.opacity(0.04), .clear]),
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: 80)
+            .allowsHitTesting(false)
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .stroke(Color.white.opacity(0.08), lineWidth: 1)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .stroke(Color.black.opacity(0.35), lineWidth: 2)
+                .offset(y: 1)
+        )
+        .environment(\.palette, theme.selected)
         .focusEffectDisabled()
         .onDrop(of: [UTType.fileURL], isTargeted: nil) { providers in
             engine.add(providers: providers)
@@ -34,52 +58,78 @@ struct ContentView: View {
         .onAppear { NSWindow.allowsAutomaticWindowTabbing = false }
     }
 
-    // MARK: Header
+    // MARK: - Header
 
     private var header: some View {
         HStack(alignment: .center) {
-            DotText(text: "DOTMP3", dot: 1.8, gap: 1.1, spacing: 2.4, color: Theme.dotOn)
-            // brand red, exactly once — blinks while playing
+            DotText(text: "MDeck", dot: 1.8, gap: 1.1, spacing: 2.4, color: Theme.dotOn)
+            modelBadge
             TimelineView(.periodic(from: .now, by: 0.45)) { tl in
                 let on = Int(tl.date.timeIntervalSinceReferenceDate / 0.45) % 2 == 0
-                Rectangle()
+                RoundedRectangle(cornerRadius: 1)
                     .fill(Theme.red)
-                    .frame(width: 4, height: 4)
+                    .frame(width: 5, height: 5)
                     .opacity(engine.isPlaying ? (on ? 1 : 0.12) : 1)
             }
             Spacer()
-            statusDot
+            statusLED
             Text("PLAYLIST")
-                .font(.mono(9)).tracking(2).foregroundStyle(Theme.inkDim)
+                .font(.mono(Typography.label)).tracking(2).foregroundStyle(Theme.inkDim)
                 .padding(.leading, 8)
             GridToggle(on: $showPlaylist)
+            Button { showSettings.toggle() } label: {
+                Image(systemName: "gearshape")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(Theme.inkDim)
+            }
+            .buttonStyle(.plain)
+            .popover(isPresented: $showSettings) {
+                SettingsView(theme: theme)
+            }
+            .padding(.leading, Spacing.snug)
         }
         .frame(height: 28)
     }
 
-    private var statusDot: some View {
-        HStack(spacing: 6) {
+    private var modelBadge: some View {
+        Text("MD-990")
+            .font(.mono(8, .bold))
+            .tracking(1.5)
+            .foregroundStyle(Theme.inkFaint.opacity(0.7))
+            .padding(.horizontal, 5)
+            .padding(.vertical, 2)
+            .overlay(
+                RoundedRectangle(cornerRadius: 3)
+                    .stroke(Theme.inkFaint.opacity(0.25), lineWidth: 1)
+            )
+            .padding(.leading, 6)
+    }
+
+    private var statusLED: some View {
+        HStack(spacing: 5) {
             Circle()
                 .fill(engine.isPlaying ? Theme.dotOn : Theme.inkFaint)
-                .frame(width: 6, height: 6)
+                .frame(width: 5, height: 5)
             Text(engine.isPlaying ? "RUN" : "IDLE")
-                .font(.mono(9)).tracking(2).foregroundStyle(Theme.inkDim)
+                .font(.mono(Typography.label)).tracking(2).foregroundStyle(Theme.inkDim)
         }
     }
 
-    // MARK: Now playing
+    // MARK: - Now Playing
 
     private var nowPlaying: some View {
         Panel(label: "Now Playing") {
-            VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: Spacing.sectionSpacing) {
                 MarqueeDotText(text: (engine.currentTrack?.title ?? "NO SIGNAL").uppercased(),
-                               dot: 3.6, gap: 1.8, spacing: 4, color: Theme.dotOn)
+                                dot: 3.6, gap: 1.8, spacing: 4, color: Theme.dotOn)
                     .id(engine.currentIndex ?? -1)
                 Text((engine.currentTrack?.artist ?? "—").uppercased())
-                    .font(.grotesk(13, .semibold)).foregroundStyle(Theme.ink)
+                    .font(.grotesk(Typography.title, .semibold)).foregroundStyle(Theme.ink)
                 Text((engine.currentTrack?.album ?? "—").uppercased())
-                    .font(.mono(10)).tracking(1).foregroundStyle(Theme.inkDim)
-                Spacer()
+                    .font(.mono(Typography.caption)).tracking(1).foregroundStyle(Theme.inkDim)
+
+                albumArtSection
+
                 SpectrumView(bands: engine.bands, rows: 14, active: engine.isPlaying)
                     .frame(maxWidth: .infinity)
                     .frame(height: 120)
@@ -89,11 +139,98 @@ struct ContentView: View {
         .frame(maxHeight: .infinity)
     }
 
-    // MARK: Transport
+    private var albumArtSection: some View {
+        VStack(spacing: 0) {
+            Spacer(minLength: 4)
+            HStack {
+                Spacer()
+                albumArtDisplay
+                    .frame(width: 260, height: 260)
+                Spacer()
+            }
+            Spacer(minLength: 4)
+        }
+        .onDrop(of: [UTType.image, UTType.png, UTType.jpeg, UTType.tiff, UTType.bmp].compactMap { $0 },
+                isTargeted: $artDropTargeted) { providers in
+            handleArtDrop(providers)
+        }
+    }
+
+    private var albumArtDisplay: some View {
+        Group {
+            if let artwork = engine.currentTrack?.artwork {
+                Image(nsImage: artwork)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+            } else {
+                albumArtPlaceholder
+            }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: Radius.art))
+        .overlay(
+            RoundedRectangle(cornerRadius: Radius.art)
+                .stroke(artDropTargeted ? Theme.orange : Theme.panelStroke, lineWidth: artDropTargeted ? 2 : 1)
+        )
+        .contextMenu {
+            if let track = engine.currentTrack, track.artworkFileName != nil {
+                Button(role: .destructive) {
+                    engine.clearCustomArtwork(for: track)
+                } label: {
+                    Label("Remove Custom Cover", systemImage: "trash")
+                }
+            }
+        }
+    }
+
+    private var albumArtPlaceholder: some View {
+        ZStack {
+            if artDropTargeted {
+                Theme.orange.opacity(0.1)
+            }
+            VStack(spacing: 14) {
+                Image(systemName: "music.note")
+                    .font(.system(size: 44, weight: .light))
+                    .foregroundStyle(artDropTargeted ? Theme.orange : Theme.inkFaint)
+                Text(artDropTargeted ? "DROP COVER" : "NO COVER")
+                    .font(.mono(11)).tracking(2.5)
+                    .foregroundStyle(artDropTargeted ? Theme.orange : Theme.inkFaint)
+            }
+        }
+    }
+
+    private func handleArtDrop(_ providers: [NSItemProvider]) -> Bool {
+        guard engine.currentTrack != nil else { return false }
+        guard let provider = providers.first else { return false }
+        // Try loading as NSImage directly
+        if provider.canLoadObject(ofClass: NSImage.self) {
+            _ = provider.loadObject(ofClass: NSImage.self) { image, _ in
+                if let image = image as? NSImage {
+                    Task { @MainActor in
+                        engine.setCustomArtwork(image)
+                    }
+                }
+            }
+            return true
+        }
+        // Fallback: load file URL and create image from it
+        if provider.canLoadObject(ofClass: URL.self) {
+            _ = provider.loadObject(ofClass: URL.self) { url, _ in
+                if let url = url, let image = NSImage(contentsOf: url) {
+                    Task { @MainActor in
+                        engine.setCustomArtwork(image)
+                    }
+                }
+            }
+            return true
+        }
+        return false
+    }
+
+    // MARK: - Transport
 
     private var transport: some View {
         Panel(label: "Transport") {
-            VStack(spacing: 16) {
+            VStack(spacing: settings.layoutDensity.spacing) {
                 HStack(alignment: .bottom) {
                     DotText(text: fmt(engine.currentTime), dot: 3, gap: 1.5, color: Theme.dotOn)
                     Spacer()
@@ -103,42 +240,57 @@ struct ContentView: View {
                     engine.seek(to: t)
                 }
                 .frame(height: 16)
-                HStack(spacing: 12) {
-                    GlyphButton(kind: .prev) { engine.prev() }
-                    GlyphButton(kind: engine.isPlaying ? .pause : .play, accent: true, size: 56) {
-                        engine.togglePlay()
-                    }
-                    GlyphButton(kind: .next) { engine.next() }
-                    ModeButton(label: "SHUF", active: engine.shuffle, width: 42) { engine.shuffle.toggle() }
-                    ModeButton(label: repeatLabel, active: engine.repeatMode != .off, width: 52) { engine.cycleRepeat() }
-                    Spacer()
-                    volume
-                }
+                transportCluster
             }
         }
         .frame(height: 190)
     }
 
+    private var transportCluster: some View {
+        HStack(spacing: Spacing.sectionSpacing) {
+            GlyphButton(kind: .prev) { engine.prev() }
+            GlyphButton(kind: engine.isPlaying ? .pause : .play, accent: true, size: 56) {
+                engine.togglePlay()
+            }
+            GlyphButton(kind: .next) { engine.next() }
+            Divider()
+                .frame(width: 1, height: 28)
+                .overlay(Theme.inkFaint.opacity(0.2))
+            ModeButton(label: "SHUF", active: engine.shuffle, width: 42) { engine.shuffle.toggle() }
+            ModeButton(label: repeatLabel, active: engine.repeatMode != .off, width: 52) { engine.cycleRepeat() }
+            Spacer()
+            volume
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 8)
+        .background(Theme.bg.opacity(0.35))
+        .clipShape(RoundedRectangle(cornerRadius: Radius.input))
+        .overlay(
+            RoundedRectangle(cornerRadius: Radius.input)
+                .stroke(Theme.panelStroke, lineWidth: 1)
+        )
+    }
+
     private var volume: some View {
-        HStack(spacing: 10) {
-            Text("VOL").font(.mono(9)).tracking(2).foregroundStyle(Theme.inkFaint)
+        HStack(spacing: Spacing.controlSpacing) {
+            Text("VOL").font(.mono(Typography.label)).tracking(2).foregroundStyle(Theme.inkFaint)
             VolumeDots(value: $engine.volume)
                 .frame(width: 104, height: 8)
         }
-        .fixedSize()        // never let the controls row truncate the volume
+        .fixedSize()
     }
 
-    // MARK: Playlist
+    // MARK: - Playlist
 
     private var playlistPanel: some View {
         Panel {
             HStack {
                 Text("QUEUE · \(engine.playlist.count)")
-                    .font(.mono(9)).tracking(2.2).foregroundStyle(Theme.inkFaint)
+                    .font(.mono(Typography.label)).tracking(2.2).foregroundStyle(Theme.inkFaint)
                 Spacer()
                 if !engine.playlist.isEmpty {
                     Button { engine.clear() } label: {
-                        Text("CLEAR").font(.mono(9, .bold)).tracking(1.5)
+                        Text("CLEAR").font(.mono(Typography.label, .bold)).tracking(1.5)
                             .foregroundStyle(Theme.inkDim)
                     }
                     .buttonStyle(.plain)
@@ -152,15 +304,16 @@ struct ContentView: View {
                     Button(action: openFiles) {
                         Text("+ ADD FILES").font(.mono(11)).tracking(2)
                             .foregroundStyle(Theme.ink)
-                            .padding(.horizontal, 16).padding(.vertical, 10)
-                            .overlay(RoundedRectangle(cornerRadius: 6).stroke(Theme.panelStroke))
+                            .padding(.horizontal, Spacing.sectionPadding)
+                            .padding(.vertical, Spacing.controlSpacing)
+                            .overlay(RoundedRectangle(cornerRadius: Radius.button).stroke(Theme.panelStroke))
                     }.buttonStyle(.plain)
                     Spacer()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 ScrollView {
-                    LazyVStack(spacing: 2) {
+                    LazyVStack(spacing: Spacing.hairline) {
                         ForEach(Array(engine.playlist.enumerated()), id: \.element.id) { idx, track in
                             row(idx: idx, track: track)
                                 .onDrag {
@@ -176,7 +329,7 @@ struct ContentView: View {
         }
         .frame(maxHeight: .infinity)
         .overlay(
-            RoundedRectangle(cornerRadius: 10)
+            RoundedRectangle(cornerRadius: Radius.panel)
                 .stroke(Theme.orange, lineWidth: dropTargeted ? 2 : 0)
         )
         .onDrop(of: [UTType.fileURL], isTargeted: $dropTargeted) { providers in
@@ -188,26 +341,26 @@ struct ContentView: View {
     private func row(idx: Int, track: Track) -> some View {
         let isCur = engine.currentIndex == idx
         let isSel = engine.selectedIndex == idx
-        return HStack(spacing: 10) {
+        return HStack(spacing: Spacing.controlSpacing) {
             if isCur {
                 Rectangle().fill(Theme.red).frame(width: 3, height: 26)
             } else {
                 Text(String(format: "%02d", idx + 1))
-                    .font(.mono(10)).foregroundStyle(Theme.inkFaint).frame(width: 18)
+                    .font(.mono(Typography.caption)).foregroundStyle(Theme.inkFaint).frame(width: 18)
             }
-            VStack(alignment: .leading, spacing: 2) {
-                Text(track.title).font(.grotesk(12, .medium)).lineLimit(1)
+            VStack(alignment: .leading, spacing: Spacing.hairline) {
+                Text(track.title).font(.grotesk(Typography.body, .medium)).lineLimit(1)
                     .foregroundStyle(isCur || isSel ? Theme.dotOn : Theme.ink)
-                Text(track.artist.uppercased()).font(.mono(9)).tracking(1)
+                Text(track.artist.uppercased()).font(.mono(Typography.label)).tracking(1)
                     .foregroundStyle(Theme.inkDim).lineLimit(1)
             }
             Spacer()
-            Text(fmt(track.duration)).font(.mono(10)).foregroundStyle(Theme.inkFaint)
+            Text(fmt(track.duration)).font(.mono(Typography.caption)).foregroundStyle(Theme.inkFaint)
         }
-        .padding(.horizontal, 8).padding(.vertical, 7)
+        .padding(.horizontal, Spacing.controlPadding).padding(.vertical, Spacing.controlVertical)
         .background(isSel ? Theme.bg : Color.clear)
-        .clipShape(RoundedRectangle(cornerRadius: 6))
-        .overlay(RoundedRectangle(cornerRadius: 6)
+        .clipShape(RoundedRectangle(cornerRadius: Radius.button))
+        .overlay(RoundedRectangle(cornerRadius: Radius.button)
             .stroke(Theme.panelStroke, lineWidth: isSel ? 1 : 0))
         .overlay(alignment: .top) {
             if draggingIndex != nil && draggingIndex == idx {
@@ -224,7 +377,7 @@ struct ContentView: View {
         }
     }
 
-    // MARK: Helpers
+    // MARK: - Helpers
 
     private var repeatLabel: String { engine.repeatMode == .one ? "LOOP·1" : "LOOP" }
 
@@ -249,161 +402,4 @@ struct ContentView: View {
     }
 }
 
-// Dotted scrub bar with draggable position.
-struct Scrubber: View {
-    let value: Double
-    let total: Double
-    let onSeek: (Double) -> Void
 
-    var body: some View {
-        GeometryReader { geo in
-            let w = geo.size.width
-            let frac = total > 0 ? CGFloat(min(1, max(0, value / total))) : 0
-            let dots = max(1, Int(w / 9))
-            Canvas { ctx, size in
-                let lit = Int(CGFloat(dots) * frac)
-                for i in 0..<dots {
-                    let x = (CGFloat(i) + 0.5) * (size.width / CGFloat(dots))
-                    let on = i <= lit
-                    let d: CGFloat = on ? 5 : 3.5
-                    ctx.fill(Path(ellipseIn: CGRect(x: x - d/2, y: size.height/2 - d/2, width: d, height: d)),
-                             with: .color(on ? Theme.dotOn : Theme.dotOff))
-                }
-            }
-            .contentShape(Rectangle())
-            .gesture(DragGesture(minimumDistance: 0).onChanged { g in
-                let f = min(1, max(0, g.location.x / w))
-                onSeek(Double(f) * total)
-            })
-        }
-    }
-}
-
-// Compact mono-text toggle for shuffle / repeat modes.
-struct ModeButton: View {
-    let label: String
-    let active: Bool
-    var width: CGFloat = 40
-    let action: () -> Void
-    var body: some View {
-        Button(action: action) {
-            Text(label)
-                .font(.mono(8, .bold)).tracking(0.5)
-                .foregroundStyle(active ? .white : Theme.inkFaint)
-                .lineLimit(1).fixedSize()
-                .frame(width: width, height: 28)
-                .background((active ? Theme.orange : Color.clear).opacity(active ? 0.18 : 0))
-                .overlay(RoundedRectangle(cornerRadius: 5, style: .continuous)
-                    .stroke(active ? Theme.orange : Theme.panelStroke, lineWidth: 1))
-                .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
-        }
-        .buttonStyle(.plain)
-    }
-}
-
-// Nothing-style pixel switch (port of nullframe's Toggle): sharp track that turns
-// orange when on, with a 3x3 white-pixel-grid knob that slides left↔right.
-struct GridToggle: View {
-    @Binding var on: Bool
-    private let trackW: CGFloat = 36
-    private let trackH: CGFloat = 17
-    private let thumb: CGFloat = 13
-
-    var body: some View {
-        Button {
-            withAnimation(.easeInOut(duration: 0.28)) { on.toggle() }
-        } label: {
-            ZStack(alignment: .leading) {
-                Rectangle()
-                    .fill(on ? Theme.orange : Theme.trackOff)   // #f26522 / #333
-                pixelKnob
-                    .frame(width: thumb, height: thumb)
-                    .offset(x: on ? trackW - thumb - 2 : 2)
-            }
-            .frame(width: trackW, height: trackH)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-        .help(on ? "Hide queue" : "Show queue")
-    }
-
-    private var pixelKnob: some View {
-        Canvas { ctx, size in
-            let n = 3
-            let gap: CGFloat = 1
-            let cell = (size.width - gap * CGFloat(n - 1)) / CGFloat(n)
-            for r in 0..<n {
-                for c in 0..<n {
-                    let x = CGFloat(c) * (cell + gap)
-                    let y = CGFloat(r) * (cell + gap)
-                    ctx.fill(Path(CGRect(x: x, y: y, width: cell, height: cell)),
-                             with: .color(.white))
-                }
-            }
-        }
-    }
-}
-
-// Live row reorder while dragging within the queue.
-struct ReorderDelegate: DropDelegate {
-    let target: Int
-    @Binding var dragging: Int?
-    let engine: AudioEngine
-
-    func dropEntered(info: DropInfo) {
-        guard let from = dragging, from != target else { return }
-        engine.move(from: from, to: target)
-        dragging = target
-    }
-    func dropUpdated(info: DropInfo) -> DropProposal? { DropProposal(operation: .move) }
-    func performDrop(info: DropInfo) -> Bool { dragging = nil; return true }
-    func dropExited(info: DropInfo) {}
-}
-
-struct VolumeDots: View {
-    @Binding var value: Float
-
-    // Warm segment palette: bright orange (left) fading to dark brown (right/unlit).
-    private static let onHot  = Color(red: 0.96, green: 0.56, blue: 0.26)
-    private static let onCool = Color(red: 0.86, green: 0.36, blue: 0.12)
-    private static let off    = Color(red: 0.24, green: 0.12, blue: 0.05)
-
-    var body: some View {
-        GeometryReader { geo in
-            let w = geo.size.width
-            let segs = 7
-            Canvas { ctx, size in
-                let lit = Int((Float(segs) * value).rounded())
-                let cell = size.width / CGFloat(segs)
-                let bw = cell * 0.84
-                let gap = cell - bw
-                for i in 0..<segs {
-                    let on = i < lit
-                    let x = CGFloat(i) * cell + gap / 2
-                    let rect = CGRect(x: x, y: 0, width: bw, height: size.height)
-                    let color: Color
-                    if on {
-                        let t = lit > 1 ? Double(i) / Double(lit - 1) : 0   // bright → cool across active region
-                        color = Self.lerp(Self.onHot, Self.onCool, t)
-                    } else {
-                        color = Self.off
-                    }
-                    ctx.fill(Path(rect), with: .color(color))   // sharp corners, no radius
-                }
-            }
-            .contentShape(Rectangle())
-            .gesture(DragGesture(minimumDistance: 0).onChanged { g in
-                value = Float(min(1, max(0, g.location.x / w)))
-            })
-        }
-    }
-
-    private static func lerp(_ a: Color, _ b: Color, _ t: Double) -> Color {
-        let ca = NSColor(a).usingColorSpace(.sRGB) ?? .orange
-        let cb = NSColor(b).usingColorSpace(.sRGB) ?? .orange
-        let f = CGFloat(max(0, min(1, t)))
-        return Color(red: Double(ca.redComponent + (cb.redComponent - ca.redComponent) * f),
-                     green: Double(ca.greenComponent + (cb.greenComponent - ca.greenComponent) * f),
-                     blue: Double(ca.blueComponent + (cb.blueComponent - ca.blueComponent) * f))
-    }
-}

@@ -1,6 +1,5 @@
 import Foundation
 import AVFoundation
-import Accelerate
 import AppKit
 
 enum RepeatMode { case off, all, one }
@@ -13,7 +12,7 @@ struct Track: Identifiable, Equatable {
     var album: String
     var duration: Double
     var artwork: NSImage?
-    var bookmark: Data?      // security-scoped bookmark for cross-launch access
+    var artworkFileName: String?     // filename of saved custom artwork in musicDirectory
 
     static func == (a: Track, b: Track) -> Bool { a.id == b.id }
 }
@@ -21,19 +20,20 @@ struct Track: Identifiable, Equatable {
 @MainActor
 final class AudioEngine: ObservableObject {
     @Published var playlist: [Track] = []
-    @Published var currentIndex: Int? = nil    // track loaded in the player
-    @Published var selectedIndex: Int? = nil   // highlighted row (single-click)
+    @Published var currentIndex: Int? = nil { didSet { if !restoring { savePlaylist() } } }
+    @Published var selectedIndex: Int? = nil
     @Published var isPlaying = false
     @Published var currentTime: Double = 0
     @Published var duration: Double = 0
     @Published var volume: Float = 0.8 {
-        didSet { mixer.outputVolume = volume; UserDefaults.standard.set(volume, forKey: Keys.volume) }
+        didSet { mixer.outputVolume = volume; UserDefaults.standard.set(volume, forKey: "MDeck.volume") }
     }
     @Published var bands: [Float] = Array(repeating: 0, count: 16)
-    @Published var level: Float = 0          // overall RMS level 0...1
-    @Published var repeatMode: RepeatMode = .off
-    @Published var shuffle: Bool = false
-    @Published var levels: [Float] = []      // rolling history of level for the waveform
+    @Published var level: Float = 0
+    @Published var repeatMode: RepeatMode = .off { didSet { if !restoring { savePlaylist() } } }
+    @Published var shuffle: Bool = false { didSet { if !restoring { savePlaylist() } } }
+    @Published var levels: [Float] = []
+    private var restoring = false
     let levelCapacity = 80
     private var tickCount = 0
 
@@ -45,33 +45,136 @@ final class AudioEngine: ObservableObject {
     private var file: AVAudioFile?
     private var sampleRate: Double = 44100
     private var totalFrames: AVAudioFramePosition = 0
-    private var seekFrame: AVAudioFramePosition = 0     // where current schedule started
-    private var scheduleToken = 0                       // invalidates stale completion callbacks
+    private var seekFrame: AVAudioFramePosition = 0
+    private var scheduleToken = 0
     private var displayTimer: Timer?
 
-    // FFT
-    private let fftSize = 1024
-    private var fftSetup: FFTSetup?
-    private var window = [Float]()
+    private let fftAnalyzer = FFTAnalyzer()
+
+    // MARK: - Persistence Paths
+
+    private var musicDirectory: URL {
+        let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+        let dir = appSupport.appendingPathComponent("com.moerdowo.MDeck/Music", isDirectory: true)
+        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true, attributes: nil)
+        return dir
+    }
+
+    private var playlistFile: URL {
+        musicDirectory.appendingPathComponent("playlist.json")
+    }
+
+    // MARK: - Codable Persistence Models
+
+    private struct SavedTrack: Codable {
+        let fileName: String
+        let title: String
+        let artist: String
+        let album: String
+        let duration: Double
+        let artworkFileName: String?
+    }
+
+    private struct SavedPlaylist: Codable {
+        let tracks: [SavedTrack]
+        let currentIndex: Int
+        let shuffle: Bool
+        let repeatMode: String
+    }
 
     init() {
         engine.attach(player)
         engine.connect(player, to: mixer, format: nil)
         mixer.outputVolume = volume
-        let log2n = vDSP_Length(log2(Float(fftSize)))
-        fftSetup = vDSP_create_fftsetup(log2n, FFTRadix(kFFTRadix2))
-        window = [Float](repeating: 0, count: fftSize)
-        vDSP_hann_window(&window, vDSP_Length(fftSize), Int32(vDSP_HANN_NORM))
-        restore()
+
+        if UserDefaults.standard.object(forKey: "MDeck.volume") != nil {
+            volume = UserDefaults.standard.float(forKey: "MDeck.volume")
+        }
+
+        loadPlaylist()
     }
 
-    private enum Keys {
-        static let bookmarks = "DotMP3.bookmarks"
-        static let currentIndex = "DotMP3.currentIndex"
-        static let volume = "DotMP3.volume"
+    // MARK: - Persistence
+
+    private func savePlaylist() {
+        let saved = SavedPlaylist(
+            tracks: playlist.map { SavedTrack(
+                fileName: $0.url.lastPathComponent,
+                title: $0.title,
+                artist: $0.artist,
+                album: $0.album,
+                duration: $0.duration,
+                artworkFileName: $0.artworkFileName
+            )},
+            currentIndex: currentIndex ?? -1,
+            shuffle: shuffle,
+            repeatMode: repeatMode == .off ? "off" : repeatMode == .all ? "all" : "one"
+        )
+        if let data = try? JSONEncoder().encode(saved) {
+            try? data.write(to: playlistFile, options: .atomic)
+        }
     }
 
-    deinit { if let s = fftSetup { vDSP_destroy_fftsetup(s) } }
+    private func loadPlaylist() {
+        restoring = true
+        defer { restoring = false }
+
+        guard let data = try? Data(contentsOf: playlistFile),
+              let saved = try? JSONDecoder().decode(SavedPlaylist.self, from: data) else { return }
+
+        var restored: [Track] = []
+        for st in saved.tracks {
+            let url = musicDirectory.appendingPathComponent(st.fileName)
+            guard FileManager.default.fileExists(atPath: url.path) else { continue }
+            var artwork: NSImage? = nil
+            if let artName = st.artworkFileName {
+                let artURL = musicDirectory.appendingPathComponent(artName)
+                if let data = try? Data(contentsOf: artURL) { artwork = NSImage(data: data) }
+            }
+            let track = Track(url: url, title: st.title, artist: st.artist, album: st.album,
+                              duration: st.duration, artwork: artwork)
+            restored.append(track)
+        }
+        playlist = restored
+
+        if saved.currentIndex >= 0, playlist.indices.contains(saved.currentIndex) {
+            load(index: saved.currentIndex, autoplay: false)
+        }
+
+        // Load artwork asynchronously
+        for t in restored { loadMetadata(for: t) }
+    }
+
+    // MARK: - Custom Artwork
+
+    /// Set custom artwork for the current track from a dropped image.
+    func setCustomArtwork(_ image: NSImage) {
+        guard let idx = currentIndex else { return }
+        let audioName = playlist[idx].url.lastPathComponent
+        let artName = audioName + "_artwork.png"
+        let artURL = musicDirectory.appendingPathComponent(artName)
+
+        if let tiffData = image.tiffRepresentation,
+           let bitmap = NSBitmapImageRep(data: tiffData),
+           let pngData = bitmap.representation(using: .png, properties: [:]) {
+            try? pngData.write(to: artURL)
+        }
+
+        playlist[idx].artwork = image
+        playlist[idx].artworkFileName = artName
+        savePlaylist()
+    }
+
+    /// Remove the custom artwork file for a given track (e.g. when resetting).
+    func clearCustomArtwork(for track: Track) {
+        guard let idx = playlist.firstIndex(where: { $0.id == track.id }),
+              let artName = playlist[idx].artworkFileName else { return }
+        let artURL = musicDirectory.appendingPathComponent(artName)
+        try? FileManager.default.removeItem(at: artURL)
+        playlist[idx].artworkFileName = nil
+        playlist[idx].artwork = nil
+        savePlaylist()
+    }
 
     // MARK: - Library
 
@@ -79,15 +182,26 @@ final class AudioEngine: ObservableObject {
         var added: [Track] = []
         for url in urls {
             guard ["mp3","m4a","aac","wav","aiff","flac"].contains(url.pathExtension.lowercased()) else { continue }
-            added.append(makeTrack(url))
+
+            // Copy file into the sandboxed Music directory for persistent access
+            let ext = url.pathExtension
+            let fileName = "\(UUID().uuidString).\(ext)"
+            let dest = musicDirectory.appendingPathComponent(fileName)
+            try? FileManager.default.copyItem(at: url, to: dest)
+            guard FileManager.default.fileExists(atPath: dest.path) else { continue }
+
+            let originalName = url.deletingPathExtension().lastPathComponent
+            let track = makeTrack(dest, title: originalName)
+            added.append(track)
         }
+
         let wasEmpty = playlist.isEmpty
         playlist.append(contentsOf: added)
         if wasEmpty, let first = added.first, let idx = playlist.firstIndex(of: first) {
             load(index: idx, autoplay: false)
         }
         for t in added { loadMetadata(for: t) }
-        persist()
+        savePlaylist()
     }
 
     // Single-click: just highlight the row.
@@ -111,63 +225,39 @@ final class AudioEngine: ObservableObject {
         let dest = max(0, min(playlist.count, to))
         playlist.insert(item, at: dest)
         if let curId { currentIndex = playlist.firstIndex { $0.id == curId } }
-        persist()
-    }
-
-    // MARK: - Persistence
-
-    private func persist() {
-        let bms = playlist.compactMap { $0.bookmark }
-        UserDefaults.standard.set(bms, forKey: Keys.bookmarks)
-        UserDefaults.standard.set(currentIndex ?? -1, forKey: Keys.currentIndex)
-    }
-
-    private func restore() {
-        if UserDefaults.standard.object(forKey: Keys.volume) != nil {
-            volume = UserDefaults.standard.float(forKey: Keys.volume)
-        }
-        guard let bms = UserDefaults.standard.array(forKey: Keys.bookmarks) as? [Data] else { return }
-        var restored: [Track] = []
-        for bm in bms {
-            var stale = false
-            guard let url = try? URL(resolvingBookmarkData: bm, options: .withSecurityScope,
-                                     relativeTo: nil, bookmarkDataIsStale: &stale) else { continue }
-            guard url.startAccessingSecurityScopedResource() else { continue }
-            restored.append(makeTrack(url))
-        }
-        playlist = restored
-        let savedIdx = UserDefaults.standard.integer(forKey: Keys.currentIndex)
-        if playlist.indices.contains(savedIdx) { load(index: savedIdx, autoplay: false) }
-        for t in restored { loadMetadata(for: t) }
+        savePlaylist()
     }
 
     // Add tracks from dropped Finder item providers (file URLs).
     func add(providers: [NSItemProvider]) {
-        let group = DispatchGroup()
-        var urls: [URL] = []
-        let lock = NSLock()
-        for p in providers where p.canLoadObject(ofClass: URL.self) {
-            group.enter()
-            _ = p.loadObject(ofClass: URL.self) { url, _ in
-                if let url { lock.lock(); urls.append(url); lock.unlock() }
-                group.leave()
+        Task {
+            var urls: [URL] = []
+            for p in providers {
+                if let url = await loadURL(from: p) {
+                    urls.append(url)
+                }
             }
-        }
-        group.notify(queue: .main) { [weak self] in
             let sorted = urls.sorted { $0.lastPathComponent.localizedStandardCompare($1.lastPathComponent) == .orderedAscending }
-            self?.add(urls: sorted)
+            await MainActor.run { add(urls: sorted) }
         }
     }
 
-    private func makeTrack(_ url: URL) -> Track {
+    private func loadURL(from provider: NSItemProvider) async -> URL? {
+        await withCheckedContinuation { continuation in
+            _ = provider.loadObject(ofClass: URL.self) { url, _ in
+                continuation.resume(returning: url)
+            }
+        }
+    }
+
+    private func makeTrack(_ url: URL, title: String? = nil) -> Track {
         var dur: Double = 0
         if let f = try? AVAudioFile(forReading: url) {
             dur = Double(f.length) / f.processingFormat.sampleRate
         }
-        let bm = try? url.bookmarkData(options: .withSecurityScope,
-                                       includingResourceValuesForKeys: nil, relativeTo: nil)
-        return Track(url: url, title: url.deletingPathExtension().lastPathComponent,
-                     artist: "—", album: "—", duration: dur, artwork: nil, bookmark: bm)
+        return Track(url: url,
+                     title: title ?? url.deletingPathExtension().lastPathComponent,
+                     artist: "—", album: "—", duration: dur, artwork: nil)
     }
 
     private func loadMetadata(for track: Track) {
@@ -192,7 +282,9 @@ final class AudioEngine: ObservableObject {
                 if let t = title, !t.isEmpty { self.playlist[i].title = t }
                 if let a = artist, !a.isEmpty { self.playlist[i].artist = a }
                 if let al = album, !al.isEmpty { self.playlist[i].album = al }
-                if let art { self.playlist[i].artwork = art }
+                if let art, self.playlist[i].artworkFileName == nil { self.playlist[i].artwork = art }
+                // Persist updated metadata
+                self.savePlaylist()
             }
         }
     }
@@ -274,6 +366,14 @@ final class AudioEngine: ObservableObject {
         stopEngineOnly()
         isPlaying = false
         file = nil
+
+        for track in playlist {
+            if let artName = track.artworkFileName {
+                let artURL = musicDirectory.appendingPathComponent(artName)
+                try? FileManager.default.removeItem(at: artURL)
+            }
+            try? FileManager.default.removeItem(at: track.url)
+        }
         playlist.removeAll()
         currentIndex = nil
         selectedIndex = nil
@@ -281,12 +381,20 @@ final class AudioEngine: ObservableObject {
         duration = 0
         bands = bands.map { _ in 0 }
         level = 0
-        persist()
+        savePlaylist()
     }
 
     func remove(at index: Int) {
         guard playlist.indices.contains(index) else { return }
         let wasCurrent = currentIndex == index
+
+        // Remove the copied file from disk
+        try? FileManager.default.removeItem(at: playlist[index].url)
+        if let artName = playlist[index].artworkFileName {
+            let artURL = musicDirectory.appendingPathComponent(artName)
+            try? FileManager.default.removeItem(at: artURL)
+        }
+
         playlist.remove(at: index)
         func adjust(_ idx: Int?) -> Int? {
             guard let i = idx else { return nil }
@@ -306,7 +414,7 @@ final class AudioEngine: ObservableObject {
             currentIndex = adjust(currentIndex)
         }
         selectedIndex = adjust(selectedIndex)
-        persist()
+        savePlaylist()
     }
 
     private func randomOtherIndex(from i: Int) -> Int {
@@ -344,8 +452,7 @@ final class AudioEngine: ObservableObject {
     }
 
     private func handleSegmentEnd(token: Int) {
-        // .dataPlayedBack fires when the segment has actually finished playing.
-        guard token == scheduleToken else { return }   // stale: a seek/load replaced this segment
+        guard token == scheduleToken else { return }
         guard isPlaying else { return }
         advance(auto: true)
     }
@@ -371,7 +478,6 @@ final class AudioEngine: ObservableObject {
         let played = Double(playerTime.sampleTime) / playerTime.sampleRate
         currentTime = min(duration, Double(seekFrame) / sampleRate + max(0, played))
 
-        // Sample the level into the rolling waveform history (~7.5 Hz).
         tickCount += 1
         if tickCount % 3 == 0 {
             levels.append(level)
@@ -383,70 +489,19 @@ final class AudioEngine: ObservableObject {
 
     private func installTap() {
         mixer.removeTap(onBus: 0)
-        mixer.installTap(onBus: 0, bufferSize: AVAudioFrameCount(fftSize), format: mixer.outputFormat(forBus: 0)) { [weak self] buf, _ in
+        mixer.installTap(onBus: 0, bufferSize: fftAnalyzer.makeBufferSize(), format: mixer.outputFormat(forBus: 0)) { [weak self] buf, _ in
             self?.process(buf)
         }
     }
 
     private func process(_ buffer: AVAudioPCMBuffer) {
-        guard let setup = fftSetup, let ch = buffer.floatChannelData else { return }
-        let n = min(Int(buffer.frameLength), fftSize)
-        guard n == fftSize else { return }
-        let samples = ch[0]
-
-        var windowed = [Float](repeating: 0, count: fftSize)
-        vDSP_vmul(samples, 1, window, 1, &windowed, 1, vDSP_Length(fftSize))
-
-        // RMS for overall level
-        var rms: Float = 0
-        vDSP_rmsqv(samples, 1, &rms, vDSP_Length(fftSize))
-
-        let half = fftSize / 2
-        var real = [Float](repeating: 0, count: half)
-        var imag = [Float](repeating: 0, count: half)
-        var magnitudes = [Float](repeating: 0, count: half)
-        windowed.withUnsafeBufferPointer { ptr in
-            real.withUnsafeMutableBufferPointer { rp in
-                imag.withUnsafeMutableBufferPointer { ip in
-                    var split = DSPSplitComplex(realp: rp.baseAddress!, imagp: ip.baseAddress!)
-                    ptr.baseAddress!.withMemoryRebound(to: DSPComplex.self, capacity: half) { typed in
-                        vDSP_ctoz(typed, 2, &split, 1, vDSP_Length(half))
-                    }
-                    vDSP_fft_zrip(setup, &split, 1, vDSP_Length(log2(Float(fftSize))), FFTDirection(FFT_FORWARD))
-                    vDSP_zvmags(&split, 1, &magnitudes, 1, vDSP_Length(half))
-                }
-            }
-        }
-
-        // Group into log-spaced bands.
-        let bandCount = 16
-        var out = [Float](repeating: 0, count: bandCount)
-        let minBin = 2
-        for b in 0..<bandCount {
-            let lo = Int(Double(half - minBin) * pow(Double(b) / Double(bandCount), 2.0)) + minBin
-            let hi = Int(Double(half - minBin) * pow(Double(b + 1) / Double(bandCount), 2.0)) + minBin
-            let a = max(minBin, lo), z = max(a + 1, min(half, hi))
-            var sum: Float = 0
-            for i in a..<z { sum += magnitudes[i] }
-            let meanPower = sum / Float(z - a)
-            // Normalize to ~0...1 amplitude (zvmags is unscaled power for an N-pt zrip FFT).
-            let amp = sqrtf(meanPower) * 2 / Float(fftSize)
-            // Spectral tilt: lift higher bands so bass doesn't dominate the left side.
-            let tilt = Float(b) * 1.7
-            let db = 20 * log10f(amp + 1e-7) + tilt
-            // Map a -58dB...-12dB window onto the meter so peaks rarely peg.
-            let norm = max(0, min(1, (db + 58) / 46))
-            out[b] = norm
-        }
-
-        let lvl = min(1, rms * 6)
+        let result = fftAnalyzer.process(buffer)
         Task { @MainActor in
-            // smooth
             for i in 0..<self.bands.count {
-                let target = i < out.count ? out[i] : 0
+                let target = i < result.bands.count ? result.bands[i] : 0
                 self.bands[i] = self.bands[i] * 0.6 + target * 0.4
             }
-            self.level = self.level * 0.7 + lvl * 0.3
+            self.level = self.level * 0.7 + result.level * 0.3
         }
     }
 }

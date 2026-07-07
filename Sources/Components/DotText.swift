@@ -1,6 +1,5 @@
 import SwiftUI
 
-// 5x7 dot-matrix glyph font — the signature Nothing readout.
 enum DotFont {
     static let w = 5, h = 7
     private static let glyphs: [Character: [String]] = [
@@ -62,12 +61,11 @@ enum DotFont {
     }
 }
 
-// Renders a string as a grid of dots. Unlit cells show as faint ghost dots.
 struct DotText: View {
     let text: String
-    var dot: CGFloat = 4        // dot diameter
-    var gap: CGFloat = 2        // gap between dots
-    var spacing: CGFloat = 5    // gap between glyphs (in dot units approx)
+    var dot: CGFloat = 4
+    var gap: CGFloat = 2
+    var spacing: CGFloat = 5
     var color: Color = Theme.dotOn
     var ghost: Bool = true
 
@@ -81,7 +79,6 @@ struct DotText: View {
     }
     private var totalHeight: CGFloat { CGFloat(DotFont.h) * cell }
 
-    // Geometry helpers for layout (e.g. marquee).
     static func width(_ text: String, dot: CGFloat, gap: CGFloat, spacing: CGFloat) -> CGFloat {
         guard !text.isEmpty else { return 0 }
         let cell = dot + gap
@@ -111,17 +108,17 @@ struct DotText: View {
             }
         }
         .frame(width: totalWidth, height: totalHeight)
+        .accessibilityLabel(text)
     }
 }
 
-// Scrolls the dot-matrix text horizontally when it overflows the available width.
 struct MarqueeDotText: View {
     let text: String
     var dot: CGFloat = 4
     var gap: CGFloat = 2
     var spacing: CGFloat = 5
     var color: Color = Theme.dotOn
-    var speed: CGFloat = 36      // points per second
+    var speed: CGFloat = 36
     var ghost: Bool = false
 
     private var contentW: CGFloat { DotText.width(text, dot: dot, gap: gap, spacing: spacing) }

@@ -8,13 +8,25 @@
 
 /* Begin PBXBuildFile section */
 		16AC574A2C984C2227484A03 /* AudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A46EFF08739CE2582AF5A7 /* AudioEngine.swift */; };
+		25D5BB382A008EB669A847FB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB0864C55D42A25DF5EEDE35 /* SettingsView.swift */; };
 		2A1F79F663B6782872D06726 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF1E7729197406B75415A533 /* ContentView.swift */; };
 		590D296572C4653D65190A02 /* DotMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C353CA31B86120E420628E6 /* DotMatrix.swift */; };
 		80B40EC2A6036AAC8515D1C2 /* dotmp3.icns in Resources */ = {isa = PBXBuildFile; fileRef = AD02CAB8ABC744C7D3DFB99E /* dotmp3.icns */; };
+		A3DF3C7D3B5FF5024422BB60 /* DotMP3Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3716A3637D5EC89EFA70823 /* DotMP3Tests.swift */; };
 		BFC619D3F1188C2A832D7E86 /* SpectrumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9AD8AA6703DC5426259176 /* SpectrumView.swift */; };
 		EF6B00D835C43E463EFE6F13 /* DotMP3App.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DA17D7551F9055B3475CBC /* DotMP3App.swift */; };
 		FC64E7C98A1B791F0259571A /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D5DE4A4F7DFB573598BB54F /* Theme.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A134165401CEB0272B491165 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CABE26BC8198C6744F9C0667 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 640676E9685FB31649703FE4;
+			remoteInfo = DotMP3;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0D5DE4A4F7DFB573598BB54F /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
@@ -22,8 +34,11 @@
 		9C353CA31B86120E420628E6 /* DotMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotMatrix.swift; sourceTree = "<group>"; };
 		A5061E0B9E0ADAA9D98224B4 /* DotMP3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DotMP3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD02CAB8ABC744C7D3DFB99E /* dotmp3.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = dotmp3.icns; sourceTree = "<group>"; };
+		AF1DE7E1EFFD80E8A9E27308 /* DotMP3Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DotMP3Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE9AD8AA6703DC5426259176 /* SpectrumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpectrumView.swift; sourceTree = "<group>"; };
 		D4DA17D7551F9055B3475CBC /* DotMP3App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotMP3App.swift; sourceTree = "<group>"; };
+		DB0864C55D42A25DF5EEDE35 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		E3716A3637D5EC89EFA70823 /* DotMP3Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotMP3Tests.swift; sourceTree = "<group>"; };
 		EF1E7729197406B75415A533 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -36,11 +51,20 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		19C6DEC0C9334255E74E4B57 /* DotMP3Tests */ = {
+			isa = PBXGroup;
+			children = (
+				E3716A3637D5EC89EFA70823 /* DotMP3Tests.swift */,
+			);
+			path = DotMP3Tests;
+			sourceTree = "<group>";
+		};
 		1DDE18BFEBCF5504DDB1C3E7 = {
 			isa = PBXGroup;
 			children = (
 				16DAC14E22770DB0BE606FCF /* Resources */,
 				C59646AE2654DAA98B5BD99E /* Sources */,
+				3B4B984EB3B289424E4569C2 /* Tests */,
 				2B7B67D6314CCECC69C19988 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -49,8 +73,17 @@
 			isa = PBXGroup;
 			children = (
 				A5061E0B9E0ADAA9D98224B4 /* DotMP3.app */,
+				AF1DE7E1EFFD80E8A9E27308 /* DotMP3Tests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		3B4B984EB3B289424E4569C2 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				19C6DEC0C9334255E74E4B57 /* DotMP3Tests */,
+			);
+			path = Tests;
 			sourceTree = "<group>";
 		};
 		C59646AE2654DAA98B5BD99E /* Sources */ = {
@@ -60,6 +93,7 @@
 				EF1E7729197406B75415A533 /* ContentView.swift */,
 				9C353CA31B86120E420628E6 /* DotMatrix.swift */,
 				D4DA17D7551F9055B3475CBC /* DotMP3App.swift */,
+				DB0864C55D42A25DF5EEDE35 /* SettingsView.swift */,
 				CE9AD8AA6703DC5426259176 /* SpectrumView.swift */,
 				0D5DE4A4F7DFB573598BB54F /* Theme.swift */,
 			);
@@ -69,6 +103,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		34B4DC05CA1D42B89CBF1BA1 /* DotMP3Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D76909BF0853C5519FDEE93A /* Build configuration list for PBXNativeTarget "DotMP3Tests" */;
+			buildPhases = (
+				31E8634B833F1FF0685B5254 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5F8B033A9CA81D5F9B270C7C /* PBXTargetDependency */,
+			);
+			name = DotMP3Tests;
+			packageProductDependencies = (
+			);
+			productName = DotMP3Tests;
+			productReference = AF1DE7E1EFFD80E8A9E27308 /* DotMP3Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		640676E9685FB31649703FE4 /* DotMP3 */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E76A0476176E825A469C650C /* Build configuration list for PBXNativeTarget "DotMP3" */;
@@ -96,8 +148,10 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					34B4DC05CA1D42B89CBF1BA1 = {
+						ProvisioningStyle = Automatic;
+					};
 					640676E9685FB31649703FE4 = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -117,6 +171,7 @@
 			projectRoot = "";
 			targets = (
 				640676E9685FB31649703FE4 /* DotMP3 */,
+				34B4DC05CA1D42B89CBF1BA1 /* DotMP3Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -133,6 +188,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		31E8634B833F1FF0685B5254 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A3DF3C7D3B5FF5024422BB60 /* DotMP3Tests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8CE9A7A8B4883053329DDC9A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -141,12 +204,21 @@
 				2A1F79F663B6782872D06726 /* ContentView.swift in Sources */,
 				EF6B00D835C43E463EFE6F13 /* DotMP3App.swift in Sources */,
 				590D296572C4653D65190A02 /* DotMatrix.swift in Sources */,
+				25D5BB382A008EB669A847FB /* SettingsView.swift in Sources */,
 				BFC619D3F1188C2A832D7E86 /* SpectrumView.swift in Sources */,
 				FC64E7C98A1B791F0259571A /* Theme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5F8B033A9CA81D5F9B270C7C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 640676E9685FB31649703FE4 /* DotMP3 */;
+			targetProxy = A134165401CEB0272B491165 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		1ECDE2ED5A4D3C8995E2241E /* Debug */ = {
@@ -217,12 +289,31 @@
 			};
 			name = Debug;
 		};
+		80A3DFB5186C41DE1D3951E3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = PSZLV9CGLK;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.moerdowo.DotMP3Tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DotMP3.app/Contents/MacOS/DotMP3";
+			};
+			name = Debug;
+		};
 		8A358C4209B1DCEF533D0C91 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Resources/DotMP3.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = PSZLV9CGLK;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Resources/Info.plist;
@@ -232,6 +323,24 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.moerdowo.DotMP3;
 				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		98239EB53EC0885BEEFE3BA9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = PSZLV9CGLK;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.moerdowo.DotMP3Tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DotMP3.app/Contents/MacOS/DotMP3";
 			};
 			name = Release;
 		};
@@ -302,6 +411,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Resources/DotMP3.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = PSZLV9CGLK;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Resources/Info.plist;
@@ -322,6 +432,15 @@
 			buildConfigurations = (
 				1ECDE2ED5A4D3C8995E2241E /* Debug */,
 				B22F56A9D41988D19520F679 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D76909BF0853C5519FDEE93A /* Build configuration list for PBXNativeTarget "DotMP3Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				80A3DFB5186C41DE1D3951E3 /* Debug */,
+				98239EB53EC0885BEEFE3BA9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

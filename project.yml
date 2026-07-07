@@ -1,4 +1,4 @@
-name: DotMP3
+name: MDeck
 options:
   bundleIdPrefix: com.moerdowo
   deploymentTarget:
@@ -12,19 +12,28 @@ settings:
     DEVELOPMENT_TEAM: ""
     CODE_SIGN_STYLE: Automatic
     ENABLE_HARDENED_RUNTIME: YES
+schemes:
+  MDeck:
+    build:
+      targets:
+        MDeck: all
+        MDeckTests: test
+    test:
+      targets:
+        - MDeckTests
 targets:
-  DotMP3:
+  MDeck:
     type: application
     platform: macOS
     sources:
       - Sources
-      - path: Resources/dotmp3.icns
+      - path: Resources/mdeck.icns
     info:
       path: Resources/Info.plist
       properties:
-        CFBundleName: DotMP3
-        CFBundleDisplayName: DotMP3
-        CFBundleIconFile: dotmp3
+        CFBundleName: MDeck
+        CFBundleDisplayName: MDeck
+        CFBundleIconFile: mdeck
         CFBundleShortVersionString: "1.0"
         CFBundleVersion: "1"
         LSMinimumSystemVersion: "14.0"
@@ -35,7 +44,7 @@ targets:
         NSAppTransportSecurity:
           NSAllowsArbitraryLoads: true
     entitlements:
-      path: Resources/DotMP3.entitlements
+      path: Resources/MDeck.entitlements
       properties:
         com.apple.security.app-sandbox: true
         com.apple.security.files.user-selected.read-only: true
@@ -43,8 +52,19 @@ targets:
         com.apple.security.assets.music.read-only: true
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.moerdowo.DotMP3
+        PRODUCT_BUNDLE_IDENTIFIER: com.moerdowo.MDeck
         GENERATE_INFOPLIST_FILE: NO
         COMBINE_HIDPI_IMAGES: YES
         ENABLE_PREVIEWS: YES
-        CODE_SIGN_ENTITLEMENTS: Resources/DotMP3.entitlements
+        CODE_SIGN_ENTITLEMENTS: Resources/MDeck.entitlements
+  MDeckTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - Tests
+    dependencies:
+      - target: MDeck
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.moerdowo.MDeckTests
+        GENERATE_INFOPLIST_FILE: YES

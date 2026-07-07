@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct DotMP3App: App {
+struct MDeckApp: App {
     @StateObject private var engine = AudioEngine()
 
     var body: some Scene {
@@ -19,10 +19,14 @@ struct DotMP3App: App {
                 Button("Open Files…") { NotificationCenter.default.post(name: .openFiles, object: nil) }
                     .keyboardShortcut("o", modifiers: .command)
             }
+            CommandMenu("Controls") {
+                Button("Toggle Play/Pause") { engine.togglePlay() }
+                    .keyboardShortcut(.space, modifiers: [])
+            }
         }
     }
 }
 
 extension Notification.Name {
-    static let openFiles = Notification.Name("DotMP3.openFiles")
+    static let openFiles = Notification.Name("MDeck.openFiles")
 }
