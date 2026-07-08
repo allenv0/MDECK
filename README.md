@@ -12,6 +12,14 @@
 
 </div>
 
+## New Features:
+
+- Persistent playlists
+- Artwork support
+- More color themes
+
+## Demos
+
 <div align="center">
 
 ![MDECK playing a track](app-assets/g.png)
