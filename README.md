@@ -1,5 +1,9 @@
+
+<div align="center">
+
 # MDECK
 
+</div>
 
 <div align="center">
 
@@ -7,10 +11,8 @@
 
 **A native macOS MP3/WAV/FLAC player with a retro MiniDisc-inspired aesthetic.** 
 
-*A fork of [DotMP3](https://github.com/moerdowo/DotMP3)*
-
-
 </div>
+
 
 ## New Features:
 
@@ -30,10 +32,7 @@
 
 ![MDECK playing a track](app-assets/g3.png)
 
-
-
 </div>
-
 
 ## Requirements
 
@@ -60,6 +59,8 @@ xcodebuild -project MDECK.xcodeproj -scheme MDECK -configuration Debug build
 
 - **Add music** — drag audio files into the window, or use **File → Open Files…** (⌘O).
 - Supported formats: MP3, M4A, AAC, WAV, AIFF, FLAC.
+
+Note: *MDECK is a fork of [DotMP3](https://github.com/moerdowo/DotMP3)*
 
 ## License
 
