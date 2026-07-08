@@ -36,28 +36,6 @@ struct ContentView: View {
         .animation(Anim.slide, value: settings.showSpectrum)
         .padding(AppSettings.shared.layoutDensity.spacing)
         .background(Theme.bg)
-        .overlay(alignment: .top) {
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    .white.opacity(OpacityToken.ghost),
-                    .white.opacity(0.03),
-                    .clear,
-                ]),
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .frame(height: 160)
-            .allowsHitTesting(false)
-        }
-        .overlay(alignment: .top) {
-            LinearGradient(
-                colors: [.white.opacity(0.04), .clear],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .frame(height: 2)
-            .allowsHitTesting(false)
-        }
         .clipShape(RoundedRectangle(cornerRadius: Radius.window, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: Radius.window, style: .continuous)
