@@ -4,17 +4,24 @@
 
 # MDECK
 
-**A native macOS MP3 player with a retro MiniDisc-inspired aesthetic.** 
+**A native macOS MP3/WAV/FLAC player with a retro MiniDisc-inspired aesthetic.** 
 
-A fork of [DotMP3](https://github.com/moerdowo/DotMP3)
+*A fork of [DotMP3](https://github.com/moerdowo/DotMP3)*
 
-Pure-black bento panels, a hand-built 5×7 dot-matrix font, an FFT spectrum, and a single
 
 </div>
 
 <div align="center">
 
 ![MDECK playing a track](app-assets/g.png)
+
+![MDECK playing a track](app-assets/g1.png)
+
+![MDECK playing a track](app-assets/g2.png)
+
+![MDECK playing a track](app-assets/g3.png)
+
+
 
 </div>
 
