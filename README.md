@@ -9,7 +9,10 @@
 
 <img src="app-assets/MDECK-mac.png" width="128" alt="MDECK icon" />
 
+---
+
 **A native macOS MP3/WAV/FLAC player with a retro MiniDisc-inspired aesthetic.** 
+
 
 </div>
 
