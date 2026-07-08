@@ -13,7 +13,10 @@
 
 **A native macOS MP3/WAV/FLAC player with a retro MiniDisc-inspired aesthetic.** 
 
+</div>
 
+<div align="center">
+    <img src="assets/MD-Anim.gif" alt="demo animation" width="700" />
 </div>
 
 
@@ -22,6 +25,7 @@
 - Persistent playlists
 - Artwork support
 - More color themes
+
 
 ## Demos
 
