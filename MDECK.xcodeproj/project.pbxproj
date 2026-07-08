@@ -1,0 +1,532 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		01A15810D334AE5BB3849CEF /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6043B3F3D39351866D84DF /* Theme.swift */; };
+		092B5A66B226E9E8C7B7889D /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5268901C3C4393B35EE4F570 /* AppSettings.swift */; };
+		0F02C26905E88DB11F747E8D /* VolumeDots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BF3D3894A09C66D12ECD06 /* VolumeDots.swift */; };
+		45A7C5BA33F2A484924B89B4 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5083AD8D74EA04196C453EB3 /* SettingsView.swift */; };
+		508B524CCE38C64151C83F97 /* MDECKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ABF877F1C383A1321DC5CD /* MDECKTests.swift */; };
+		50DF335AD52AA3F2195CB743 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CACAAC891359A18494E639B /* DesignTokens.swift */; };
+		51EFDA8FFA31E29FC7960BFC /* PickerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B9A36AB447553D52BE8152 /* PickerButton.swift */; };
+		61906C0F8A3AD2AAA9A518E1 /* SpectrumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B154B4EDD777EC574FA800 /* SpectrumView.swift */; };
+		73CC390E7905699A43C62944 /* ModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31CE3B1E61968618AB39B8A2 /* ModeButton.swift */; };
+		7B08BBF7D490297C64A9942C /* DotText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6DF89257F15BBF0C715BC8 /* DotText.swift */; };
+		7E69E1656C1F0F82364E5BC1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25424F5D5B688F9AF0C5AAB8 /* ContentView.swift */; };
+		8C3B487BB9B7CAC016D983F2 /* GridToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5C994E4F7C5B559A6D0E76 /* GridToggle.swift */; };
+		988CBB7994FD1C7C7C559866 /* ReorderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4588C43D90EE66710E68A0 /* ReorderDelegate.swift */; };
+		98E105FC4A3A4A430503734A /* FFTAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6D17B7E6276AE9FA124F5D /* FFTAnalyzer.swift */; };
+		B2AD0CD0B3A6395A9C7A73BF /* GlyphButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E96B156F8B2CEF03AC63A /* GlyphButton.swift */; };
+		C16B88D707CE64BB6D908136 /* Scrubber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F82C28BD7CDE12CE4D208B3 /* Scrubber.swift */; };
+		D85B93BCC98C8C17E791788B /* RotaryKnob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BEADF4D19D07C0F45EB7BF /* RotaryKnob.swift */; };
+		DD72758447C1F042C089CEE7 /* MDECKApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59359B9B3DCEC1B6D6CCA4D5 /* MDECKApp.swift */; };
+		DDCEEA6DF977FF9EF9DCD7A8 /* AudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = BABA88B3DEC5667D6F522133 /* AudioEngine.swift */; };
+		E27EF5607280844AF7256895 /* PowerLED.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41994A31CE869E2EA3039DB0 /* PowerLED.swift */; };
+		FDE171422B5E1F32F9F5EADF /* mdeck.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5110AF490D33945A4BFBF1E4 /* mdeck.icns */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5F7FEE4F4CEE7AAFB775BAD1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D046F7BDB2E2EACDD88DAAE0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EFAAB7BCC14EBD50BB97DFED;
+			remoteInfo = MDECK;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		24B9A36AB447553D52BE8152 /* PickerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerButton.swift; sourceTree = "<group>"; };
+		25424F5D5B688F9AF0C5AAB8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		29BF3D3894A09C66D12ECD06 /* VolumeDots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeDots.swift; sourceTree = "<group>"; };
+		31CE3B1E61968618AB39B8A2 /* ModeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeButton.swift; sourceTree = "<group>"; };
+		41994A31CE869E2EA3039DB0 /* PowerLED.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerLED.swift; sourceTree = "<group>"; };
+		46ABF877F1C383A1321DC5CD /* MDECKTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDECKTests.swift; sourceTree = "<group>"; };
+		47BEADF4D19D07C0F45EB7BF /* RotaryKnob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotaryKnob.swift; sourceTree = "<group>"; };
+		5083AD8D74EA04196C453EB3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		5110AF490D33945A4BFBF1E4 /* mdeck.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = mdeck.icns; sourceTree = "<group>"; };
+		5268901C3C4393B35EE4F570 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		59359B9B3DCEC1B6D6CCA4D5 /* MDECKApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDECKApp.swift; sourceTree = "<group>"; };
+		5F6DF89257F15BBF0C715BC8 /* DotText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotText.swift; sourceTree = "<group>"; };
+		5F82C28BD7CDE12CE4D208B3 /* Scrubber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scrubber.swift; sourceTree = "<group>"; };
+		6A4588C43D90EE66710E68A0 /* ReorderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReorderDelegate.swift; sourceTree = "<group>"; };
+		6A6D17B7E6276AE9FA124F5D /* FFTAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FFTAnalyzer.swift; sourceTree = "<group>"; };
+		6D6043B3F3D39351866D84DF /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		8767A92F9C4B50B05429DAC9 /* MDECKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MDECKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9CACAAC891359A18494E639B /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
+		9E7E96B156F8B2CEF03AC63A /* GlyphButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlyphButton.swift; sourceTree = "<group>"; };
+		AB5C994E4F7C5B559A6D0E76 /* GridToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridToggle.swift; sourceTree = "<group>"; };
+		BABA88B3DEC5667D6F522133 /* AudioEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioEngine.swift; sourceTree = "<group>"; };
+		D5C9329FDEDEF92559386B14 /* MDECK.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MDECK.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8B154B4EDD777EC574FA800 /* SpectrumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpectrumView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0D151EC36313D14E0ADDD282 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				8EEE29AF2ED332D11766C3FA /* MDECKTests */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		389B0C086E2AA1C8A3677D2C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				5110AF490D33945A4BFBF1E4 /* mdeck.icns */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		6B7493168CE032B641F839A3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D5C9329FDEDEF92559386B14 /* MDECK.app */,
+				8767A92F9C4B50B05429DAC9 /* MDECKTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8EEE29AF2ED332D11766C3FA /* MDECKTests */ = {
+			isa = PBXGroup;
+			children = (
+				46ABF877F1C383A1321DC5CD /* MDECKTests.swift */,
+			);
+			path = MDECKTests;
+			sourceTree = "<group>";
+		};
+		9E64427D121F3DD863FFF479 = {
+			isa = PBXGroup;
+			children = (
+				389B0C086E2AA1C8A3677D2C /* Resources */,
+				E24D487E0E674D55779A79AE /* Sources */,
+				0D151EC36313D14E0ADDD282 /* Tests */,
+				6B7493168CE032B641F839A3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C9C75AF155991D3255E21D7F /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				9CACAAC891359A18494E639B /* DesignTokens.swift */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		E24D487E0E674D55779A79AE /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				5268901C3C4393B35EE4F570 /* AppSettings.swift */,
+				BABA88B3DEC5667D6F522133 /* AudioEngine.swift */,
+				25424F5D5B688F9AF0C5AAB8 /* ContentView.swift */,
+				59359B9B3DCEC1B6D6CCA4D5 /* MDECKApp.swift */,
+				5083AD8D74EA04196C453EB3 /* SettingsView.swift */,
+				D8B154B4EDD777EC574FA800 /* SpectrumView.swift */,
+				6D6043B3F3D39351866D84DF /* Theme.swift */,
+				F02672AD31DA2082E3C57AC1 /* AudioEngine */,
+				EAC4BD9A02D7F07849AD74E2 /* Components */,
+				C9C75AF155991D3255E21D7F /* DesignSystem */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		EAC4BD9A02D7F07849AD74E2 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				5F6DF89257F15BBF0C715BC8 /* DotText.swift */,
+				9E7E96B156F8B2CEF03AC63A /* GlyphButton.swift */,
+				AB5C994E4F7C5B559A6D0E76 /* GridToggle.swift */,
+				31CE3B1E61968618AB39B8A2 /* ModeButton.swift */,
+				24B9A36AB447553D52BE8152 /* PickerButton.swift */,
+				41994A31CE869E2EA3039DB0 /* PowerLED.swift */,
+				6A4588C43D90EE66710E68A0 /* ReorderDelegate.swift */,
+				47BEADF4D19D07C0F45EB7BF /* RotaryKnob.swift */,
+				5F82C28BD7CDE12CE4D208B3 /* Scrubber.swift */,
+				29BF3D3894A09C66D12ECD06 /* VolumeDots.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		F02672AD31DA2082E3C57AC1 /* AudioEngine */ = {
+			isa = PBXGroup;
+			children = (
+				6A6D17B7E6276AE9FA124F5D /* FFTAnalyzer.swift */,
+			);
+			path = AudioEngine;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		EFAAB7BCC14EBD50BB97DFED /* MDECK */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BEE150B32F86A9E312834E12 /* Build configuration list for PBXNativeTarget "MDECK" */;
+			buildPhases = (
+				F47BA1BF893013F19815F5B2 /* Sources */,
+				D1FA38DDE0DABA3F06CF758B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MDECK;
+			packageProductDependencies = (
+			);
+			productName = MDECK;
+			productReference = D5C9329FDEDEF92559386B14 /* MDECK.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F632B22A0AF171CC00E57418 /* MDECKTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7FE8E2FB69D5F6F3F026F7E4 /* Build configuration list for PBXNativeTarget "MDECKTests" */;
+			buildPhases = (
+				B0F9BA733BA30AB315400BEB /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				37997F6393977E9134759549 /* PBXTargetDependency */,
+			);
+			name = MDECKTests;
+			packageProductDependencies = (
+			);
+			productName = MDECKTests;
+			productReference = 8767A92F9C4B50B05429DAC9 /* MDECKTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D046F7BDB2E2EACDD88DAAE0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					EFAAB7BCC14EBD50BB97DFED = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					F632B22A0AF171CC00E57418 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 724CEB982DC172C8B2291FA4 /* Build configuration list for PBXProject "MDECK" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 9E64427D121F3DD863FFF479;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 6B7493168CE032B641F839A3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EFAAB7BCC14EBD50BB97DFED /* MDECK */,
+				F632B22A0AF171CC00E57418 /* MDECKTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D1FA38DDE0DABA3F06CF758B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FDE171422B5E1F32F9F5EADF /* mdeck.icns in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B0F9BA733BA30AB315400BEB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				508B524CCE38C64151C83F97 /* MDECKTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F47BA1BF893013F19815F5B2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				092B5A66B226E9E8C7B7889D /* AppSettings.swift in Sources */,
+				DDCEEA6DF977FF9EF9DCD7A8 /* AudioEngine.swift in Sources */,
+				7E69E1656C1F0F82364E5BC1 /* ContentView.swift in Sources */,
+				50DF335AD52AA3F2195CB743 /* DesignTokens.swift in Sources */,
+				7B08BBF7D490297C64A9942C /* DotText.swift in Sources */,
+				98E105FC4A3A4A430503734A /* FFTAnalyzer.swift in Sources */,
+				B2AD0CD0B3A6395A9C7A73BF /* GlyphButton.swift in Sources */,
+				8C3B487BB9B7CAC016D983F2 /* GridToggle.swift in Sources */,
+				DD72758447C1F042C089CEE7 /* MDECKApp.swift in Sources */,
+				73CC390E7905699A43C62944 /* ModeButton.swift in Sources */,
+				51EFDA8FFA31E29FC7960BFC /* PickerButton.swift in Sources */,
+				E27EF5607280844AF7256895 /* PowerLED.swift in Sources */,
+				988CBB7994FD1C7C7C559866 /* ReorderDelegate.swift in Sources */,
+				D85B93BCC98C8C17E791788B /* RotaryKnob.swift in Sources */,
+				C16B88D707CE64BB6D908136 /* Scrubber.swift in Sources */,
+				45A7C5BA33F2A484924B89B4 /* SettingsView.swift in Sources */,
+				61906C0F8A3AD2AAA9A518E1 /* SpectrumView.swift in Sources */,
+				01A15810D334AE5BB3849CEF /* Theme.swift in Sources */,
+				0F02C26905E88DB11F747E8D /* VolumeDots.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		37997F6393977E9134759549 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EFAAB7BCC14EBD50BB97DFED /* MDECK */;
+			targetProxy = 5F7FEE4F4CEE7AAFB775BAD1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		477D68B205888E8F87BD626D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Resources/MDECK.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.moerdowo.MDECK;
+				PRODUCT_MODULE_NAME = MDECK;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		63233C192C39FB3081E9EDEA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.moerdowo.MDECKTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MDECK.app/Contents/MacOS/MDECK";
+			};
+			name = Debug;
+		};
+		8C586BE54F2170BBBE1A17FE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		D95FEBB3E0A58ED365E62636 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Resources/MDECK.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.moerdowo.MDECK;
+				PRODUCT_MODULE_NAME = MDECK;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		EECCC1C5454832AB22ACD030 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		F186916395AE0FBC332C098A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.moerdowo.MDECKTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MDECK.app/Contents/MacOS/MDECK";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		724CEB982DC172C8B2291FA4 /* Build configuration list for PBXProject "MDECK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8C586BE54F2170BBBE1A17FE /* Debug */,
+				EECCC1C5454832AB22ACD030 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		7FE8E2FB69D5F6F3F026F7E4 /* Build configuration list for PBXNativeTarget "MDECKTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				63233C192C39FB3081E9EDEA /* Debug */,
+				F186916395AE0FBC332C098A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		BEE150B32F86A9E312834E12 /* Build configuration list for PBXNativeTarget "MDECK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D95FEBB3E0A58ED365E62636 /* Debug */,
+				477D68B205888E8F87BD626D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D046F7BDB2E2EACDD88DAAE0 /* Project object */;
+}

@@ -4,13 +4,11 @@ import SwiftUI
 enum SpectrumStyle: String, CaseIterable, Sendable {
     case bars = "bars"
     case waveform = "waveform"
-    case combined = "combined"
 
     var label: String {
         switch self {
         case .bars:     return "Bars"
         case .waveform: return "Wave"
-        case .combined: return "Both"
         }
     }
 }
@@ -82,14 +80,14 @@ final class AppSettings: ObservableObject {
     // MARK: - Persistence Keys
 
     private enum Key {
-        static let spectrumStyle     = "MDeck.spectrumStyle"
-        static let spectrumRows      = "MDeck.spectrumRows"
-        static let spectrumSmoothing = "MDeck.spectrumSmoothing"
-        static let accentEnabled     = "MDeck.accentOverrideEnabled"
-        static let accentHex         = "MDeck.accentOverrideHex"
-        static let showAlbumArt      = "MDeck.showAlbumArt"
-        static let showSpectrum      = "MDeck.showSpectrum"
-        static let layoutDensity     = "MDeck.layoutDensity"
+        static let spectrumStyle     = "MDECK.spectrumStyle"
+        static let spectrumRows      = "MDECK.spectrumRows"
+        static let spectrumSmoothing = "MDECK.spectrumSmoothing"
+        static let accentEnabled     = "MDECK.accentOverrideEnabled"
+        static let accentHex         = "MDECK.accentOverrideHex"
+        static let showAlbumArt      = "MDECK.showAlbumArt"
+        static let showSpectrum      = "MDECK.showSpectrum"
+        static let layoutDensity     = "MDECK.layoutDensity"
     }
 
     init() {
@@ -121,6 +119,7 @@ final class AppSettings: ObservableObject {
             Theme.customAccentEnabled = false
             Theme.customAccent = nil
         }
+        Theme.colorCache.removeAll()
     }
 
     /// Convenience – select an accent by preset hex or disable it.

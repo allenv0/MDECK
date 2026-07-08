@@ -3,10 +3,6 @@ import SwiftUI
 struct VolumeDots: View {
     @Binding var value: Float
 
-    private static let onHot  = Color(red: 0.96, green: 0.56, blue: 0.26)
-    private static let onCool = Color(red: 0.86, green: 0.36, blue: 0.12)
-    private static let off    = Color(red: 0.24, green: 0.12, blue: 0.05)
-
     var body: some View {
         GeometryReader { geo in
             let w = geo.size.width
@@ -23,9 +19,9 @@ struct VolumeDots: View {
                     let color: Color
                     if on {
                         let t = lit > 1 ? Double(i) / Double(lit - 1) : 0
-                        color = Self.lerp(Self.onHot, Self.onCool, t)
+                        color = Self.lerp(Theme.accent, Theme.accent.opacity(0.4), t)
                     } else {
-                        color = Self.off
+                        color = Theme.dotOff.opacity(0.4)
                     }
                     ctx.fill(Path(rect), with: .color(color))
                 }

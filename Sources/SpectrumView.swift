@@ -14,9 +14,6 @@ struct SpectrumView: View {
                 drawBars(ctx: &ctx, size: size)
             case .waveform:
                 drawWaveform(ctx: &ctx, size: size)
-            case .combined:
-                drawBars(ctx: &ctx, size: size)
-                drawWaveform(ctx: &ctx, size: size)
             }
         }
     }
@@ -56,7 +53,7 @@ struct SpectrumView: View {
             let last = idx == levels.count - 1
             let rect = CGRect(x: x - bw/2, y: (size.height - h) / 2, width: bw, height: h)
             ctx.fill(Path(roundedRect: rect, cornerRadius: radius),
-                     with: .color(last ? Theme.orange : Theme.dotOn))
+                     with: .color(last ? Theme.accent : Theme.dotOn))
         }
     }
 

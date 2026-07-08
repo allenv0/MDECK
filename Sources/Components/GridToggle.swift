@@ -12,7 +12,7 @@ struct GridToggle: View {
         } label: {
             ZStack(alignment: .leading) {
                 Rectangle()
-                    .fill(on ? Theme.orange : Theme.trackOff)
+                    .fill(on ? Theme.accent : Theme.trackOff)
                 pixelKnob
                     .frame(width: thumb, height: thumb)
                     .offset(x: on ? trackW - thumb - 2 : 2)
@@ -36,7 +36,7 @@ struct GridToggle: View {
                     let x = CGFloat(c) * (cell + gap)
                     let y = CGFloat(r) * (cell + gap)
                     ctx.fill(Path(CGRect(x: x, y: y, width: cell, height: cell)),
-                             with: .color(.white))
+                             with: .color(Theme.dotOn))
                 }
             }
         }

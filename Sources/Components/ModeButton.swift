@@ -12,11 +12,13 @@ struct ModeButton: View {
                 .foregroundStyle(active ? .white : Theme.inkFaint)
                 .lineLimit(1).fixedSize()
                 .frame(width: width, height: 28)
-                .background((active ? Theme.orange : Color.clear).opacity(active ? 0.18 : 0))
+                .background((active ? Theme.accent : Color.clear).opacity(active ? 0.18 : 0))
                 .overlay(RoundedRectangle(cornerRadius: Radius.pill, style: .continuous)
-                    .stroke(active ? Theme.orange : Theme.panelStroke, lineWidth: 1))
+                    .stroke(active ? Theme.accent : Theme.panelStroke, lineWidth: 1))
                 .clipShape(RoundedRectangle(cornerRadius: Radius.pill, style: .continuous))
         }
         .buttonStyle(.plain)
+        .accessibilityLabel("\(label) mode")
+        .accessibilityValue(active ? "On" : "Off")
     }
 }

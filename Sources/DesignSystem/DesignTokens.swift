@@ -4,25 +4,88 @@ enum Spacing {
     // Base unit
     static let grid: CGFloat = 16
 
-    // Panels
-    static let panelPadding: CGFloat = 14
-    static let panelSpacing: CGFloat = 10
+    // Panels — function of density
+    static func panelPadding(_ density: LayoutDensity = .normal) -> CGFloat {
+        switch density {
+        case .compact:  return 10
+        case .normal:   return 14
+        case .spacious: return 18
+        }
+    }
+    static var panelPadding: CGFloat { panelPadding() }
+    static func panelSpacing(_ density: LayoutDensity = .normal) -> CGFloat {
+        switch density {
+        case .compact:  return 8
+        case .normal:   return 10
+        case .spacious: return 14
+        }
+    }
+    static var panelSpacing: CGFloat { panelSpacing() }
     static let panelLabelPadding: CGFloat = 4
 
     // Sections
-    static let sectionSpacing: CGFloat = 12
-    static let sectionPadding: CGFloat = 16
+    static func sectionSpacing(_ density: LayoutDensity = .normal) -> CGFloat {
+        switch density {
+        case .compact:  return 8
+        case .normal:   return 12
+        case .spacious: return 16
+        }
+    }
+    static var sectionSpacing: CGFloat { sectionSpacing() }
+    static func sectionPadding(_ density: LayoutDensity = .normal) -> CGFloat {
+        switch density {
+        case .compact:  return 12
+        case .normal:   return 16
+        case .spacious: return 20
+        }
+    }
+    static var sectionPadding: CGFloat { sectionPadding() }
 
     // Controls
-    static let controlSpacing: CGFloat = 10
-    static let controlPadding: CGFloat = 8
-    static let controlVertical: CGFloat = 7
+    static func controlSpacing(_ density: LayoutDensity = .normal) -> CGFloat {
+        switch density {
+        case .compact:  return 6
+        case .normal:   return 10
+        case .spacious: return 14
+        }
+    }
+    static var controlSpacing: CGFloat { controlSpacing() }
+    static func controlPadding(_ density: LayoutDensity = .normal) -> CGFloat {
+        switch density {
+        case .compact:  return 6
+        case .normal:   return 8
+        case .spacious: return 10
+        }
+    }
+    static var controlPadding: CGFloat { controlPadding() }
+    static func controlVertical(_ density: LayoutDensity = .normal) -> CGFloat {
+        switch density {
+        case .compact:  return 5
+        case .normal:   return 7
+        case .spacious: return 10
+        }
+    }
+    static var controlVertical: CGFloat { controlVertical() }
 
     // Buttons
-    static let buttonSpacing: CGFloat = 6
-    static let buttonPadding: CGFloat = 6
+    static func buttonSpacing(_ density: LayoutDensity = .normal) -> CGFloat {
+        switch density {
+        case .compact:  return 4
+        case .normal:   return 6
+        case .spacious: return 8
+        }
+    }
+    static var buttonSpacing: CGFloat { buttonSpacing() }
+    static func buttonPadding(_ density: LayoutDensity = .normal) -> CGFloat {
+        switch density {
+        case .compact:  return 4
+        case .normal:   return 6
+        case .spacious: return 8
+        }
+    }
+    static var buttonPadding: CGFloat { buttonPadding() }
 
-    // Layout density mapping
+    // Layout density mapping (top-level gutter)
     static func density(_ density: LayoutDensity) -> CGFloat {
         switch density {
         case .compact:  return 12

@@ -1,7 +1,7 @@
 import XCTest
 import SwiftUI
 import AVFoundation
-@testable import MDeck
+@testable import MDECK
 
 private let testSRGB = NSColorSpace.sRGB
 
@@ -129,16 +129,16 @@ final class ColorHexTests: XCTestCase {
 
 @MainActor
 final class ThemeManagerTests: XCTestCase {
-    let defaults = UserDefaults(suiteName: "test.theme.MDeck")!
+    let defaults = UserDefaults(suiteName: "test.theme.MDECK")!
 
     override func setUp() {
         super.setUp()
-        UserDefaults.standard.removeObject(forKey: "MDeck.theme")
+        UserDefaults.standard.removeObject(forKey: "MDECK.theme")
     }
 
     override func tearDown() {
-        defaults.removePersistentDomain(forName: "test.theme.MDeck")
-        UserDefaults.standard.removeObject(forKey: "MDeck.theme")
+        defaults.removePersistentDomain(forName: "test.theme.MDECK")
+        UserDefaults.standard.removeObject(forKey: "MDECK.theme")
         Theme.current = ThemeCatalog.classic
     }
 
@@ -158,11 +158,11 @@ final class ThemeManagerTests: XCTestCase {
 
     func test_selectionPersistsAcrossInstances() {
         let defaults = self.defaults
-        defaults.set("dracula", forKey: "MDeck.theme")
+        defaults.set("dracula", forKey: "MDECK.theme")
 
         let mgr = ThemeManager()
         mgr.select(ThemeCatalog.nord)
-        let saved = UserDefaults.standard.string(forKey: "MDeck.theme")
+        let saved = UserDefaults.standard.string(forKey: "MDECK.theme")
         XCTAssertEqual(saved, "nord")
     }
 }
@@ -172,22 +172,22 @@ final class ThemeManagerTests: XCTestCase {
 /// Simulates the exact UserDefaults key/value contract that AudioEngine uses,
 /// so we can verify the encoding/decoding logic in isolation.
 final class PersistenceContractTests: XCTestCase {
-    let defaults = UserDefaults(suiteName: "test.persist.MDeck")!
+    let defaults = UserDefaults(suiteName: "test.persist.MDECK")!
 
     override func tearDown() {
-        defaults.removePersistentDomain(forName: "test.persist.MDeck")
+        defaults.removePersistentDomain(forName: "test.persist.MDECK")
     }
 
     // MARK: Shuffle
 
     func test_shuffle_defaultIsFalse() {
-        let key = "MDeck.shuffle"
+        let key = "MDECK.shuffle"
         XCTAssertFalse(defaults.bool(forKey: key),
                        "Missing shuffle key should return false")
     }
 
     func test_shuffle_roundTrip() {
-        let key = "MDeck.shuffle"
+        let key = "MDECK.shuffle"
         defaults.set(true, forKey: key)
         XCTAssertTrue(defaults.bool(forKey: key))
         defaults.set(false, forKey: key)
@@ -195,7 +195,7 @@ final class PersistenceContractTests: XCTestCase {
     }
 
     func test_shuffle_onlyReadWhenKeyExists() {
-        let key = "MDeck.shuffle"
+        let key = "MDECK.shuffle"
         XCTAssertNil(defaults.object(forKey: key),
                      "object(forKey:) should return nil for missing key")
     }
@@ -203,14 +203,14 @@ final class PersistenceContractTests: XCTestCase {
     // MARK: RepeatMode
 
     func test_repeatMode_defaultIsOff() {
-        let key = "MDeck.repeatMode"
+        let key = "MDECK.repeatMode"
         let raw = defaults.string(forKey: key)
         XCTAssertNil(raw, "Missing repeatMode key should return nil")
         // The restore code maps nil → .off
     }
 
     func test_repeatMode_roundTrip() {
-        let key = "MDeck.repeatMode"
+        let key = "MDECK.repeatMode"
         for mode in ["off", "all", "one"] {
             defaults.set(mode, forKey: key)
             let decoded: RepeatMode = {
@@ -228,7 +228,7 @@ final class PersistenceContractTests: XCTestCase {
     // MARK: CurrentIndex
 
     func test_currentIndex_defaultIsNegative() {
-        let key = "MDeck.currentIndex"
+        let key = "MDECK.currentIndex"
         // integer(forKey:) returns 0 when missing, but AudioEngine uses
         // object(forKey:) to detect absence.  Without a saved value we
         // should treat -1 (or nil) as "no saved index".
@@ -237,7 +237,7 @@ final class PersistenceContractTests: XCTestCase {
     }
 
     func test_currentIndex_roundTrip() {
-        let key = "MDeck.currentIndex"
+        let key = "MDECK.currentIndex"
         defaults.set(3, forKey: key)
         XCTAssertEqual(defaults.integer(forKey: key), 3)
 
@@ -250,7 +250,7 @@ final class PersistenceContractTests: XCTestCase {
     // MARK: Volume
 
     func test_volume_roundTrip() {
-        let key = "MDeck.volume"
+        let key = "MDECK.volume"
         defaults.set(Float(0.5), forKey: key)
         XCTAssertEqual(defaults.float(forKey: key), 0.5, accuracy: 0.001)
 
@@ -261,7 +261,7 @@ final class PersistenceContractTests: XCTestCase {
     // MARK: Bookmarks (simulated)
 
     func test_bookmarks_roundTrip() {
-        let key = "MDeck.bookmarks"
+        let key = "MDECK.bookmarks"
         // Create fake bookmark data
         let fakeData1 = "track1".data(using: .utf8)!
         let fakeData2 = "track2".data(using: .utf8)!
@@ -278,7 +278,7 @@ final class PersistenceContractTests: XCTestCase {
     }
 
     func test_bookmarks_emptyArray() {
-        let key = "MDeck.bookmarks"
+        let key = "MDECK.bookmarks"
         defaults.set([Data](), forKey: key)
         guard let read = defaults.array(forKey: key) as? [Data] else {
             XCTFail("Should read back empty bookmark array")
@@ -288,7 +288,7 @@ final class PersistenceContractTests: XCTestCase {
     }
 
     func test_bookmarks_missingKeyReturnsNil() {
-        let key = "MDeck.bookmarks"
+        let key = "MDECK.bookmarks"
         XCTAssertNil(defaults.array(forKey: key))
     }
 
@@ -321,19 +321,17 @@ final class PersistenceContractTests: XCTestCase {
 
 final class SpectrumStyleTests: XCTestCase {
     func test_allCases_count() {
-        XCTAssertEqual(SpectrumStyle.allCases.count, 3)
+        XCTAssertEqual(SpectrumStyle.allCases.count, 2)
     }
 
     func test_labels() {
         XCTAssertEqual(SpectrumStyle.bars.label, "Bars")
         XCTAssertEqual(SpectrumStyle.waveform.label, "Wave")
-        XCTAssertEqual(SpectrumStyle.combined.label, "Both")
     }
 
     func test_rawValues() {
         XCTAssertEqual(SpectrumStyle.bars.rawValue, "bars")
         XCTAssertEqual(SpectrumStyle.waveform.rawValue, "waveform")
-        XCTAssertEqual(SpectrumStyle.combined.rawValue, "combined")
     }
 }
 
@@ -409,12 +407,12 @@ final class DesignTokensTests: XCTestCase {
 
 @MainActor
 final class AppSettingsTests: XCTestCase {
-    private let defaults = UserDefaults(suiteName: "test.appsettings.MDeck")!
+    private let defaults = UserDefaults(suiteName: "test.appsettings.MDECK")!
 
-    private let appSettingKeys = ["MDeck.spectrumStyle", "MDeck.spectrumRows",
-                                   "MDeck.spectrumSmoothing", "MDeck.accentOverrideEnabled",
-                                   "MDeck.accentOverrideHex", "MDeck.showAlbumArt",
-                                   "MDeck.showSpectrum", "MDeck.layoutDensity"]
+    private let appSettingKeys = ["MDECK.spectrumStyle", "MDECK.spectrumRows",
+                                   "MDECK.spectrumSmoothing", "MDECK.accentOverrideEnabled",
+                                   "MDECK.accentOverrideHex", "MDECK.showAlbumArt",
+                                   "MDECK.showSpectrum", "MDECK.layoutDensity"]
 
     override func setUp() {
         super.setUp()
@@ -422,7 +420,7 @@ final class AppSettingsTests: XCTestCase {
     }
 
     override func tearDown() {
-        defaults.removePersistentDomain(forName: "test.appsettings.MDeck")
+        defaults.removePersistentDomain(forName: "test.appsettings.MDECK")
         for key in appSettingKeys { UserDefaults.standard.removeObject(forKey: key) }
         Theme.customAccentEnabled = false
         Theme.customAccent = nil
@@ -842,10 +840,10 @@ final class AudioEnginePlaylistTests: XCTestCase {
             try? fm.removeItem(at: tmp.appendingPathComponent(name))
         }
         let musicDir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-            .appendingPathComponent("com.moerdowo.MDeck/Music", isDirectory: true)
+            .appendingPathComponent("com.moerdowo.MDECK/Music", isDirectory: true)
         try? FileManager.default.removeItem(at: musicDir.appendingPathComponent("playlist.json"))
         Theme.current = ThemeCatalog.classic
-        UserDefaults.standard.removeObject(forKey: "MDeck.volume")
+        UserDefaults.standard.removeObject(forKey: "MDECK.volume")
     }
 
     func test_playlist_initialState() {

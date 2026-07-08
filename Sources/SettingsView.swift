@@ -50,46 +50,40 @@ struct SettingsView: View {
     private var colorThemeSection: some View {
         VStack(spacing: 0) {
             sectionHeader("COLOR THEME")
-            VStack(spacing: 0) {
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: Spacing.hairline), count: 4), spacing: Spacing.buttonSpacing) {
                 ForEach(theme.palettes) { palette in
-                    themeRow(palette)
+                    themeCell(palette)
                 }
             }
-            .padding(.bottom, Spacing.snug)
+            .padding(.horizontal, Spacing.sectionPadding)
+            .padding(.bottom, Spacing.sectionSpacing)
         }
     }
 
-    private func themeRow(_ p: Palette) -> some View {
+    private func themeCell(_ p: Palette) -> some View {
         let isSelected = theme.selectedID == p.id
         return Button {
             withAnimation(.easeInOut(duration: 0.15)) { theme.select(p) }
         } label: {
-            HStack(spacing: Spacing.sectionSpacing) {
-                swatches(p)
+            VStack(spacing: Spacing.snug) {
+                RoundedRectangle(cornerRadius: Radius.pill)
+                    .fill(Color(hex: p.accent))
+                    .frame(height: 32)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: Radius.pill)
+                            .stroke(isSelected ? Theme.dotOn : Color.clear, lineWidth: 2)
+                    )
+                    .shadow(color: isSelected ? Color(hex: p.accent).opacity(0.4) : .clear, radius: 4)
                 Text(p.name)
-                    .font(.mono(Typography.body, isSelected ? .bold : .regular))
+                    .font(.mono(Typography.badge, isSelected ? .bold : .regular))
                     .foregroundStyle(isSelected ? Theme.dotOn : Theme.ink)
-                Spacer()
-                Image(systemName: isSelected ? "largecircle.fill.circle" : "circle")
-                    .font(.system(size: 12))
-                    .foregroundStyle(isSelected ? Theme.orange : Theme.inkFaint)
+                    .lineLimit(1)
+                    .frame(maxWidth: .infinity)
             }
-            .padding(.horizontal, Spacing.sectionPadding).padding(.vertical, 9)
-            .background(isSelected ? Theme.orange.opacity(0.09) : Color.clear)
-            .contentShape(Rectangle())
+            .padding(.vertical, Spacing.snug)
+            .padding(.horizontal, 2)
         }
         .buttonStyle(.plain)
-    }
-
-    private func swatches(_ p: Palette) -> some View {
-        HStack(spacing: Spacing.hairline) {
-            ForEach(Array([p.bg, p.accent, p.bandLow, p.bandMid, p.bandHigh, p.bandPeak].enumerated()), id: \.offset) { _, hex in
-                RoundedRectangle(cornerRadius: Radius.swatchInner)
-                    .fill(Color(hex: hex))
-                    .frame(width: 9, height: 18)
-            }
-        }
-        .overlay(RoundedRectangle(cornerRadius: Radius.swatch).stroke(Theme.inkFaint, lineWidth: 0.5))
     }
 
     // MARK: - Visualizer
@@ -103,7 +97,7 @@ struct SettingsView: View {
                     .font(.mono(Typography.label)).tracking(1.5).foregroundStyle(Theme.inkFaint)
                     .frame(width: 38, alignment: .leading)
                 ForEach(SpectrumStyle.allCases, id: \.self) { style in
-                    pickerButton(
+                    PickerButton(
                         label: style.label.uppercased(),
                         isSelected: settings.spectrumStyle == style
                     ) {
@@ -140,27 +134,13 @@ struct SettingsView: View {
                     .font(.mono(Typography.label)).tracking(1.5).foregroundStyle(Theme.inkFaint)
                     .frame(width: 38, alignment: .leading)
                 Slider(value: $settings.spectrumSmoothing, in: 0.0...1.0)
-                    .tint(Theme.orange)
+                    .tint(Theme.accent)
                 Text(String(format: "%.1f", settings.spectrumSmoothing))
                     .font(.mono(Typography.caption)).foregroundStyle(Theme.inkDim).frame(width: 24, alignment: .trailing)
             }
             .padding(.horizontal, Spacing.sectionPadding).padding(.vertical, Spacing.snug)
             .padding(.bottom, Spacing.snug)
         }
-    }
-
-    private func pickerButton(label: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Text(label)
-                .font(.mono(Typography.label, isSelected ? .bold : .regular))
-                .foregroundStyle(isSelected ? Theme.dotOn : Theme.inkDim)
-                .padding(.horizontal, Spacing.controlSpacing).padding(.vertical, 5)
-                .background(isSelected ? Theme.orange.opacity(0.15) : Color.clear)
-                .overlay(RoundedRectangle(cornerRadius: Radius.input)
-                    .stroke(isSelected ? Theme.orange : Theme.panelStroke, lineWidth: 1))
-                .clipShape(RoundedRectangle(cornerRadius: Radius.input))
-        }
-        .buttonStyle(.plain)
     }
 
     // MARK: - Custom Accent
@@ -173,7 +153,7 @@ struct SettingsView: View {
                 Toggle(isOn: $settings.accentOverrideEnabled) {
                     Text("OVERRIDE").font(.mono(Typography.label)).tracking(1.5).foregroundStyle(Theme.inkFaint)
                 }
-                .toggleStyle(.switch).tint(Theme.orange)
+                .toggleStyle(.switch).tint(Theme.accent)
                 Spacer()
                 if settings.accentOverrideEnabled, let hex = settings.accentOverrideHex {
                     RoundedRectangle(cornerRadius: Radius.input)
@@ -211,6 +191,7 @@ struct SettingsView: View {
                     Text("RESET ACCENT").font(.mono(Typography.badge, .bold)).tracking(1.2)
                         .foregroundStyle(Theme.inkFaint)
                         .padding(.horizontal, Spacing.sectionSpacing).padding(.vertical, Spacing.buttonSpacing)
+                        .background(Theme.inkFaint.opacity(0.06))
                         .overlay(RoundedRectangle(cornerRadius: Radius.input).stroke(Theme.panelStroke))
                         .clipShape(RoundedRectangle(cornerRadius: Radius.input))
                 }
@@ -222,6 +203,17 @@ struct SettingsView: View {
 
     // MARK: - Display
 
+    private func densityBar(count: Int, height: CGFloat) -> some View {
+        HStack(alignment: .bottom, spacing: 1) {
+            ForEach(0..<count, id: \.self) { i in
+                RoundedRectangle(cornerRadius: 0.5)
+                    .fill(Theme.inkDim)
+                    .frame(width: 3, height: height * CGFloat(i + 1) / CGFloat(count))
+            }
+        }
+        .frame(width: 14, alignment: .center)
+    }
+
     private var displaySection: some View {
         VStack(spacing: 0) {
             sectionHeader("DISPLAY")
@@ -231,11 +223,17 @@ struct SettingsView: View {
                     .font(.mono(Typography.label)).tracking(1.5).foregroundStyle(Theme.inkFaint)
                     .frame(width: 50, alignment: .leading)
                 ForEach(LayoutDensity.allCases, id: \.self) { density in
-                    pickerButton(
-                        label: density.label.uppercased(),
-                        isSelected: settings.layoutDensity == density
-                    ) {
-                        withAnimation { settings.layoutDensity = density }
+                    HStack(spacing: Spacing.snug) {
+                        densityBar(
+                            count: density == .compact ? 3 : (density == .normal ? 4 : 5),
+                            height: density == .compact ? 8 : (density == .normal ? 11 : 14)
+                        )
+                        PickerButton(
+                            label: density.label.uppercased(),
+                            isSelected: settings.layoutDensity == density
+                        ) {
+                            withAnimation { settings.layoutDensity = density }
+                        }
                     }
                 }
                 Spacer()
@@ -268,7 +266,7 @@ struct SettingsView: View {
                 .font(.mono(Typography.caption)).foregroundStyle(Theme.ink)
             Spacer()
             Toggle(isOn: binding) { EmptyView() }
-                .toggleStyle(.switch).tint(Theme.orange)
+                .toggleStyle(.switch).tint(Theme.accent)
                 .scaleEffect(0.85)
         }
         .padding(.horizontal, Spacing.sectionPadding).padding(.vertical, Spacing.buttonSpacing)

@@ -15,10 +15,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "640676E9685FB31649703FE4"
-               BuildableName = "DotMP3.app"
-               BlueprintName = "DotMP3"
-               ReferencedContainer = "container:DotMP3.xcodeproj">
+               BlueprintIdentifier = "EFAAB7BCC14EBD50BB97DFED"
+               BuildableName = "MDECK.app"
+               BlueprintName = "MDECK"
+               ReferencedContainer = "container:MDECK.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -29,10 +29,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "34B4DC05CA1D42B89CBF1BA1"
-               BuildableName = "DotMP3Tests.xctest"
-               BlueprintName = "DotMP3Tests"
-               ReferencedContainer = "container:DotMP3.xcodeproj">
+               BlueprintIdentifier = "F632B22A0AF171CC00E57418"
+               BuildableName = "MDECKTests.xctest"
+               BlueprintName = "MDECKTests"
+               ReferencedContainer = "container:MDECK.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -46,10 +46,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "640676E9685FB31649703FE4"
-            BuildableName = "DotMP3.app"
-            BlueprintName = "DotMP3"
-            ReferencedContainer = "container:DotMP3.xcodeproj">
+            BlueprintIdentifier = "EFAAB7BCC14EBD50BB97DFED"
+            BuildableName = "MDECK.app"
+            BlueprintName = "MDECK"
+            ReferencedContainer = "container:MDECK.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
@@ -58,10 +58,10 @@
             parallelizable = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "34B4DC05CA1D42B89CBF1BA1"
-               BuildableName = "DotMP3Tests.xctest"
-               BlueprintName = "DotMP3Tests"
-               ReferencedContainer = "container:DotMP3.xcodeproj">
+               BlueprintIdentifier = "F632B22A0AF171CC00E57418"
+               BuildableName = "MDECKTests.xctest"
+               BlueprintName = "MDECKTests"
+               ReferencedContainer = "container:MDECK.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -82,10 +82,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "640676E9685FB31649703FE4"
-            BuildableName = "DotMP3.app"
-            BlueprintName = "DotMP3"
-            ReferencedContainer = "container:DotMP3.xcodeproj">
+            BlueprintIdentifier = "EFAAB7BCC14EBD50BB97DFED"
+            BuildableName = "MDECK.app"
+            BlueprintName = "MDECK"
+            ReferencedContainer = "container:MDECK.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -99,10 +99,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "640676E9685FB31649703FE4"
-            BuildableName = "DotMP3.app"
-            BlueprintName = "DotMP3"
-            ReferencedContainer = "container:DotMP3.xcodeproj">
+            BlueprintIdentifier = "EFAAB7BCC14EBD50BB97DFED"
+            BuildableName = "MDECK.app"
+            BlueprintName = "MDECK"
+            ReferencedContainer = "container:MDECK.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

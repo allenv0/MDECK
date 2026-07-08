@@ -165,7 +165,7 @@ enum Theme {
     static var customAccentEnabled = false
     static var customAccent: Color? = nil
 
-    private static var colorCache: [UInt32: Color] = [:]
+    static var colorCache: [UInt32: Color] = [:]
 
     private static func hex(_ value: UInt32, alpha: Double = 1) -> Color {
         if let c = colorCache[value], alpha == 1 { return c }
@@ -184,7 +184,8 @@ enum Theme {
     static var inkDim: Color     { hex(current.muted) }
     static var inkFaint: Color   { hex(current.faint) }
     static var red: Color        { hex(current.bandPeak) }
-    static var orange: Color     { customAccentEnabled && customAccent != nil ? customAccent! : hex(current.accent) }
+    static var accent: Color     { customAccentEnabled && customAccent != nil ? customAccent! : hex(current.accent) }
+    static var orange: Color     { accent }
     static var trackOff: Color   { hex(current.grid) }
 
     static var bandLow: Color    { hex(current.bandLow) }
@@ -202,7 +203,7 @@ struct PaletteKey: EnvironmentKey {
 extension EnvironmentValues {
     var palette: Palette {
         get { self[PaletteKey.self] }
-        set { self[PaletteKey.self] = newValue; Theme.current = newValue }
+        set { self[PaletteKey.self] = newValue; Theme.current = newValue; Theme.colorCache.removeAll() }
     }
 }
 
@@ -223,10 +224,11 @@ extension Font {
 
 @MainActor
 final class ThemeManager: ObservableObject {
-    private let key = "MDeck.theme"
+    private let key = "MDECK.theme"
     @Published var selectedID: String {
         didSet {
             Theme.current = ThemeCatalog.byID(selectedID)
+            Theme.colorCache.removeAll()
             UserDefaults.standard.set(selectedID, forKey: key)
         }
     }

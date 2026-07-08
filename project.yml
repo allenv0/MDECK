@@ -1,4 +1,4 @@
-name: MDeck
+name: MDECK
 options:
   bundleIdPrefix: com.moerdowo
   deploymentTarget:
@@ -13,16 +13,16 @@ settings:
     CODE_SIGN_STYLE: Automatic
     ENABLE_HARDENED_RUNTIME: YES
 schemes:
-  MDeck:
+  MDECK:
     build:
       targets:
-        MDeck: all
-        MDeckTests: test
+        MDECK: all
+        MDECKTests: test
     test:
       targets:
-        - MDeckTests
+        - MDECKTests
 targets:
-  MDeck:
+  MDECK:
     type: application
     platform: macOS
     sources:
@@ -31,8 +31,8 @@ targets:
     info:
       path: Resources/Info.plist
       properties:
-        CFBundleName: MDeck
-        CFBundleDisplayName: MDeck
+        CFBundleName: MDECK
+        CFBundleDisplayName: MDECK
         CFBundleIconFile: mdeck
         CFBundleShortVersionString: "1.0"
         CFBundleVersion: "1"
@@ -44,7 +44,7 @@ targets:
         NSAppTransportSecurity:
           NSAllowsArbitraryLoads: true
     entitlements:
-      path: Resources/MDeck.entitlements
+      path: Resources/MDECK.entitlements
       properties:
         com.apple.security.app-sandbox: true
         com.apple.security.files.user-selected.read-only: true
@@ -52,19 +52,20 @@ targets:
         com.apple.security.assets.music.read-only: true
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.moerdowo.MDeck
+        PRODUCT_BUNDLE_IDENTIFIER: com.moerdowo.MDECK
+        PRODUCT_MODULE_NAME: MDECK
         GENERATE_INFOPLIST_FILE: NO
         COMBINE_HIDPI_IMAGES: YES
         ENABLE_PREVIEWS: YES
-        CODE_SIGN_ENTITLEMENTS: Resources/MDeck.entitlements
-  MDeckTests:
+        CODE_SIGN_ENTITLEMENTS: Resources/MDECK.entitlements
+  MDECKTests:
     type: bundle.unit-test
     platform: macOS
     sources:
       - Tests
     dependencies:
-      - target: MDeck
+      - target: MDECK
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.moerdowo.MDeckTests
+        PRODUCT_BUNDLE_IDENTIFIER: com.moerdowo.MDECKTests
         GENERATE_INFOPLIST_FILE: YES

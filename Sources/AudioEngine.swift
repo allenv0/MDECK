@@ -26,7 +26,7 @@ final class AudioEngine: ObservableObject {
     @Published var currentTime: Double = 0
     @Published var duration: Double = 0
     @Published var volume: Float = 0.8 {
-        didSet { mixer.outputVolume = volume; UserDefaults.standard.set(volume, forKey: "MDeck.volume") }
+        didSet { mixer.outputVolume = volume; UserDefaults.standard.set(volume, forKey: "MDECK.volume") }
     }
     @Published var bands: [Float] = Array(repeating: 0, count: 16)
     @Published var level: Float = 0
@@ -55,7 +55,7 @@ final class AudioEngine: ObservableObject {
 
     private var musicDirectory: URL {
         let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        let dir = appSupport.appendingPathComponent("com.moerdowo.MDeck/Music", isDirectory: true)
+        let dir = appSupport.appendingPathComponent("com.moerdowo.MDECK/Music", isDirectory: true)
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true, attributes: nil)
         return dir
     }
@@ -87,8 +87,8 @@ final class AudioEngine: ObservableObject {
         engine.connect(player, to: mixer, format: nil)
         mixer.outputVolume = volume
 
-        if UserDefaults.standard.object(forKey: "MDeck.volume") != nil {
-            volume = UserDefaults.standard.float(forKey: "MDeck.volume")
+        if UserDefaults.standard.object(forKey: "MDECK.volume") != nil {
+            volume = UserDefaults.standard.float(forKey: "MDECK.volume")
         }
 
         loadPlaylist()

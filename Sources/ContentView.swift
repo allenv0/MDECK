@@ -6,7 +6,9 @@ struct ContentView: View {
     @StateObject private var theme = ThemeManager()
     @ObservedObject private var settings = AppSettings.shared
     @State private var dropTargeted = false
+    @State private var windowDropTargeted = false
     @State private var artDropTargeted = false
+    @State private var artHovered = false
     @State private var draggingIndex: Int? = nil
     @State private var showPlaylist = true
     @State private var showSettings = false
@@ -26,6 +28,10 @@ struct ContentView: View {
                 }
             }
         }
+        .frame(
+            minWidth: settings.showSpectrum || settings.showAlbumArt ? 680 : 480,
+            minHeight: showPlaylist ? 560 : 400
+        )
         .animation(.spring(response: 0.32, dampingFraction: 0.82), value: showPlaylist)
         .padding(AppSettings.shared.layoutDensity.spacing)
         .background(Theme.bg)
@@ -63,10 +69,30 @@ struct ContentView: View {
         )
         .environment(\.palette, theme.selected)
         .focusEffectDisabled()
-        .onDrop(of: [UTType.fileURL], isTargeted: nil) { providers in
+        .onDrop(of: [UTType.fileURL], isTargeted: $windowDropTargeted) { providers in
             engine.add(providers: providers)
             return true
         }
+        .overlay {
+            if windowDropTargeted {
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .fill(Theme.accent.opacity(0.06))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 14, style: .continuous)
+                            .stroke(Theme.accent, lineWidth: 2)
+                    )
+                    .overlay {
+                        VStack(spacing: 12) {
+                            DotText(text: "DROP FILES", dot: 5, gap: 2.5, spacing: 5, color: Theme.accent)
+                            Text("Add to queue")
+                                .font(.mono(Typography.caption)).tracking(1.5).foregroundStyle(Theme.inkDim)
+                        }
+                    }
+                    .allowsHitTesting(false)
+                    .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut(duration: 0.2), value: windowDropTargeted)
         .onReceive(NotificationCenter.default.publisher(for: .openFiles)) { _ in openFiles() }
         .onAppear { NSWindow.allowsAutomaticWindowTabbing = false }
     }
@@ -75,7 +101,7 @@ struct ContentView: View {
 
     private var header: some View {
         HStack(alignment: .center) {
-            DotText(text: "MDeck", dot: 1.8, gap: 1.1, spacing: 2.4, color: Theme.dotOn)
+            DotText(text: "MDECK", dot: 1.8, gap: 1.1, spacing: 2.4, color: Theme.dotOn)
             modelBadge
 
             controlStrip
@@ -101,24 +127,31 @@ struct ContentView: View {
     }
 
     private var controlStrip: some View {
-        HStack(spacing: 6) {
+        HStack(spacing: Spacing.controlSpacing()) {
             RotaryKnob(size: 18)
             RotaryKnob(size: 18)
-            PowerLED()
         }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 2)
-        .background(Theme.bg.opacity(0.5))
-        .clipShape(RoundedRectangle(cornerRadius: 6))
+        .padding(.horizontal, Spacing.controlPadding())
+        .padding(.vertical, Spacing.snug)
+        .background(
+            RoundedRectangle(cornerRadius: 6)
+                .fill(Theme.bg.opacity(0.3))
+        )
         .overlay(
             RoundedRectangle(cornerRadius: 6)
                 .stroke(Color.white.opacity(0.04), lineWidth: 1)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 6)
+                .inset(by: 0.5)
+                .stroke(Color.black.opacity(0.25), lineWidth: 1)
+                .offset(y: 1)
         )
     }
 
     private var modelBadge: some View {
         Text("Fontier-Systems")
-            .font(.mono(8, .bold))
+            .font(.mono(Typography.label, .bold))
             .tracking(1.5)
             .foregroundStyle(Theme.inkFaint.opacity(0.7))
             .padding(.horizontal, 5)
@@ -130,34 +163,9 @@ struct ContentView: View {
             .padding(.leading, 6)
     }
 
-    private struct PowerLED: View {
-        @Environment(\.palette) private var palette
-        var body: some View {
-            ZStack {
-                Circle()
-                    .fill(Color(hex: palette.accent2).opacity(0.2))
-                    .frame(width: 12, height: 12)
-                    .blur(radius: 2)
-                Circle()
-                    .fill(Color(hex: palette.accent2).opacity(0.35))
-                    .frame(width: 8, height: 8)
-                    .blur(radius: 1.5)
-                Circle()
-                    .fill(Color(hex: palette.accent2))
-                    .frame(width: 5, height: 5)
-                Circle()
-                    .fill(.white.opacity(0.5))
-                    .frame(width: 2, height: 2)
-                    .offset(x: -1, y: -1)
-            }
-        }
-    }
-
     private var statusLED: some View {
         HStack(spacing: 5) {
-            Circle()
-                .fill(engine.isPlaying ? Theme.dotOn : Theme.inkFaint)
-                .frame(width: 5, height: 5)
+            PowerLED(isActive: engine.isPlaying)
             Text(engine.isPlaying ? "PLAYING" : "IDLE")
                 .font(.mono(Typography.label)).tracking(2).foregroundStyle(Theme.inkDim)
         }
@@ -168,8 +176,10 @@ struct ContentView: View {
     private var nowPlaying: some View {
         Panel(label: "Now Playing") {
             VStack(alignment: .leading, spacing: Spacing.sectionSpacing) {
-                MarqueeDotText(text: (engine.currentTrack?.title ?? "NO SIGNAL").uppercased(),
-                                dot: 3.6, gap: 1.8, spacing: 4, color: Theme.dotOn)
+                let titleText = (engine.currentTrack?.title ?? "NO SIGNAL").uppercased()
+                MarqueeDotText(text: titleText,
+                                dot: 3.6, gap: 1.8, spacing: 4, color: Theme.dotOn,
+                                speed: max(24, CGFloat(titleText.count) * 1.2))
                     .id(engine.currentIndex ?? -1)
                 Text((engine.currentTrack?.artist ?? "—").uppercased())
                     .font(.grotesk(Typography.title, .semibold)).foregroundStyle(Theme.ink)
@@ -225,14 +235,28 @@ struct ContentView: View {
                 Image(nsImage: defaultArtwork)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .opacity(0.5)
+                    .opacity(artHovered ? 0.7 : 0.5)
             }
         }
         .clipShape(RoundedRectangle(cornerRadius: Radius.art))
         .overlay(
             RoundedRectangle(cornerRadius: Radius.art)
-                .stroke(artDropTargeted ? Theme.orange : Theme.panelStroke, lineWidth: artDropTargeted ? 2 : 1)
+                .stroke(artDropTargeted ? Theme.accent : (artHovered ? Theme.inkDim : Theme.panelStroke), lineWidth: artDropTargeted ? 2 : (artHovered ? 1.5 : 1))
         )
+        .overlay(alignment: .bottom) {
+            if artHovered && engine.currentTrack != nil {
+                Text("DROP COVER")
+                    .font(.mono(Typography.badge, .bold)).tracking(1)
+                    .foregroundStyle(Theme.inkDim)
+                    .padding(.vertical, 4)
+                    .frame(maxWidth: .infinity)
+                    .background(.ultraThinMaterial.opacity(0.5))
+                    .clipShape(RoundedRectangle(cornerRadius: Radius.art - 1))
+            }
+        }
+        .onHover { h in
+            withAnimation(.easeInOut(duration: 0.15)) { artHovered = h }
+        }
         .contextMenu {
             if let track = engine.currentTrack, track.artworkFileName != nil {
                 Button(role: .destructive) {
@@ -297,7 +321,7 @@ struct ContentView: View {
                 transportCluster
             }
         }
-        .frame(height: 190)
+        .frame(minHeight: 150)
     }
 
     private var transportCluster: some View {
@@ -355,6 +379,11 @@ struct ContentView: View {
                 VStack(spacing: 14) {
                     Spacer()
                     DotText(text: "EMPTY", dot: 4, gap: 2, color: Theme.inkFaint)
+                        .phaseAnimator([false, true]) { content, pulse in
+                            content.opacity(pulse ? 0.35 : 1)
+                        } animation: { _ in
+                                .easeInOut(duration: 2).repeatForever(autoreverses: true)
+                        }
                     Button(action: openFiles) {
                         Text("+ ADD FILES").font(.mono(11)).tracking(2)
                             .foregroundStyle(Theme.ink)
@@ -384,7 +413,7 @@ struct ContentView: View {
         .frame(maxHeight: .infinity)
         .overlay(
             RoundedRectangle(cornerRadius: Radius.panel)
-                .stroke(Theme.orange, lineWidth: dropTargeted ? 2 : 0)
+                .stroke(Theme.accent, lineWidth: dropTargeted ? 2 : 0)
         )
         .onDrop(of: [UTType.fileURL], isTargeted: $dropTargeted) { providers in
             engine.add(providers: providers)
@@ -397,7 +426,8 @@ struct ContentView: View {
         let isSel = engine.selectedIndex == idx
         return HStack(spacing: Spacing.controlSpacing) {
             if isCur {
-                Rectangle().fill(Theme.red).frame(width: 3, height: 26)
+                DotText(text: "▶", dot: 2.2, gap: 1, spacing: 0, color: Theme.accent)
+                    .frame(width: 18)
             } else {
                 Text(String(format: "%02d", idx + 1))
                     .font(.mono(Typography.caption)).foregroundStyle(Theme.inkFaint).frame(width: 18)
@@ -418,10 +448,13 @@ struct ContentView: View {
             .stroke(Theme.panelStroke, lineWidth: isSel ? 1 : 0))
         .overlay(alignment: .top) {
             if draggingIndex != nil && draggingIndex == idx {
-                Rectangle().fill(Theme.orange).frame(height: 2)
+                Rectangle().fill(Theme.accent).frame(height: 2)
             }
         }
         .contentShape(Rectangle())
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(track.title) by \(track.artist)")
+        .accessibilityHint("Double-click to play")
         .onTapGesture(count: 2) { engine.play(index: idx) }
         .onTapGesture(count: 1) { engine.select(idx) }
         .contextMenu {

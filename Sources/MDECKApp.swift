@@ -1,14 +1,13 @@
 import SwiftUI
 
 @main
-struct MDeckApp: App {
+struct MDECKApp: App {
     @StateObject private var engine = AudioEngine()
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(engine)
-                .frame(minWidth: 880, minHeight: 560)
                 .background(Theme.bg)
                 .preferredColorScheme(.dark)
         }
@@ -28,5 +27,5 @@ struct MDeckApp: App {
 }
 
 extension Notification.Name {
-    static let openFiles = Notification.Name("MDeck.openFiles")
+    static let openFiles = Notification.Name("MDECK.openFiles")
 }
