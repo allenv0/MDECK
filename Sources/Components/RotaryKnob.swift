@@ -7,8 +7,6 @@ struct RotaryKnob: View {
     @State private var currentAngle: Angle = .degrees(-45)
     @State private var dragStart: CGFloat? = nil
 
-    @Environment(\.palette) private var palette
-
     private let knobMin: Double = -135
     private let knobMax: Double = 45
 
@@ -20,24 +18,24 @@ struct RotaryKnob: View {
     }
 
     var body: some View {
-        let neon = Color(hex: palette.accent2)
+        let neon = Theme.accent2
         let displayAngle = dragStart != nil ? currentAngle : snappedAngle
 
         ZStack {
             Circle()
-                .fill(Color.black.opacity(0.45))
+                .fill(Color.black.opacity(Elevation.shadowOpacity))
                 .frame(width: size + 6, height: size + 6)
-                .blur(radius: 4)
-                .offset(y: 2.5)
+                .blur(radius: Elevation.shadowBlur)
+                .offset(y: Elevation.shadowOffset)
 
             Circle()
                 .stroke(
                     LinearGradient(
                         colors: [
-                            Color(white: 0.62),
-                            Color(white: 0.85),
-                            Color(white: 0.48),
-                            Color(white: 0.30),
+                            Color(white: Elevation.rimLight),
+                            Color(white: Elevation.rimMid),
+                            Color(white: Elevation.rimShadow),
+                            Color(white: Elevation.rimDark),
                         ],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
@@ -50,9 +48,9 @@ struct RotaryKnob: View {
                 .fill(
                     RadialGradient(
                         colors: [
-                            Color(white: 0.22),
-                            Color(white: 0.12),
-                            Color(white: 0.06),
+                            Color(white: Elevation.innerLight),
+                            Color(white: Elevation.innerMid),
+                            Color(white: Elevation.innerDark),
                         ],
                         center: .topLeading,
                         startRadius: 0,
@@ -81,7 +79,7 @@ struct RotaryKnob: View {
                 .frame(width: size - 4, height: size - 4)
 
             RoundedRectangle(cornerRadius: 0.8)
-                .fill(Color(white: 0.72))
+                .fill(Color(white: Elevation.indicator))
                 .frame(width: 1.5, height: size * 0.26)
                 .offset(y: -size * 0.22)
                 .rotationEffect(displayAngle)
@@ -100,7 +98,7 @@ struct RotaryKnob: View {
                 }
                 .onEnded { _ in
                     dragStart = nil
-                    withAnimation(.spring(response: 0.25, dampingFraction: 0.6)) {
+                    withAnimation(Anim.snap) {
                         currentAngle = snappedAngle
                     }
                 }

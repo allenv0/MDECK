@@ -22,12 +22,12 @@ struct GlyphButton: View {
                 }
             }
             .frame(width: size, height: size)
-            .background(accent ? Theme.accent.opacity(0.65) : Theme.panel)
+            .background(accent ? Theme.accent.opacity(OpacityToken.strong) : Theme.panel)
             .clipShape(RoundedRectangle(cornerRadius: Radius.art, style: .continuous))
             .overlay(RoundedRectangle(cornerRadius: Radius.art, style: .continuous)
                 .stroke(accent ? Color.clear : Theme.panelStroke, lineWidth: 1))
             .scaleEffect(down ? 0.9 : 1)
-            .animation(.spring(response: 0.18, dampingFraction: 0.45), value: down)
+            .animation(Anim.press, value: down)
             .animation(.spring(response: 0.2, dampingFraction: 0.65), value: kind)
         }
         .buttonStyle(.plain)

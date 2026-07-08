@@ -19,9 +19,9 @@ struct VolumeDots: View {
                     let color: Color
                     if on {
                         let t = lit > 1 ? Double(i) / Double(lit - 1) : 0
-                        color = Self.lerp(Theme.accent, Theme.accent.opacity(0.4), t)
+                        color = Theme.accent.opacity(1 - t * 0.6)
                     } else {
-                        color = Theme.dotOff.opacity(0.4)
+                        color = Theme.dotOff.opacity(OpacityToken.medium)
                     }
                     ctx.fill(Path(rect), with: .color(color))
                 }
@@ -39,14 +39,5 @@ struct VolumeDots: View {
                 value = Float(min(1, max(0, g.location.x / w)))
             })
         }
-    }
-
-    private static func lerp(_ a: Color, _ b: Color, _ t: Double) -> Color {
-        let ca = NSColor(a).usingColorSpace(.sRGB) ?? .orange
-        let cb = NSColor(b).usingColorSpace(.sRGB) ?? .orange
-        let f = CGFloat(max(0, min(1, t)))
-        return Color(red: Double(ca.redComponent + (cb.redComponent - ca.redComponent) * f),
-                     green: Double(ca.greenComponent + (cb.greenComponent - ca.greenComponent) * f),
-                     blue: Double(ca.blueComponent + (cb.blueComponent - ca.blueComponent) * f))
     }
 }

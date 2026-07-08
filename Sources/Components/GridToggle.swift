@@ -2,22 +2,19 @@ import SwiftUI
 
 struct GridToggle: View {
     @Binding var on: Bool
-    private let trackW: CGFloat = 36
-    private let trackH: CGFloat = 17
-    private let thumb: CGFloat = 13
 
     var body: some View {
         Button {
-            withAnimation(.easeInOut(duration: 0.28)) { on.toggle() }
+            withAnimation(Anim.toggle) { on.toggle() }
         } label: {
             ZStack(alignment: .leading) {
-                Rectangle()
+                RoundedRectangle(cornerRadius: Radius.pill, style: .continuous)
                     .fill(on ? Theme.accent : Theme.trackOff)
                 pixelKnob
-                    .frame(width: thumb, height: thumb)
-                    .offset(x: on ? trackW - thumb - 2 : 2)
+                    .frame(width: 13, height: 13)
+                    .offset(x: on ? 36 - 13 - 2 : 2)
             }
-            .frame(width: trackW, height: trackH)
+            .frame(width: 36, height: 17)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)

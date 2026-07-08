@@ -185,6 +185,7 @@ enum Theme {
     static var inkFaint: Color   { hex(current.faint) }
     static var red: Color        { hex(current.bandPeak) }
     static var accent: Color     { customAccentEnabled && customAccent != nil ? customAccent! : hex(current.accent) }
+    static var accent2: Color    { hex(current.accent2) }
     static var orange: Color     { accent }
     static var trackOff: Color   { hex(current.grid) }
 
@@ -193,7 +194,6 @@ enum Theme {
     static var bandHigh: Color   { hex(current.bandHigh) }
     static var bandPeak: Color   { hex(current.bandPeak) }
 
-    static let grid: CGFloat = Spacing.grid
 }
 
 struct PaletteKey: EnvironmentKey {
@@ -204,21 +204,6 @@ extension EnvironmentValues {
     var palette: Palette {
         get { self[PaletteKey.self] }
         set { self[PaletteKey.self] = newValue; Theme.current = newValue; Theme.colorCache.removeAll() }
-    }
-}
-
-extension Font {
-    static func mono(_ size: CGFloat, _ weight: Font.Weight = .regular) -> Font {
-        if NSFont(name: "Space Mono", size: size) != nil {
-            return .custom("Space Mono", size: size)
-        }
-        return .system(size: size, weight: weight, design: .monospaced)
-    }
-    static func grotesk(_ size: CGFloat, _ weight: Font.Weight = .medium) -> Font {
-        if NSFont(name: "Space Grotesk", size: size) != nil {
-            return .custom("Space Grotesk", size: size)
-        }
-        return .system(size: size, weight: weight, design: .default)
     }
 }
 
@@ -245,51 +230,4 @@ final class ThemeManager: ObservableObject {
     func select(_ p: Palette) { selectedID = p.id }
 }
 
-extension Color {
-    init(hex: UInt32, alpha: Double = 1.0) {
-        self.init(
-            .sRGB,
-            red:   Double((hex >> 16) & 0xFF) / 255.0,
-            green: Double((hex >> 8)  & 0xFF) / 255.0,
-            blue:  Double(hex & 0xFF)         / 255.0,
-            opacity: alpha
-        )
-    }
-}
 
-struct Panel<Content: View>: View {
-    var label: String? = nil
-    @ViewBuilder var content: Content
-    var body: some View {
-        VStack(alignment: .leading, spacing: Spacing.panelSpacing) {
-            if let label {
-                HStack(spacing: 6) {
-                    Rectangle()
-                        .fill(Theme.inkFaint.opacity(0.4))
-                        .frame(width: 8, height: 1)
-                    Text(label.uppercased())
-                        .font(.mono(Typography.label, .regular))
-                        .tracking(2.5)
-                        .foregroundStyle(Theme.inkFaint)
-                }
-            }
-            content
-        }
-        .padding(Spacing.panelPadding)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .background(
-            RoundedRectangle(cornerRadius: Radius.panel, style: .continuous)
-                .fill(Theme.panel)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: Radius.panel, style: .continuous)
-                .stroke(Color.white.opacity(0.06), lineWidth: 1)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: Radius.panel, style: .continuous)
-                .stroke(Color.black.opacity(0.3), lineWidth: 1)
-                .offset(y: 1)
-        )
-        .clipShape(RoundedRectangle(cornerRadius: Radius.panel, style: .continuous))
-    }
-}

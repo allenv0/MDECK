@@ -1,11 +1,10 @@
 import SwiftUI
 
 struct PowerLED: View {
-    @Environment(\.palette) private var palette
     var isActive: Bool = true
 
     var body: some View {
-        let neon = Color(hex: palette.accent2)
+        let neon = Theme.accent2
         ZStack {
             Circle()
                 .fill(neon.opacity(isActive ? 0.08 : 0.005))

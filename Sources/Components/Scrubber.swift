@@ -8,12 +8,6 @@ struct Scrubber: View {
     @State private var dragging = false
     @State private var dragLocation: CGPoint = .zero
 
-    private func fmt(_ t: Double) -> String {
-        guard t.isFinite, t >= 0 else { return "00:00" }
-        let s = Int(t)
-        return String(format: "%02d:%02d", s / 60, s % 60)
-    }
-
     var body: some View {
         GeometryReader { geo in
             let w = geo.size.width
@@ -23,9 +17,9 @@ struct Scrubber: View {
                 if dragging {
                     let dragFrac = min(1, max(0, dragLocation.x / w))
                     let dragTime = Double(dragFrac) * total
-                    let previewW = DotText.width(fmt(dragTime), dot: 2.2, gap: 1.2, spacing: 2.4)
+                    let previewW = DotText.width(formatTime(dragTime), dot: 2.2, gap: 1.2, spacing: 2.4)
                     let previewX = dragLocation.x - previewW / 2
-                    DotText(text: fmt(dragTime), dot: 2.2, gap: 1.2, spacing: 2.4, color: Theme.accent)
+                    DotText(text: formatTime(dragTime), dot: 2.2, gap: 1.2, spacing: 2.4, color: Theme.accent)
                         .offset(x: min(max(previewX, 0), w - previewW), y: -20)
                         .transition(.opacity)
                 }
@@ -59,13 +53,13 @@ struct Scrubber: View {
             .contentShape(Rectangle())
             .gesture(DragGesture(minimumDistance: 0)
                 .onChanged { g in
-                    if !dragging { withAnimation(.easeOut(duration: 0.1)) { dragging = true } }
+                    if !dragging { withAnimation(Anim.fade) { dragging = true } }
                     dragLocation = g.location
                     let f = min(1, max(0, g.location.x / w))
                     onSeek(Double(f) * total)
                 }
                 .onEnded { _ in
-                    withAnimation(.easeOut(duration: 0.15)) { dragging = false }
+                    withAnimation(Anim.fastFade) { dragging = false }
                 }
             )
         }

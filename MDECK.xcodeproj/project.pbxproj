@@ -8,13 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		01A15810D334AE5BB3849CEF /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6043B3F3D39351866D84DF /* Theme.swift */; };
+		023A1DB5AE24000AE2A01879 /* RetroToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C59C97A8674E5543629413 /* RetroToggle.swift */; };
 		092B5A66B226E9E8C7B7889D /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5268901C3C4393B35EE4F570 /* AppSettings.swift */; };
+		0D3D7AA33AA4FD672BBDBAD0 /* SelectableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EFCC24F4F424C61AAF52B6 /* SelectableButton.swift */; };
 		0F02C26905E88DB11F747E8D /* VolumeDots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BF3D3894A09C66D12ECD06 /* VolumeDots.swift */; };
+		25038ECFE631182346CAFF93 /* Panel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE6E3817D813CB3F917CA4F /* Panel.swift */; };
 		45A7C5BA33F2A484924B89B4 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5083AD8D74EA04196C453EB3 /* SettingsView.swift */; };
+		471B2ABAF869E9D9CC8638F7 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9799FA56A15E995A8354EB76 /* Fonts.swift */; };
 		508B524CCE38C64151C83F97 /* MDECKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ABF877F1C383A1321DC5CD /* MDECKTests.swift */; };
 		50DF335AD52AA3F2195CB743 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CACAAC891359A18494E639B /* DesignTokens.swift */; };
 		51EFDA8FFA31E29FC7960BFC /* PickerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B9A36AB447553D52BE8152 /* PickerButton.swift */; };
-		61906C0F8A3AD2AAA9A518E1 /* SpectrumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B154B4EDD777EC574FA800 /* SpectrumView.swift */; };
 		73CC390E7905699A43C62944 /* ModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31CE3B1E61968618AB39B8A2 /* ModeButton.swift */; };
 		7B08BBF7D490297C64A9942C /* DotText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6DF89257F15BBF0C715BC8 /* DotText.swift */; };
 		7E69E1656C1F0F82364E5BC1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25424F5D5B688F9AF0C5AAB8 /* ContentView.swift */; };
@@ -22,10 +25,13 @@
 		988CBB7994FD1C7C7C559866 /* ReorderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4588C43D90EE66710E68A0 /* ReorderDelegate.swift */; };
 		98E105FC4A3A4A430503734A /* FFTAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6D17B7E6276AE9FA124F5D /* FFTAnalyzer.swift */; };
 		B2AD0CD0B3A6395A9C7A73BF /* GlyphButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E96B156F8B2CEF03AC63A /* GlyphButton.swift */; };
+		B8B00F33FFEF461FB61B115B /* ColorHex.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F52C81ECCA8E7A22EEF362 /* ColorHex.swift */; };
 		C16B88D707CE64BB6D908136 /* Scrubber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F82C28BD7CDE12CE4D208B3 /* Scrubber.swift */; };
+		C2CA8C1167E38A59242E484B /* SpectrumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C960B370D34042356FFE42F /* SpectrumView.swift */; };
 		D85B93BCC98C8C17E791788B /* RotaryKnob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BEADF4D19D07C0F45EB7BF /* RotaryKnob.swift */; };
 		DD72758447C1F042C089CEE7 /* MDECKApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59359B9B3DCEC1B6D6CCA4D5 /* MDECKApp.swift */; };
 		DDCEEA6DF977FF9EF9DCD7A8 /* AudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = BABA88B3DEC5667D6F522133 /* AudioEngine.swift */; };
+		E164BC612F8D2C69D12CAB72 /* Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E613F1A231184FD5130DF296 /* Formatting.swift */; };
 		E27EF5607280844AF7256895 /* PowerLED.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41994A31CE869E2EA3039DB0 /* PowerLED.swift */; };
 		FDE171422B5E1F32F9F5EADF /* mdeck.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5110AF490D33945A4BFBF1E4 /* mdeck.icns */; };
 /* End PBXBuildFile section */
@@ -41,7 +47,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1BE6E3817D813CB3F917CA4F /* Panel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Panel.swift; sourceTree = "<group>"; };
+		21EFCC24F4F424C61AAF52B6 /* SelectableButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableButton.swift; sourceTree = "<group>"; };
 		24B9A36AB447553D52BE8152 /* PickerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerButton.swift; sourceTree = "<group>"; };
+		24C59C97A8674E5543629413 /* RetroToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroToggle.swift; sourceTree = "<group>"; };
 		25424F5D5B688F9AF0C5AAB8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		29BF3D3894A09C66D12ECD06 /* VolumeDots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeDots.swift; sourceTree = "<group>"; };
 		31CE3B1E61968618AB39B8A2 /* ModeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeButton.swift; sourceTree = "<group>"; };
@@ -52,18 +61,21 @@
 		5110AF490D33945A4BFBF1E4 /* mdeck.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = mdeck.icns; sourceTree = "<group>"; };
 		5268901C3C4393B35EE4F570 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		59359B9B3DCEC1B6D6CCA4D5 /* MDECKApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDECKApp.swift; sourceTree = "<group>"; };
+		5C960B370D34042356FFE42F /* SpectrumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpectrumView.swift; sourceTree = "<group>"; };
 		5F6DF89257F15BBF0C715BC8 /* DotText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotText.swift; sourceTree = "<group>"; };
 		5F82C28BD7CDE12CE4D208B3 /* Scrubber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scrubber.swift; sourceTree = "<group>"; };
 		6A4588C43D90EE66710E68A0 /* ReorderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReorderDelegate.swift; sourceTree = "<group>"; };
 		6A6D17B7E6276AE9FA124F5D /* FFTAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FFTAnalyzer.swift; sourceTree = "<group>"; };
 		6D6043B3F3D39351866D84DF /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		8767A92F9C4B50B05429DAC9 /* MDECKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MDECKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9799FA56A15E995A8354EB76 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		9CACAAC891359A18494E639B /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
 		9E7E96B156F8B2CEF03AC63A /* GlyphButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlyphButton.swift; sourceTree = "<group>"; };
 		AB5C994E4F7C5B559A6D0E76 /* GridToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridToggle.swift; sourceTree = "<group>"; };
 		BABA88B3DEC5667D6F522133 /* AudioEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioEngine.swift; sourceTree = "<group>"; };
 		D5C9329FDEDEF92559386B14 /* MDECK.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MDECK.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		D8B154B4EDD777EC574FA800 /* SpectrumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpectrumView.swift; sourceTree = "<group>"; };
+		E613F1A231184FD5130DF296 /* Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatting.swift; sourceTree = "<group>"; };
+		F0F52C81ECCA8E7A22EEF362 /* ColorHex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorHex.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -113,7 +125,9 @@
 		C9C75AF155991D3255E21D7F /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
+				F0F52C81ECCA8E7A22EEF362 /* ColorHex.swift */,
 				9CACAAC891359A18494E639B /* DesignTokens.swift */,
+				9799FA56A15E995A8354EB76 /* Fonts.swift */,
 			);
 			path = DesignSystem;
 			sourceTree = "<group>";
@@ -126,13 +140,21 @@
 				25424F5D5B688F9AF0C5AAB8 /* ContentView.swift */,
 				59359B9B3DCEC1B6D6CCA4D5 /* MDECKApp.swift */,
 				5083AD8D74EA04196C453EB3 /* SettingsView.swift */,
-				D8B154B4EDD777EC574FA800 /* SpectrumView.swift */,
 				6D6043B3F3D39351866D84DF /* Theme.swift */,
 				F02672AD31DA2082E3C57AC1 /* AudioEngine */,
 				EAC4BD9A02D7F07849AD74E2 /* Components */,
 				C9C75AF155991D3255E21D7F /* DesignSystem */,
+				E6112C679274490C9F9F09AB /* Utility */,
 			);
 			path = Sources;
+			sourceTree = "<group>";
+		};
+		E6112C679274490C9F9F09AB /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				E613F1A231184FD5130DF296 /* Formatting.swift */,
+			);
+			path = Utility;
 			sourceTree = "<group>";
 		};
 		EAC4BD9A02D7F07849AD74E2 /* Components */ = {
@@ -142,11 +164,15 @@
 				9E7E96B156F8B2CEF03AC63A /* GlyphButton.swift */,
 				AB5C994E4F7C5B559A6D0E76 /* GridToggle.swift */,
 				31CE3B1E61968618AB39B8A2 /* ModeButton.swift */,
+				1BE6E3817D813CB3F917CA4F /* Panel.swift */,
 				24B9A36AB447553D52BE8152 /* PickerButton.swift */,
 				41994A31CE869E2EA3039DB0 /* PowerLED.swift */,
 				6A4588C43D90EE66710E68A0 /* ReorderDelegate.swift */,
+				24C59C97A8674E5543629413 /* RetroToggle.swift */,
 				47BEADF4D19D07C0F45EB7BF /* RotaryKnob.swift */,
 				5F82C28BD7CDE12CE4D208B3 /* Scrubber.swift */,
+				21EFCC24F4F424C61AAF52B6 /* SelectableButton.swift */,
+				5C960B370D34042356FFE42F /* SpectrumView.swift */,
 				29BF3D3894A09C66D12ECD06 /* VolumeDots.swift */,
 			);
 			path = Components;
@@ -264,21 +290,27 @@
 			files = (
 				092B5A66B226E9E8C7B7889D /* AppSettings.swift in Sources */,
 				DDCEEA6DF977FF9EF9DCD7A8 /* AudioEngine.swift in Sources */,
+				B8B00F33FFEF461FB61B115B /* ColorHex.swift in Sources */,
 				7E69E1656C1F0F82364E5BC1 /* ContentView.swift in Sources */,
 				50DF335AD52AA3F2195CB743 /* DesignTokens.swift in Sources */,
 				7B08BBF7D490297C64A9942C /* DotText.swift in Sources */,
 				98E105FC4A3A4A430503734A /* FFTAnalyzer.swift in Sources */,
+				471B2ABAF869E9D9CC8638F7 /* Fonts.swift in Sources */,
+				E164BC612F8D2C69D12CAB72 /* Formatting.swift in Sources */,
 				B2AD0CD0B3A6395A9C7A73BF /* GlyphButton.swift in Sources */,
 				8C3B487BB9B7CAC016D983F2 /* GridToggle.swift in Sources */,
 				DD72758447C1F042C089CEE7 /* MDECKApp.swift in Sources */,
 				73CC390E7905699A43C62944 /* ModeButton.swift in Sources */,
+				25038ECFE631182346CAFF93 /* Panel.swift in Sources */,
 				51EFDA8FFA31E29FC7960BFC /* PickerButton.swift in Sources */,
 				E27EF5607280844AF7256895 /* PowerLED.swift in Sources */,
 				988CBB7994FD1C7C7C559866 /* ReorderDelegate.swift in Sources */,
+				023A1DB5AE24000AE2A01879 /* RetroToggle.swift in Sources */,
 				D85B93BCC98C8C17E791788B /* RotaryKnob.swift in Sources */,
 				C16B88D707CE64BB6D908136 /* Scrubber.swift in Sources */,
+				0D3D7AA33AA4FD672BBDBAD0 /* SelectableButton.swift in Sources */,
 				45A7C5BA33F2A484924B89B4 /* SettingsView.swift in Sources */,
-				61906C0F8A3AD2AAA9A518E1 /* SpectrumView.swift in Sources */,
+				C2CA8C1167E38A59242E484B /* SpectrumView.swift in Sources */,
 				01A15810D334AE5BB3849CEF /* Theme.swift in Sources */,
 				0F02C26905E88DB11F747E8D /* VolumeDots.swift in Sources */,
 			);

@@ -32,13 +32,13 @@ struct ContentView: View {
             minWidth: settings.showSpectrum || settings.showAlbumArt ? 680 : 480,
             minHeight: showPlaylist ? 560 : 400
         )
-        .animation(.spring(response: 0.32, dampingFraction: 0.82), value: showPlaylist)
+        .animation(Anim.slide, value: showPlaylist)
         .padding(AppSettings.shared.layoutDensity.spacing)
         .background(Theme.bg)
         .overlay(alignment: .top) {
             LinearGradient(
                 gradient: Gradient(colors: [
-                    .white.opacity(0.07),
+                    .white.opacity(OpacityToken.ghost),
                     .white.opacity(0.03),
                     .clear,
                 ]),
@@ -57,13 +57,13 @@ struct ContentView: View {
             .frame(height: 2)
             .allowsHitTesting(false)
         }
-        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: Radius.window, style: .continuous))
         .overlay(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .stroke(Color.white.opacity(0.08), lineWidth: 1)
+            RoundedRectangle(cornerRadius: Radius.window, style: .continuous)
+                .stroke(Color.white.opacity(OpacityToken.ghost), lineWidth: 1)
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
+            RoundedRectangle(cornerRadius: Radius.window, style: .continuous)
                 .stroke(Color.black.opacity(0.35), lineWidth: 2)
                 .offset(y: 1)
         )
@@ -75,10 +75,10 @@ struct ContentView: View {
         }
         .overlay {
             if windowDropTargeted {
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(Theme.accent.opacity(0.06))
+                RoundedRectangle(cornerRadius: Radius.window, style: .continuous)
+                    .fill(Theme.accent.opacity(OpacityToken.ghost))
                     .overlay(
-                        RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        RoundedRectangle(cornerRadius: Radius.window, style: .continuous)
                             .stroke(Theme.accent, lineWidth: 2)
                     )
                     .overlay {
@@ -109,7 +109,7 @@ struct ContentView: View {
             Spacer()
             statusLED
             Text("PLAYLIST")
-                .font(.mono(Typography.label)).tracking(2).foregroundStyle(Theme.inkDim)
+                .font(.mono(Typography.label)).tracking(Tracking.panel).foregroundStyle(Theme.inkDim)
                 .padding(.leading, 8)
             GridToggle(on: $showPlaylist)
             Button { showSettings.toggle() } label: {
@@ -123,7 +123,7 @@ struct ContentView: View {
             }
             .padding(.leading, Spacing.snug)
         }
-        .frame(height: 40)
+        .frame(height: Spacing.headerHeight)
     }
 
     private var controlStrip: some View {
@@ -138,13 +138,13 @@ struct ContentView: View {
                 .fill(Theme.bg.opacity(0.3))
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 6)
-                .stroke(Color.white.opacity(0.04), lineWidth: 1)
+            RoundedRectangle(cornerRadius: Radius.button)
+                .stroke(Color.white.opacity(OpacityToken.ghost), lineWidth: 1)
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 6)
+            RoundedRectangle(cornerRadius: Radius.button)
                 .inset(by: 0.5)
-                .stroke(Color.black.opacity(0.25), lineWidth: 1)
+                .stroke(Color.black.opacity(OpacityToken.panelBorder), lineWidth: 1)
                 .offset(y: 1)
         )
     }
@@ -152,13 +152,13 @@ struct ContentView: View {
     private var modelBadge: some View {
         Text("Fontier-Systems")
             .font(.mono(Typography.label, .bold))
-            .tracking(1.5)
+            .tracking(Tracking.section)
             .foregroundStyle(Theme.inkFaint.opacity(0.7))
-            .padding(.horizontal, 5)
-            .padding(.vertical, 2)
+            .padding(.horizontal, Spacing.modelBadgeW)
+            .padding(.vertical, Spacing.modelBadgeH)
             .overlay(
-                RoundedRectangle(cornerRadius: 3)
-                    .stroke(Theme.inkFaint.opacity(0.25), lineWidth: 1)
+                RoundedRectangle(cornerRadius: Radius.badge)
+                    .stroke(Theme.inkFaint.opacity(OpacityToken.panelBorder), lineWidth: 1)
             )
             .padding(.leading, 6)
     }
@@ -167,7 +167,7 @@ struct ContentView: View {
         HStack(spacing: 5) {
             PowerLED(isActive: engine.isPlaying)
             Text(engine.isPlaying ? "PLAYING" : "IDLE")
-                .font(.mono(Typography.label)).tracking(2).foregroundStyle(Theme.inkDim)
+                .font(.mono(Typography.label)).tracking(Tracking.panel).foregroundStyle(Theme.inkDim)
         }
     }
 
@@ -181,10 +181,10 @@ struct ContentView: View {
                                 dot: 3.6, gap: 1.8, spacing: 4, color: Theme.dotOn,
                                 speed: max(24, CGFloat(titleText.count) * 1.2))
                     .id(engine.currentIndex ?? -1)
-                Text((engine.currentTrack?.artist ?? "—").uppercased())
+                Text((engine.currentTrack?.artist ?? "\u{2014}").uppercased())
                     .font(.grotesk(Typography.title, .semibold)).foregroundStyle(Theme.ink)
-                Text((engine.currentTrack?.album ?? "—").uppercased())
-                    .font(.mono(Typography.caption)).tracking(1).foregroundStyle(Theme.inkDim)
+                Text((engine.currentTrack?.album ?? "\u{2014}").uppercased())
+                    .font(.mono(Typography.caption)).tracking(Tracking.label).foregroundStyle(Theme.inkDim)
 
                 if settings.showAlbumArt {
                     albumArtSection
@@ -310,9 +310,9 @@ struct ContentView: View {
         Panel(label: "Transport") {
             VStack(spacing: settings.layoutDensity.spacing) {
                 HStack(alignment: .bottom) {
-                    DotText(text: fmt(engine.currentTime), dot: 3, gap: 1.5, color: Theme.dotOn)
+                    DotText(text: formatTime(engine.currentTime), dot: 3, gap: 1.5, color: Theme.dotOn)
                     Spacer()
-                    DotText(text: fmt(engine.duration), dot: 3, gap: 1.5, color: Theme.inkDim)
+                    DotText(text: formatTime(engine.duration), dot: 3, gap: 1.5, color: Theme.inkDim)
                 }
                 Scrubber(value: engine.currentTime, total: max(engine.duration, 0.01)) { t in
                     engine.seek(to: t)
@@ -339,8 +339,8 @@ struct ContentView: View {
             Spacer()
             volume
         }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 8)
+        .padding(.horizontal, Spacing.controlPadding())
+        .padding(.vertical, Spacing.snug * 2)
         .background(Theme.bg.opacity(0.35))
         .clipShape(RoundedRectangle(cornerRadius: Radius.input))
         .overlay(
@@ -351,7 +351,7 @@ struct ContentView: View {
 
     private var volume: some View {
         HStack(spacing: Spacing.controlSpacing) {
-            Text("VOL").font(.mono(Typography.label)).tracking(2).foregroundStyle(Theme.inkFaint)
+            Text("VOL").font(.mono(Typography.label)).tracking(Tracking.panel).foregroundStyle(Theme.inkFaint)
             VolumeDots(value: $engine.volume)
                 .frame(width: 104, height: 8)
         }
@@ -363,12 +363,12 @@ struct ContentView: View {
     private var playlistPanel: some View {
         Panel {
             HStack {
-                Text("QUEUE · \(engine.playlist.count)")
-                    .font(.mono(Typography.label)).tracking(2.2).foregroundStyle(Theme.inkFaint)
+                Text("QUEUE \u{00B7} \(engine.playlist.count)")
+                    .font(.mono(Typography.label)).tracking(Tracking.queue).foregroundStyle(Theme.inkFaint)
                 Spacer()
                 if !engine.playlist.isEmpty {
                     Button { engine.clear() } label: {
-                        Text("CLEAR").font(.mono(Typography.label, .bold)).tracking(1.5)
+                        Text("CLEAR").font(.mono(Typography.label, .bold)).tracking(Tracking.section)
                             .foregroundStyle(Theme.inkDim)
                     }
                     .buttonStyle(.plain)
@@ -381,11 +381,9 @@ struct ContentView: View {
                     DotText(text: "EMPTY", dot: 4, gap: 2, color: Theme.inkFaint)
                         .phaseAnimator([false, true]) { content, pulse in
                             content.opacity(pulse ? 0.35 : 1)
-                        } animation: { _ in
-                                .easeInOut(duration: 2).repeatForever(autoreverses: true)
-                        }
+                        } animation: { _ in Anim.pulse }
                     Button(action: openFiles) {
-                        Text("+ ADD FILES").font(.mono(11)).tracking(2)
+                        Text("+ ADD FILES").font(.mono(Typography.body)).tracking(Tracking.panel)
                             .foregroundStyle(Theme.ink)
                             .padding(.horizontal, Spacing.sectionPadding)
                             .padding(.vertical, Spacing.controlSpacing)
@@ -435,11 +433,11 @@ struct ContentView: View {
             VStack(alignment: .leading, spacing: Spacing.hairline) {
                 Text(track.title).font(.grotesk(Typography.body, .medium)).lineLimit(1)
                     .foregroundStyle(isCur || isSel ? Theme.dotOn : Theme.ink)
-                Text(track.artist.uppercased()).font(.mono(Typography.label)).tracking(1)
+                Text(track.artist.uppercased()).font(.mono(Typography.label)).tracking(Tracking.label)
                     .foregroundStyle(Theme.inkDim).lineLimit(1)
             }
             Spacer()
-            Text(fmt(track.duration)).font(.mono(Typography.caption)).foregroundStyle(Theme.inkFaint)
+            Text(formatTime(track.duration)).font(.mono(Typography.caption)).foregroundStyle(Theme.inkFaint)
         }
         .padding(.horizontal, Spacing.controlPadding).padding(.vertical, Spacing.controlVertical)
         .background(isSel ? Theme.bg : Color.clear)
@@ -466,17 +464,7 @@ struct ContentView: View {
 
     // MARK: - Helpers
 
-    private var repeatLabel: String { engine.repeatMode == .one ? "LOOP·1" : "LOOP" }
-
-    private func fmt(_ t: Double) -> String {
-        guard t.isFinite, t >= 0 else { return "00:00" }
-        let s = Int(t)
-        return String(format: "%02d:%02d", s / 60, s % 60)
-    }
-    private func shortened(_ s: String, _ n: Int) -> String {
-        let up = s.uppercased()
-        return up.count <= n ? up : String(up.prefix(n - 1)) + "…"
-    }
+    private var repeatLabel: String { engine.repeatMode == .one ? "LOOP\u{00B7}1" : "LOOP" }
 
     private func openFiles() {
         let p = NSOpenPanel()
