@@ -33,6 +33,7 @@ final class AudioEngine: ObservableObject {
     @Published var repeatMode: RepeatMode = .off { didSet { if !restoring { savePlaylist() } } }
     @Published var shuffle: Bool = false { didSet { if !restoring { savePlaylist() } } }
     @Published var levels: [Float] = []
+    @Published var trackTransitionCount = 0
     private var restoring = false
     let levelCapacity = 80
     private var tickCount = 0
@@ -294,6 +295,7 @@ final class AudioEngine: ObservableObject {
     func load(index: Int, autoplay: Bool) {
         guard playlist.indices.contains(index) else { return }
         stopEngineOnly()
+        let wasNewTrack = currentIndex != index
         currentIndex = index
         let url = playlist[index].url
         guard let f = try? AVAudioFile(forReading: url) else { return }
@@ -306,7 +308,12 @@ final class AudioEngine: ObservableObject {
         levels.removeAll()
         installTap()
         scheduleSegment(from: 0)
-        if autoplay { play() } else { isPlaying = false }
+        if autoplay {
+            if wasNewTrack { trackTransitionCount += 1 }
+            play()
+        } else {
+            isPlaying = false
+        }
     }
 
     func togglePlay() {

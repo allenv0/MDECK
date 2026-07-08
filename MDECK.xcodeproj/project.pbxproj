@@ -12,6 +12,7 @@
 		092B5A66B226E9E8C7B7889D /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5268901C3C4393B35EE4F570 /* AppSettings.swift */; };
 		0D3D7AA33AA4FD672BBDBAD0 /* SelectableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EFCC24F4F424C61AAF52B6 /* SelectableButton.swift */; };
 		0F02C26905E88DB11F747E8D /* VolumeDots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BF3D3894A09C66D12ECD06 /* VolumeDots.swift */; };
+		1C40391BD2D90111B0586EF4 /* MDInsertAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02739CF3A78473EE28B34D11 /* MDInsertAnimation.swift */; };
 		25038ECFE631182346CAFF93 /* Panel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE6E3817D813CB3F917CA4F /* Panel.swift */; };
 		45A7C5BA33F2A484924B89B4 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5083AD8D74EA04196C453EB3 /* SettingsView.swift */; };
 		471B2ABAF869E9D9CC8638F7 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9799FA56A15E995A8354EB76 /* Fonts.swift */; };
@@ -19,6 +20,7 @@
 		50DF335AD52AA3F2195CB743 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CACAAC891359A18494E639B /* DesignTokens.swift */; };
 		51EFDA8FFA31E29FC7960BFC /* PickerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B9A36AB447553D52BE8152 /* PickerButton.swift */; };
 		73CC390E7905699A43C62944 /* ModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31CE3B1E61968618AB39B8A2 /* ModeButton.swift */; };
+		7A151DC9EBF47DC4796B8996 /* MiniDiscView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BE72C4583C80A66FE3604C /* MiniDiscView.swift */; };
 		7B08BBF7D490297C64A9942C /* DotText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6DF89257F15BBF0C715BC8 /* DotText.swift */; };
 		7E69E1656C1F0F82364E5BC1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25424F5D5B688F9AF0C5AAB8 /* ContentView.swift */; };
 		8C3B487BB9B7CAC016D983F2 /* GridToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5C994E4F7C5B559A6D0E76 /* GridToggle.swift */; };
@@ -33,6 +35,7 @@
 		DDCEEA6DF977FF9EF9DCD7A8 /* AudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = BABA88B3DEC5667D6F522133 /* AudioEngine.swift */; };
 		E164BC612F8D2C69D12CAB72 /* Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E613F1A231184FD5130DF296 /* Formatting.swift */; };
 		E27EF5607280844AF7256895 /* PowerLED.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41994A31CE869E2EA3039DB0 /* PowerLED.swift */; };
+		EECEA8FE0B78A06CB901606C /* md_insert.wav in Resources */ = {isa = PBXBuildFile; fileRef = 46293BB62B74B24C612C8C6E /* md_insert.wav */; };
 		FDE171422B5E1F32F9F5EADF /* mdeck.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5110AF490D33945A4BFBF1E4 /* mdeck.icns */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +50,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		02739CF3A78473EE28B34D11 /* MDInsertAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDInsertAnimation.swift; sourceTree = "<group>"; };
 		1BE6E3817D813CB3F917CA4F /* Panel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Panel.swift; sourceTree = "<group>"; };
 		21EFCC24F4F424C61AAF52B6 /* SelectableButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableButton.swift; sourceTree = "<group>"; };
 		24B9A36AB447553D52BE8152 /* PickerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerButton.swift; sourceTree = "<group>"; };
@@ -55,6 +59,7 @@
 		29BF3D3894A09C66D12ECD06 /* VolumeDots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeDots.swift; sourceTree = "<group>"; };
 		31CE3B1E61968618AB39B8A2 /* ModeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeButton.swift; sourceTree = "<group>"; };
 		41994A31CE869E2EA3039DB0 /* PowerLED.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerLED.swift; sourceTree = "<group>"; };
+		46293BB62B74B24C612C8C6E /* md_insert.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = md_insert.wav; sourceTree = "<group>"; };
 		46ABF877F1C383A1321DC5CD /* MDECKTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDECKTests.swift; sourceTree = "<group>"; };
 		47BEADF4D19D07C0F45EB7BF /* RotaryKnob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotaryKnob.swift; sourceTree = "<group>"; };
 		5083AD8D74EA04196C453EB3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -73,6 +78,7 @@
 		9E7E96B156F8B2CEF03AC63A /* GlyphButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlyphButton.swift; sourceTree = "<group>"; };
 		AB5C994E4F7C5B559A6D0E76 /* GridToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridToggle.swift; sourceTree = "<group>"; };
 		BABA88B3DEC5667D6F522133 /* AudioEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioEngine.swift; sourceTree = "<group>"; };
+		D0BE72C4583C80A66FE3604C /* MiniDiscView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniDiscView.swift; sourceTree = "<group>"; };
 		D5C9329FDEDEF92559386B14 /* MDECK.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MDECK.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E613F1A231184FD5130DF296 /* Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatting.swift; sourceTree = "<group>"; };
 		F0F52C81ECCA8E7A22EEF362 /* ColorHex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorHex.swift; sourceTree = "<group>"; };
@@ -90,6 +96,7 @@
 		389B0C086E2AA1C8A3677D2C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				46293BB62B74B24C612C8C6E /* md_insert.wav */,
 				5110AF490D33945A4BFBF1E4 /* mdeck.icns */,
 			);
 			path = Resources;
@@ -163,6 +170,8 @@
 				5F6DF89257F15BBF0C715BC8 /* DotText.swift */,
 				9E7E96B156F8B2CEF03AC63A /* GlyphButton.swift */,
 				AB5C994E4F7C5B559A6D0E76 /* GridToggle.swift */,
+				02739CF3A78473EE28B34D11 /* MDInsertAnimation.swift */,
+				D0BE72C4583C80A66FE3604C /* MiniDiscView.swift */,
 				31CE3B1E61968618AB39B8A2 /* ModeButton.swift */,
 				1BE6E3817D813CB3F917CA4F /* Panel.swift */,
 				24B9A36AB447553D52BE8152 /* PickerButton.swift */,
@@ -269,6 +278,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EECEA8FE0B78A06CB901606C /* md_insert.wav in Resources */,
 				FDE171422B5E1F32F9F5EADF /* mdeck.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -300,6 +310,8 @@
 				B2AD0CD0B3A6395A9C7A73BF /* GlyphButton.swift in Sources */,
 				8C3B487BB9B7CAC016D983F2 /* GridToggle.swift in Sources */,
 				DD72758447C1F042C089CEE7 /* MDECKApp.swift in Sources */,
+				1C40391BD2D90111B0586EF4 /* MDInsertAnimation.swift in Sources */,
+				7A151DC9EBF47DC4796B8996 /* MiniDiscView.swift in Sources */,
 				73CC390E7905699A43C62944 /* ModeButton.swift in Sources */,
 				25038ECFE631182346CAFF93 /* Panel.swift in Sources */,
 				51EFDA8FFA31E29FC7960BFC /* PickerButton.swift in Sources */,

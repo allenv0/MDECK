@@ -133,6 +133,10 @@ enum Anim {
     static let fastFade = Animation.easeInOut(duration: 0.1)
     static let pulse = Animation.easeInOut(duration: 2).repeatForever(autoreverses: true)
     static let theme = Animation.easeInOut(duration: 0.4)
+    static let mdDoor = Animation.spring(response: 0.30, dampingFraction: 0.45)
+    static let mdInsert = Animation.spring(response: 0.53, dampingFraction: 0.72)
+    static let mdShutter = Animation.spring(response: 0.42, dampingFraction: 0.68)
+    static let mdSpin = Animation.linear(duration: 0.53)
 }
 
 // MARK: - Letter-Spacing Tokens

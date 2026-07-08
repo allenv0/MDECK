@@ -11,6 +11,10 @@ struct ContentView: View {
     @State private var artHovered = false
     @State private var draggingIndex: Int? = nil
     @State private var showSettings = false
+    @State private var mdAnimActive = false
+    @State private var mdAnimTrigger = 0
+    @State private var mdAnimTrackTitle = ""
+    @State private var mdAnimTrackArtist = ""
 
     var body: some View {
         VStack(spacing: AppSettings.shared.layoutDensity.spacing) {
@@ -75,6 +79,13 @@ struct ContentView: View {
         .animation(.easeInOut(duration: 0.2), value: windowDropTargeted)
         .onReceive(NotificationCenter.default.publisher(for: .openFiles)) { _ in openFiles() }
         .onAppear { NSWindow.allowsAutomaticWindowTabbing = false }
+        .onChange(of: engine.trackTransitionCount) { _ in
+            guard let track = engine.currentTrack else { return }
+            mdAnimTrackTitle = track.title
+            mdAnimTrackArtist = track.artist
+            mdAnimTrigger += 1
+            mdAnimActive = true
+        }
     }
 
     // MARK: - Header
@@ -205,8 +216,24 @@ struct ContentView: View {
             Spacer(minLength: 4)
             HStack {
                 Spacer()
-                albumArtDisplay
-                    .frame(width: 260, height: 260)
+                ZStack {
+                    albumArtDisplay
+                        .frame(width: 260, height: 260)
+
+                    if mdAnimActive {
+                        MDInsertAnimation(
+                            triggerID: mdAnimTrigger,
+                            trackTitle: mdAnimTrackTitle,
+                            trackArtist: mdAnimTrackArtist,
+                            onFinish: { mdAnimActive = false }
+                        )
+                        .id(mdAnimTrigger)
+                        .transition(.opacity)
+                        .frame(width: 260, height: 260)
+                        .clipShape(RoundedRectangle(cornerRadius: Radius.art))
+                    }
+                }
+                .frame(width: 260, height: 260)
                 Spacer()
             }
             Spacer(minLength: 4)
