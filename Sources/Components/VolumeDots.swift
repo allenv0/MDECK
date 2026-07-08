@@ -3,6 +3,9 @@ import SwiftUI
 struct VolumeDots: View {
     @Binding var value: Float
 
+    @State private var litAt: [Int: Date] = [:]
+    @State private var prevLit: Int = 0
+
     var body: some View {
         GeometryReader { geo in
             let w = geo.size.width
@@ -12,14 +15,21 @@ struct VolumeDots: View {
                 let cell = size.width / CGFloat(segs)
                 let bw = cell * 0.84
                 let gap = cell - bw
+                let now = Date()
                 for i in 0..<segs {
                     let on = i < lit
                     let x = CGFloat(i) * cell + gap / 2
-                    let rect = CGRect(x: x, y: 0, width: bw, height: size.height)
+                    var rect = CGRect(x: x, y: 0, width: bw, height: size.height)
                     let color: Color
                     if on {
                         let t = lit > 1 ? Double(i) / Double(lit - 1) : 0
                         color = Theme.accent.opacity(1 - t * 0.6)
+                        if let litTime = litAt[i], now.timeIntervalSince(litTime) < 0.2 {
+                            let bloom = CGFloat(1 - now.timeIntervalSince(litTime) / 0.2)
+                            rect = rect.insetBy(dx: -bw * 0.1 * bloom, dy: -2 * bloom)
+                            ctx.fill(Path(roundedRect: rect, cornerRadius: 1),
+                                     with: .color(Theme.accent.opacity(0.15 * bloom)))
+                        }
                     } else {
                         color = Theme.dotOff.opacity(OpacityToken.medium)
                     }
@@ -38,6 +48,16 @@ struct VolumeDots: View {
             .gesture(DragGesture(minimumDistance: 0).onChanged { g in
                 value = Float(min(1, max(0, g.location.x / w)))
             })
+            .onChange(of: value) { newValue in
+                let segs = 7
+                let newLit = Int((Float(segs) * newValue).rounded())
+                if newLit > prevLit {
+                    for i in prevLit..<newLit {
+                        litAt[i] = Date()
+                    }
+                }
+                prevLit = newLit
+            }
         }
     }
 }

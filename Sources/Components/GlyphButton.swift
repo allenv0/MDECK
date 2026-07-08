@@ -11,6 +11,21 @@ struct GlyphButton: View {
     var body: some View {
         Button(action: action) {
             ZStack {
+                if down {
+                    Circle()
+                        .fill(Theme.accent.opacity(0.1))
+                        .frame(width: size * 0.9, height: size * 0.9)
+                        .scaleEffect(down ? 1.25 : 0.8)
+                        .opacity(down ? 0.5 : 0)
+                }
+                if accent && down {
+                    Circle()
+                        .fill(Theme.accent.opacity(0.08))
+                        .blur(radius: 6)
+                        .frame(width: size, height: size)
+                        .scaleEffect(1.15)
+                }
+
                 if kind == .pause || kind == .play {
                     Canvas { ctx, sz in drawGlyph(ctx: ctx, size: sz, kind: kind) }
                         .frame(width: size, height: size)

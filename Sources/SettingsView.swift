@@ -61,7 +61,7 @@ struct SettingsView: View {
     private func themeCell(_ p: Palette) -> some View {
         let isSelected = theme.selectedID == p.id
         return Button {
-            withAnimation(Anim.fade) { theme.select(p) }
+            withAnimation(Anim.theme) { theme.select(p) }
         } label: {
             VStack(spacing: Spacing.snug) {
                 RoundedRectangle(cornerRadius: Radius.pill)

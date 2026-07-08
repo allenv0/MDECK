@@ -10,7 +10,6 @@ struct ContentView: View {
     @State private var artDropTargeted = false
     @State private var artHovered = false
     @State private var draggingIndex: Int? = nil
-    @State private var showPlaylist = true
     @State private var showSettings = false
 
     var body: some View {
@@ -21,7 +20,7 @@ struct ContentView: View {
                     nowPlaying
                     transport
                 }
-                if showPlaylist {
+                if settings.showPlaylist {
                     playlistPanel
                         .frame(width: 320)
                         .transition(.move(edge: .trailing).combined(with: .opacity))
@@ -30,9 +29,11 @@ struct ContentView: View {
         }
         .frame(
             minWidth: settings.showSpectrum || settings.showAlbumArt ? 680 : 480,
-            minHeight: showPlaylist ? 560 : 400
+            minHeight: settings.showPlaylist ? 560 : 400
         )
-        .animation(Anim.slide, value: showPlaylist)
+        .animation(Anim.slide, value: settings.showPlaylist)
+        .animation(Anim.slide, value: settings.showAlbumArt)
+        .animation(Anim.slide, value: settings.showSpectrum)
         .padding(AppSettings.shared.layoutDensity.spacing)
         .background(Theme.bg)
         .overlay(alignment: .top) {
@@ -68,6 +69,7 @@ struct ContentView: View {
                 .offset(y: 1)
         )
         .environment(\.palette, theme.selected)
+        .animation(Anim.theme, value: theme.selectedID)
         .focusEffectDisabled()
         .onDrop(of: [UTType.fileURL], isTargeted: $windowDropTargeted) { providers in
             engine.add(providers: providers)
@@ -111,7 +113,7 @@ struct ContentView: View {
             Text("PLAYLIST")
                 .font(.mono(Typography.label)).tracking(Tracking.panel).foregroundStyle(Theme.inkDim)
                 .padding(.leading, 8)
-            GridToggle(on: $showPlaylist)
+            GridToggle(on: $settings.showPlaylist)
             Button { showSettings.toggle() } label: {
                 Image(systemName: "gearshape")
                     .font(.system(size: 11, weight: .medium))
@@ -178,13 +180,22 @@ struct ContentView: View {
             VStack(alignment: .leading, spacing: Spacing.sectionSpacing) {
                 let titleText = (engine.currentTrack?.title ?? "NO SIGNAL").uppercased()
                 MarqueeDotText(text: titleText,
-                                dot: 3.6, gap: 1.8, spacing: 4, color: Theme.dotOn,
+                                dot: 3.6, gap: 1.8, spacing: 4, color: trackLoaded ? Theme.dotOn : Theme.inkDim,
                                 speed: max(24, CGFloat(titleText.count) * 1.2))
                     .id(engine.currentIndex ?? -1)
-                Text((engine.currentTrack?.artist ?? "\u{2014}").uppercased())
-                    .font(.grotesk(Typography.title, .semibold)).foregroundStyle(Theme.ink)
-                Text((engine.currentTrack?.album ?? "\u{2014}").uppercased())
-                    .font(.mono(Typography.caption)).tracking(Tracking.label).foregroundStyle(Theme.inkDim)
+
+                if trackLoaded {
+                    Text((engine.currentTrack?.artist ?? "\u{2014}").uppercased())
+                        .font(.grotesk(Typography.title, .semibold)).foregroundStyle(Theme.ink)
+                    Text((engine.currentTrack?.album ?? "\u{2014}").uppercased())
+                        .font(.mono(Typography.caption)).tracking(Tracking.label).foregroundStyle(Theme.inkDim)
+                } else {
+                    Text("DROP FILES TO PLAY")
+                        .font(.mono(Typography.caption)).tracking(Tracking.section).foregroundStyle(Theme.inkFaint)
+                        .phaseAnimator([false, true]) { content, pulse in
+                            content.opacity(pulse ? 0.4 : 1)
+                        } animation: { _ in Anim.pulse }
+                }
 
                 if settings.showAlbumArt {
                     albumArtSection
@@ -192,8 +203,8 @@ struct ContentView: View {
 
                 if settings.showSpectrum {
                     SpectrumView(
-                        bands: engine.bands,
-                        levels: engine.levels,
+                        bands: trackLoaded ? engine.bands : [],
+                        levels: trackLoaded ? engine.levels : [],
                         rows: settings.spectrumRows,
                         active: engine.isPlaying,
                         style: settings.spectrumStyle
@@ -206,7 +217,10 @@ struct ContentView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         }
         .frame(maxHeight: .infinity)
+        .opacity(trackLoaded ? 1 : 0.85)
     }
+
+    private var trackLoaded: Bool { engine.currentTrack != nil }
 
     private var albumArtSection: some View {
         VStack(spacing: 0) {
@@ -236,6 +250,11 @@ struct ContentView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .opacity(artHovered ? 0.7 : 0.5)
+                    .phaseAnimator([false, true]) { content, pulse in
+                        content.opacity(pulse ? 0.55 : 0.45)
+                    } animation: { _ in
+                            Animation.easeInOut(duration: 3).repeatForever(autoreverses: true)
+                    }
             }
         }
         .clipShape(RoundedRectangle(cornerRadius: Radius.art))
@@ -310,15 +329,17 @@ struct ContentView: View {
         Panel(label: "Transport") {
             VStack(spacing: settings.layoutDensity.spacing) {
                 HStack(alignment: .bottom) {
-                    DotText(text: formatTime(engine.currentTime), dot: 3, gap: 1.5, color: Theme.dotOn)
+                    DotText(text: formatTime(engine.currentTime), dot: 3, gap: 1.5, color: trackLoaded ? Theme.dotOn : Theme.inkFaint)
                     Spacer()
-                    DotText(text: formatTime(engine.duration), dot: 3, gap: 1.5, color: Theme.inkDim)
+                    DotText(text: formatTime(engine.duration), dot: 3, gap: 1.5, color: trackLoaded ? Theme.inkDim : Theme.inkFaint)
                 }
                 Scrubber(value: engine.currentTime, total: max(engine.duration, 0.01)) { t in
                     engine.seek(to: t)
                 }
                 .frame(height: 16)
+                .opacity(trackLoaded ? 1 : 0.4)
                 transportCluster
+                    .opacity(trackLoaded ? 1 : 0.35)
             }
         }
         .frame(minHeight: 150)
@@ -392,6 +413,10 @@ struct ContentView: View {
                     Spacer()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .overlay(
+                    RoundedRectangle(cornerRadius: Radius.panel)
+                        .stroke(Theme.accent.opacity(0.06), lineWidth: 1)
+                )
             } else {
                 ScrollView {
                     LazyVStack(spacing: Spacing.hairline) {

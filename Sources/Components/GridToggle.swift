@@ -24,16 +24,20 @@ struct GridToggle: View {
     }
 
     private var pixelKnob: some View {
-        Canvas { ctx, size in
-            let n = 3
-            let gap: CGFloat = 1
-            let cell = (size.width - gap * CGFloat(n - 1)) / CGFloat(n)
-            for r in 0..<n {
-                for c in 0..<n {
-                    let x = CGFloat(c) * (cell + gap)
-                    let y = CGFloat(r) * (cell + gap)
-                    ctx.fill(Path(CGRect(x: x, y: y, width: cell, height: cell)),
-                             with: .color(Theme.dotOn))
+        let n = 3
+        let gap: CGFloat = 1
+        let cell = (13 - gap * CGFloat(n - 1)) / CGFloat(n)
+        return VStack(spacing: gap) {
+            ForEach(0..<n, id: \.self) { r in
+                HStack(spacing: gap) {
+                    ForEach(0..<n, id: \.self) { c in
+                        let delay = Double(r + c) * 0.04
+                        Rectangle()
+                            .fill(Theme.dotOn)
+                            .frame(width: cell, height: cell)
+                            .scaleEffect(on ? 1 : 0, anchor: .center)
+                            .animation(Anim.toggle.delay(delay), value: on)
+                    }
                 }
             }
         }

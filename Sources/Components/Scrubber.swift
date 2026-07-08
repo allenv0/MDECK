@@ -26,8 +26,24 @@ struct Scrubber: View {
 
                 Canvas { ctx, size in
                     let lit = Int(CGFloat(dots) * frac)
+                    let dotW = size.width / CGFloat(dots)
+
+                    if dragging {
+                        let dx = min(w - 2, max(2, dragLocation.x))
+                        for i in 0..<dots {
+                            let dotX = (CGFloat(i) + 0.5) * dotW
+                            let dist = abs(dotX - dx)
+                            if dist < 40 {
+                                let glow = max(0, 1 - dist / 40)
+                                let d: CGFloat = 3.5 + glow * 3
+                                ctx.fill(Path(ellipseIn: CGRect(x: dotX - d/2, y: size.height/2 - d/2, width: d, height: d)),
+                                         with: .color(Theme.accent.opacity(glow * 0.2)))
+                            }
+                        }
+                    }
+
                     for i in 0..<dots {
-                        let x = (CGFloat(i) + 0.5) * (size.width / CGFloat(dots))
+                        let x = (CGFloat(i) + 0.5) * dotW
                         let on = i <= lit
                         let d: CGFloat = on ? 5 : 3.5
                         ctx.fill(Path(ellipseIn: CGRect(x: x - d/2, y: size.height/2 - d/2, width: d, height: d)),
@@ -35,7 +51,8 @@ struct Scrubber: View {
                     }
                     if dragging {
                         let dx = min(w - 2, max(2, dragLocation.x))
-                        ctx.fill(Path(ellipseIn: CGRect(x: dx - 4, y: size.height/2 - 4, width: 8, height: 8)),
+                        let cursorSize: CGFloat = 8
+                        ctx.fill(Path(ellipseIn: CGRect(x: dx - cursorSize/2, y: size.height/2 - cursorSize/2, width: cursorSize, height: cursorSize)),
                                  with: .color(Theme.accent))
                     }
                 }

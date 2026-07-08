@@ -97,9 +97,14 @@ struct RotaryKnob: View {
                     currentAngle = .degrees(newDeg)
                 }
                 .onEnded { _ in
+                    let prevSnap = snappedAngle
                     dragStart = nil
                     withAnimation(Anim.snap) {
                         currentAngle = snappedAngle
+                    }
+                    if prevSnap.degrees != snappedAngle.degrees {
+                        NSHapticFeedbackManager.defaultPerformer.perform(
+                            .alignment, performanceTime: .default)
                     }
                 }
         )

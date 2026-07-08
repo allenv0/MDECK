@@ -36,7 +36,13 @@ struct SpectrumView: View {
                 let cx = cw * (CGFloat(c) + 0.5)
                 let cy = rh * (CGFloat(r) + 0.5)
                 let rect = CGRect(x: cx - bw/2, y: cy - bh/2, width: bw, height: bh)
-                let color: Color = on ? bandColor : Theme.pixelOff
+                let color: Color
+                if active {
+                    color = on ? bandColor : Theme.pixelOff
+                } else {
+                    let ghost = ((c * 7 + 3) % rows) > 1
+                    color = on ? bandColor : (ghost ? Theme.pixelOff.opacity(0.3) : Theme.pixelOff)
+                }
                 ctx.fill(Path(roundedRect: rect, cornerRadius: radius), with: .color(color))
             }
         }

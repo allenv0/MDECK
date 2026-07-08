@@ -132,6 +132,7 @@ enum Anim {
     static let fade = Animation.easeInOut(duration: 0.15)
     static let fastFade = Animation.easeInOut(duration: 0.1)
     static let pulse = Animation.easeInOut(duration: 2).repeatForever(autoreverses: true)
+    static let theme = Animation.easeInOut(duration: 0.4)
 }
 
 // MARK: - Letter-Spacing Tokens
