@@ -52,6 +52,7 @@ final class AudioEngine: ObservableObject {
     }
     @Published var bands: [Float] = Array(repeating: 0, count: 16)
     @Published var level: Float = 0
+    @Published var waveformSamples: [Float] = []
     @Published var repeatMode: RepeatMode = .off { didSet { if !restoring { savePlaylist() } } }
     @Published var shuffle: Bool = false { didSet { if !restoring { savePlaylist() } } }
     @Published var levels: [Float] = []
@@ -653,6 +654,21 @@ final class AudioEngine: ObservableObject {
             }
             let levelSmooth = 0.5 + s * 0.4
             self.level = self.level * levelSmooth + result.level * (1 - levelSmooth)
+
+            // Extract real waveform samples from the PCM buffer
+            if let ch = buffer.floatChannelData {
+                let n = Int(buffer.frameLength)
+                let step = max(1, n / 192)
+                var slice: [Float] = []
+                slice.reserveCapacity(192)
+                for i in stride(from: 0, to: n, by: step) {
+                    slice.append(ch[0][i])
+                }
+                self.waveformSamples.append(contentsOf: slice)
+                if self.waveformSamples.count > 768 {
+                    self.waveformSamples.removeFirst(self.waveformSamples.count - 768)
+                }
+            }
         }
     }
 }

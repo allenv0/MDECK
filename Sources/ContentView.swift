@@ -222,6 +222,7 @@ struct ContentView: View {
                     SpectrumView(
                         bands: trackLoaded ? engine.bands : [],
                         levels: trackLoaded ? engine.levels : [],
+                        waveformSamples: trackLoaded ? engine.waveformSamples : [],
                         rows: settings.spectrumRows,
                         active: engine.isPlaying,
                         style: settings.spectrumStyle
