@@ -24,9 +24,9 @@ final class ThemeCatalogTests: XCTestCase {
 
     func test_byID_returnsCorrectPalette() {
         XCTAssertEqual(ThemeCatalog.byID("iris").name, "Iris")
-        XCTAssertEqual(ThemeCatalog.byID("tokyo").name, "Tokyo Night")
+        XCTAssertEqual(ThemeCatalog.byID("solarized").name, "Solarized")
         XCTAssertEqual(ThemeCatalog.byID("amber").name, "Amber CRT")
-        XCTAssertEqual(ThemeCatalog.byID("monokai").name, "Monokai")
+        XCTAssertEqual(ThemeCatalog.byID("ayudark").name, "Ayu Dark")
     }
 
     func test_byID_fallbackToClassic() {
@@ -79,7 +79,7 @@ final class ThemeMappingTests: XCTestCase {
     }
 
     func test_red_equalsBandPeak() {
-        let p = ThemeCatalog.monokai
+        let p = ThemeCatalog.dracula
         Theme.current = p
         let redNS = NSColor(Theme.red)
         let peakNS = NSColor(Color(hex: p.bandPeak))
@@ -161,9 +161,9 @@ final class ThemeManagerTests: XCTestCase {
         defaults.set("dracula", forKey: "MDECK.theme")
 
         let mgr = ThemeManager()
-        mgr.select(ThemeCatalog.nord)
+        mgr.select(ThemeCatalog.iris)
         let saved = UserDefaults.standard.string(forKey: "MDECK.theme")
-        XCTAssertEqual(saved, "nord")
+        XCTAssertEqual(saved, "iris")
     }
 }
 
@@ -649,9 +649,9 @@ final class ThemeColorCacheTests: XCTestCase {
     func test_customAccentDisabled_usesPaletteAccent() {
         Theme.customAccentEnabled = false
         Theme.customAccent = nil
-        Theme.current = ThemeCatalog.nord
+        Theme.current = ThemeCatalog.dracula
         let orangeNS = NSColor(Theme.orange)
-        let accentNS = NSColor(Color(hex: ThemeCatalog.nord.accent))
+        let accentNS = NSColor(Color(hex: ThemeCatalog.dracula.accent))
         XCTAssertEqual(orangeNS, accentNS)
     }
 
