@@ -6,8 +6,10 @@ struct SpectrumView: View {
     var rows: Int = 9
     var active: Bool = true
     var style: SpectrumStyle = .bars
+    @Environment(\.palette) private var palette
 
     var body: some View {
+        let _ = palette  // register environment dependency for theme sync
         Canvas { ctx, size in
             switch style {
             case .bars:
