@@ -343,6 +343,10 @@ struct ContentView: View {
     }
 
     private static let _defaultArtwork: NSImage = {
+        if let cover = NSImage(named: "md-cover") {
+            return cover
+        }
+        // Fallback: app icon
         if let appIcon = NSImage(named: NSImage.applicationIconName) {
             return appIcon
         }
