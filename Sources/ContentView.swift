@@ -15,6 +15,8 @@ struct ContentView: View {
     @State private var mdAnimTrigger = 0
     @State private var mdAnimTrackTitle = ""
     @State private var mdAnimTrackArtist = ""
+    @State private var themeFade: Double = 0
+    @State private var themeFadeColor: Color = .clear
 
     var body: some View {
         VStack(spacing: AppSettings.shared.layoutDensity.spacing) {
@@ -60,7 +62,11 @@ struct ContentView: View {
                 .offset(y: 1)
         )
         .environment(\.palette, theme.selected)
-        .animation(Anim.theme, value: theme.selectedID)
+        .overlay(
+            themeFadeColor
+                .opacity(themeFade * 0.55)
+                .allowsHitTesting(false)
+        )
         .focusEffectDisabled()
         .onDrop(of: [UTType.fileURL], isTargeted: $windowDropTargeted) { providers in
             engine.add(providers: providers)
@@ -94,6 +100,16 @@ struct ContentView: View {
             mdAnimTrackArtist = track.artist
             mdAnimTrigger += 1
             mdAnimActive = true
+        }
+        .onChange(of: theme.selectedID) { oldID, newID in
+            guard oldID != newID else { return }
+            // Capture old palette's background before theme swap takes full effect
+            themeFadeColor = Color(hex: ThemeCatalog.byID(oldID).bg)
+            // Fade out → swap → fade in
+            withAnimation(.easeInOut(duration: 0.15)) { themeFade = 1 }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.18) {
+                withAnimation(.easeInOut(duration: 0.15)) { themeFade = 0 }
+            }
         }
     }
 
