@@ -7,6 +7,7 @@ struct EQBandKnob: View {
     var index: Int = 0
     var total: Int = 10
     var size: CGFloat = 34
+    @Environment(\.palette) private var palette  // force re-render on theme change
 
     @State private var dragStart: CGFloat? = nil
     @State private var dragStartValue: Float = 0
@@ -35,6 +36,7 @@ struct EQBandKnob: View {
     private var atCenter: Bool { abs(Double(value)) < 0.25 }
 
     var body: some View {
+        let _ = palette  // read to register environment dependency
         let neon = Theme.accent2
         let active = dragStart != nil
 

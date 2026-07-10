@@ -145,8 +145,10 @@ private struct EQResponseCurve: View {
     let gains: [Float]
     let enabled: Bool
     var activeIndex: Int? = nil
+    @Environment(\.palette) private var palette  // force re-render on theme change
 
     var body: some View {
+        let _ = palette  // read to register environment dependency
         Canvas { ctx, size in
             let padX: CGFloat = 10
             let drawW = size.width - padX * 2
