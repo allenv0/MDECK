@@ -200,39 +200,39 @@ struct MDInsertAnimation: View {
     private func runSequence() {
         playInsertSound()
 
-        withAnimation(.easeOut(duration: 0.27)) {
+        withAnimation(.easeOut(duration: 0.40)) {
             contentOpacity = 1
         }
 
         Task {
-            try? await Task.sleep(nanoseconds: 90_000_000)
+            try? await Task.sleep(nanoseconds: 135_000_000)
 
             withAnimation(Anim.mdDoor) { doorAngle = -85 }
 
-            try? await Task.sleep(nanoseconds: 270_000_000)
+            try? await Task.sleep(nanoseconds: 405_000_000)
 
             withAnimation(Anim.mdInsert) { mdOffset = 0 }
 
-            try? await Task.sleep(nanoseconds: 570_000_000)
+            try? await Task.sleep(nanoseconds: 855_000_000)
 
             withAnimation(Anim.snap) { doorAngle = 0 }
 
-            try? await Task.sleep(nanoseconds: 270_000_000)
+            try? await Task.sleep(nanoseconds: 405_000_000)
 
             withAnimation(Anim.mdShutter) { shutterReveal = 1 }
 
-            try? await Task.sleep(nanoseconds: 330_000_000)
+            try? await Task.sleep(nanoseconds: 495_000_000)
 
             isSpinning = true
             withAnimation(Anim.mdSpin) { discRotation = 720 }
 
-            try? await Task.sleep(nanoseconds: 675_000_000)
+            try? await Task.sleep(nanoseconds: 1_012_500_000)
 
-            withAnimation(.easeOut(duration: 0.30)) {
+            withAnimation(.easeOut(duration: 0.45)) {
                 contentOpacity = 0
             }
 
-            try? await Task.sleep(nanoseconds: 375_000_000)
+            try? await Task.sleep(nanoseconds: 562_500_000)
             onFinish()
         }
     }
