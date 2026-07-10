@@ -187,6 +187,9 @@ struct ContentView: View {
                         .font(.grotesk(Typography.title, .semibold)).foregroundStyle(Theme.ink)
                     Text((engine.currentTrack?.album ?? "\u{2014}").uppercased())
                         .font(.mono(Typography.caption)).tracking(Tracking.label).foregroundStyle(Theme.inkDim)
+
+                    // Audio quality info
+                    qualityInfoRow
                 } else {
                     Text("DROP FILES TO PLAY")
                         .font(.mono(Typography.caption)).tracking(Tracking.section).foregroundStyle(Theme.inkFaint)
@@ -219,6 +222,27 @@ struct ContentView: View {
     }
 
     private var trackLoaded: Bool { engine.currentTrack != nil }
+
+    private var qualityInfoRow: some View {
+        let label = engine.currentTrack?.qualityLabel ?? ""
+        guard !label.isEmpty else { return AnyView(EmptyView()) }
+        return AnyView(
+            HStack(spacing: 6) {
+                Image(systemName: "waveform")
+                    .font(.system(size: 8, weight: .medium))
+                    .foregroundStyle(Theme.inkFaint)
+                Text(label)
+                    .font(.mono(Typography.badge, .medium))
+                    .tracking(Tracking.label)
+                    .foregroundStyle(Theme.inkFaint)
+                Spacer()
+            }
+            .padding(.vertical, 3)
+            .padding(.horizontal, 6)
+            .background(Theme.panelStroke.opacity(0.15))
+            .clipShape(RoundedRectangle(cornerRadius: Radius.pill))
+        )
+    }
 
     private var albumArtSection: some View {
         VStack(spacing: 0) {

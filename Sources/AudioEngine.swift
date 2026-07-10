@@ -14,6 +14,28 @@ struct Track: Identifiable, Equatable {
     var artwork: NSImage?
     var artworkFileName: String?     // filename of saved custom artwork in musicDirectory
 
+    // Audio quality metadata
+    var codec: String = ""          // "MP3", "FLAC", "AAC", "WAV", "AIFF"
+    var sampleRate: Int = 0         // Hz (e.g. 44100)
+    var bitDepth: Int = 0           // bits (0 for lossy/compressed)
+    var channels: Int = 0           // 1=mono, 2=stereo
+    var bitRate: Int = 0            // kbps (e.g. 320)
+
+    var qualityLabel: String {
+        var parts: [String] = []
+        if !codec.isEmpty { parts.append(codec) }
+        if sampleRate > 0 {
+            let khz = Double(sampleRate) / 1000.0
+            parts.append(khz == floor(khz) ? "\(Int(khz))kHz" : String(format: "%.1fkHz", khz))
+        }
+        if bitDepth > 0 { parts.append("\(bitDepth)-bit") }
+        if channels == 1 { parts.append("Mono") }
+        else if channels == 2 { parts.append("Stereo") }
+        else if channels > 2 { parts.append("\(channels)ch") }
+        if bitRate > 0 { parts.append("\(bitRate)kbps") }
+        return parts.isEmpty ? "" : parts.joined(separator: " · ")
+    }
+
     static func == (a: Track, b: Track) -> Bool { a.id == b.id }
 }
 
@@ -86,6 +108,11 @@ final class AudioEngine: ObservableObject {
         let album: String
         let duration: Double
         let artworkFileName: String?
+        let codec: String?
+        let sampleRate: Int?
+        let bitDepth: Int?
+        let channels: Int?
+        let bitRate: Int?
     }
 
     private struct SavedPlaylist: Codable {
@@ -160,7 +187,12 @@ final class AudioEngine: ObservableObject {
                 artist: $0.artist,
                 album: $0.album,
                 duration: $0.duration,
-                artworkFileName: $0.artworkFileName
+                artworkFileName: $0.artworkFileName,
+                codec: $0.codec.isEmpty ? nil : $0.codec,
+                sampleRate: $0.sampleRate > 0 ? $0.sampleRate : nil,
+                bitDepth: $0.bitDepth > 0 ? $0.bitDepth : nil,
+                channels: $0.channels > 0 ? $0.channels : nil,
+                bitRate: $0.bitRate > 0 ? $0.bitRate : nil
             )},
             currentIndex: currentIndex ?? -1,
             shuffle: shuffle,
@@ -188,7 +220,12 @@ final class AudioEngine: ObservableObject {
                 if let data = try? Data(contentsOf: artURL) { artwork = NSImage(data: data) }
             }
             let track = Track(url: url, title: st.title, artist: st.artist, album: st.album,
-                              duration: st.duration, artwork: artwork)
+                              duration: st.duration, artwork: artwork,
+                              codec: st.codec ?? "",
+                              sampleRate: st.sampleRate ?? 0,
+                              bitDepth: st.bitDepth ?? 0,
+                              channels: st.channels ?? 0,
+                              bitRate: st.bitRate ?? 0)
             restored.append(track)
         }
         playlist = restored
@@ -308,18 +345,41 @@ final class AudioEngine: ObservableObject {
 
     private func makeTrack(_ url: URL, title: String? = nil) -> Track {
         var dur: Double = 0
+        var sampleRate: Int = 0
+        var channels: Int = 0
+        var bitDepth: Int = 0
         if let f = try? AVAudioFile(forReading: url) {
             dur = Double(f.length) / f.processingFormat.sampleRate
+            let fmt = f.processingFormat
+            sampleRate = Int(fmt.sampleRate)
+            channels = Int(fmt.channelCount)
+            bitDepth = AudioEngine.bitDepth(from: f.fileFormat.commonFormat)
         }
+        let codec = url.pathExtension.uppercased()
         return Track(url: url,
                      title: title ?? url.deletingPathExtension().lastPathComponent,
-                     artist: "—", album: "—", duration: dur, artwork: nil)
+                     artist: "—", album: "—", duration: dur, artwork: nil,
+                     codec: codec, sampleRate: sampleRate, bitDepth: bitDepth, channels: channels)
+    }
+
+    /// Map AVAudioCommonFormat to bit depth (returns 0 for compressed/other).
+    private static func bitDepth(from commonFormat: AVAudioCommonFormat) -> Int {
+        switch commonFormat {
+        case .pcmFormatInt16:    return 16
+        case .pcmFormatInt32:    return 32
+        case .pcmFormatFloat32:  return 32
+        case .pcmFormatFloat64:  return 64
+        default:                 return 0
+        }
     }
 
     private func loadMetadata(for track: Track) {
         let asset = AVURLAsset(url: track.url)
         Task {
             var title: String?, artist: String?, album: String?; var art: NSImage?
+            var bitRate: Int = 0
+
+            // Load metadata tags
             if let meta = try? await asset.load(.commonMetadata) {
                 for item in meta {
                     guard let key = item.commonKey else { continue }
@@ -333,11 +393,28 @@ final class AudioEngine: ObservableObject {
                     }
                 }
             }
+
+            // Extract bitrate from audio track
+            if let tracks = try? await asset.load(.tracks) {
+                for t in tracks where t.mediaType == .audio {
+                    if #available(macOS 13, *) {
+                        if let rate = try? await t.load(.estimatedDataRate), rate > 0 {
+                            bitRate = Int(rate / 1000)
+                        }
+                    } else {
+                        let rate = t.estimatedDataRate
+                        if rate > 0 { bitRate = Int(rate / 1000) }
+                    }
+                    break
+                }
+            }
+
             await MainActor.run {
                 guard let i = self.playlist.firstIndex(where: { $0.id == track.id }) else { return }
                 if let t = title, !t.isEmpty { self.playlist[i].title = t }
                 if let a = artist, !a.isEmpty { self.playlist[i].artist = a }
                 if let al = album, !al.isEmpty { self.playlist[i].album = al }
+                if bitRate > 0 { self.playlist[i].bitRate = bitRate }
                 if let art, self.playlist[i].artworkFileName == nil { self.playlist[i].artwork = art }
                 // Persist updated metadata
                 self.savePlaylist()
@@ -361,6 +438,14 @@ final class AudioEngine: ObservableObject {
         currentTime = 0
         seekFrame = 0
         levels.removeAll()
+
+        // Update quality info from the actual audio file
+        let fmt = f.processingFormat
+        playlist[index].sampleRate = Int(fmt.sampleRate)
+        playlist[index].channels = Int(fmt.channelCount)
+        playlist[index].bitDepth = AudioEngine.bitDepth(from: f.fileFormat.commonFormat)
+        playlist[index].codec = url.pathExtension.uppercased()
+
         installTap()
         scheduleSegment(from: 0)
         if autoplay {
