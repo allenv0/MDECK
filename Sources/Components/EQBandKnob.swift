@@ -35,6 +35,54 @@ struct EQBandKnob: View {
 
     private var atCenter: Bool { abs(Double(value)) < 0.25 }
 
+    private var isSilver: Bool { palette.id == "silver" }
+
+    private var rimGradient: LinearGradient {
+        LinearGradient(
+            colors: isSilver
+                ? [Color(white: 0.75), Color(white: 0.70), Color(white: 0.66), Color(white: 0.60)]
+                : [Color(white: Elevation.rimLight), Color(white: Elevation.rimMid), Color(white: Elevation.rimShadow), Color(white: Elevation.rimDark)],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+    }
+
+    private var innerFill: RadialGradient {
+        RadialGradient(
+            colors: isSilver
+                ? [Color(white: 0.16), Color(white: 0.12), Color(white: 0.09)]
+                : [Color(white: Elevation.innerLight), Color(white: Elevation.innerMid), Color(white: Elevation.innerDark)],
+            center: .topLeading,
+            startRadius: 0,
+            endRadius: size * 0.7
+        )
+    }
+
+    private var highlightFill: RadialGradient {
+        RadialGradient(
+            colors: isSilver
+                ? [Color.white.opacity(0.08), Color.white.opacity(0.02), Color.clear]
+                : [Color.white.opacity(0.2), Color.white.opacity(0.06), Color.clear],
+            center: .topLeading,
+            startRadius: 0,
+            endRadius: size * 0.5
+        )
+    }
+
+    private var bandRingOpacity: Double {
+        isSilver
+            ? (dragStart != nil ? 0.30 : (hovering ? 0.20 : 0.12))
+            : (dragStart != nil ? 0.60 : (hovering ? 0.40 : 0.22))
+    }
+
+    private var pointerShadowOpacity: Double {
+        isSilver ? (dragStart != nil ? 0.35 : 0.15) : (dragStart != nil ? 0.70 : 0.30)
+    }
+
+    private var pointerShadowRadius: CGFloat {
+        isSilver ? (dragStart != nil ? 2.0 : 1.0) : (dragStart != nil ? 3.0 : 1.5)
+    }
+
     var body: some View {
         let _ = palette  // read to register environment dependency
         let neon = Theme.accent2
@@ -48,34 +96,11 @@ struct EQBandKnob: View {
                 .offset(y: Elevation.shadowOffset)
 
             Circle()
-                .stroke(
-                    LinearGradient(
-                        colors: [
-                            Color(white: Elevation.rimLight),
-                            Color(white: Elevation.rimMid),
-                            Color(white: Elevation.rimShadow),
-                            Color(white: Elevation.rimDark),
-                        ],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ),
-                    lineWidth: 2
-                )
+                .stroke(rimGradient, lineWidth: 2)
                 .frame(width: size, height: size)
 
             Circle()
-                .fill(
-                    RadialGradient(
-                        colors: [
-                            Color(white: Elevation.innerLight),
-                            Color(white: Elevation.innerMid),
-                            Color(white: Elevation.innerDark),
-                        ],
-                        center: .topLeading,
-                        startRadius: 0,
-                        endRadius: size * 0.7
-                    )
-                )
+                .fill(innerFill)
                 .frame(width: size - 4, height: size - 4)
 
             Circle()
@@ -83,23 +108,12 @@ struct EQBandKnob: View {
                 .frame(width: size - 2, height: size - 2)
 
             Circle()
-                .stroke(bandColor.opacity(active ? 0.6 : (hovering ? 0.4 : 0.22)),
+                .stroke(bandColor.opacity(bandRingOpacity),
                         lineWidth: 1.5)
                 .frame(width: size - 8, height: size - 8)
 
             Circle()
-                .fill(
-                    RadialGradient(
-                        colors: [
-                            Color.white.opacity(0.2),
-                            Color.white.opacity(0.06),
-                            Color.clear,
-                        ],
-                        center: .topLeading,
-                        startRadius: 0,
-                        endRadius: size * 0.5
-                    )
-                )
+                .fill(highlightFill)
                 .frame(width: size - 4, height: size - 4)
 
             RoundedRectangle(cornerRadius: 0.8)
@@ -107,7 +121,7 @@ struct EQBandKnob: View {
                 .frame(width: 1.5, height: size * 0.26)
                 .offset(y: -size * 0.22)
                 .rotationEffect(.degrees(angle))
-                .shadow(color: bandColor.opacity(active ? 0.7 : 0.3), radius: active ? 3 : 1.5)
+                .shadow(color: bandColor.opacity(pointerShadowOpacity), radius: pointerShadowRadius)
 
             Circle()
                 .fill(Theme.inkFaint.opacity(atCenter ? 0.8 : 0.2))

@@ -47,10 +47,10 @@ enum ThemeCatalog {
 
     static let silver = Palette(
         id: "silver", name: "Silver",
-        bg: 0xE4E6E9, panel: 0xEEF0F2, grid: 0xD0D3D7, grain: 0xB4B8BD,
-        cream: 0x2C2F33, muted: 0x767B82, faint: 0xA2A6AC,
+        bg: 0xD5D9DE, panel: 0xEEF0F2, grid: 0xD0D3D7, grain: 0xB4B8BD,
+        cream: 0x2C2F33, muted: 0x5E636A, faint: 0xA2A6AC,
         accent: 0x5B8BAA, accent2: 0x8DABBF,
-        bandLow: 0x758795, bandMid: 0x5B8BAA, bandHigh: 0x3B7798, bandPeak: 0xCC5544)
+        bandLow: 0x758795, bandMid: 0x6D9DBA, bandHigh: 0x4EA8C8, bandPeak: 0xCC5544)
 
     static let ayuDark = Palette(
         id: "ayudark", name: "Ayu Dark",
