@@ -2,12 +2,14 @@ import SwiftUI
 
 struct VolumeDots: View {
     @Binding var value: Float
+    @Environment(\.palette) private var palette
 
     @State private var litAt: [Int: Date] = [:]
     @State private var prevLit: Int = 0
 
     var body: some View {
-        GeometryReader { geo in
+        let _ = palette  // register environment dependency for theme sync
+        return GeometryReader { geo in
             let w = geo.size.width
             let segs = 7
             Canvas { ctx, size in
