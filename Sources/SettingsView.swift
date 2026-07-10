@@ -249,6 +249,7 @@ struct SettingsView: View {
             VStack(spacing: Spacing.hairline) {
                 RetroToggle(isOn: $settings.showAlbumArt, label: "Album Art", icon: "photo")
                 RetroToggle(isOn: $settings.showSpectrum, label: "Spectrum", icon: "waveform")
+                RetroToggle(isOn: $settings.showEqualizer, label: "Equalizer", icon: "slider.vertical.3")
             }
             .padding(.horizontal, Spacing.sectionPadding).padding(.bottom, Spacing.controlPadding)
         }

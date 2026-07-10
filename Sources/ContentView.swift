@@ -24,20 +24,29 @@ struct ContentView: View {
                     nowPlaying
                     transport
                 }
-                if settings.showPlaylist {
-                    playlistPanel
-                        .frame(width: 320)
-                        .transition(.move(edge: .trailing).combined(with: .opacity))
+                if settings.showPlaylist || settings.showEqualizer {
+                    VStack(spacing: AppSettings.shared.layoutDensity.spacing) {
+                        if settings.showPlaylist {
+                            playlistPanel
+                                .transition(.move(edge: .trailing).combined(with: .opacity))
+                        }
+                        equalizerPanel
+                            .fixedSize(horizontal: false, vertical: true)
+                            .layoutPriority(1)
+                    }
+                    .frame(width: 320)
+                    .transition(.move(edge: .trailing).combined(with: .opacity))
                 }
             }
         }
         .frame(
             minWidth: settings.showSpectrum || settings.showAlbumArt ? 680 : 480,
-            minHeight: settings.showPlaylist ? 560 : 400
+            minHeight: minHeightForLayout
         )
         .animation(Anim.slide, value: settings.showPlaylist)
         .animation(Anim.slide, value: settings.showAlbumArt)
         .animation(Anim.slide, value: settings.showSpectrum)
+        .animation(Anim.slide, value: settings.showEqualizer)
         .padding(AppSettings.shared.layoutDensity.spacing)
         .background(Theme.bg)
         .clipShape(RoundedRectangle(cornerRadius: Radius.window, style: .continuous))
@@ -384,6 +393,17 @@ struct ContentView: View {
         .fixedSize()
     }
 
+    // MARK: - Equalizer
+
+    private var equalizerPanel: some View {
+        Group {
+            if settings.showEqualizer {
+                EqualizerView()
+                    .transition(.opacity.combined(with: .move(edge: .bottom)))
+            }
+        }
+    }
+
     // MARK: - Playlist
 
     private var playlistPanel: some View {
@@ -495,6 +515,12 @@ struct ContentView: View {
     // MARK: - Helpers
 
     private var repeatLabel: String { engine.repeatMode == .one ? "LOOP\u{00B7}1" : "LOOP" }
+
+    private var minHeightForLayout: CGFloat {
+        var h: CGFloat = settings.showPlaylist ? 560 : 400
+        if settings.showEqualizer { h += 300 }
+        return h
+    }
 
     private func openFiles() {
         let p = NSOpenPanel()

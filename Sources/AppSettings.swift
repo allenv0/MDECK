@@ -81,6 +81,10 @@ final class AppSettings: ObservableObject {
         didSet { save() }
     }
 
+    @Published var showEqualizer: Bool = true {
+        didSet { save() }
+    }
+
     // MARK: - Persistence Keys
 
     private enum Key {
@@ -93,6 +97,7 @@ final class AppSettings: ObservableObject {
         static let showSpectrum      = "MDECK.showSpectrum"
         static let layoutDensity     = "MDECK.layoutDensity"
         static let showPlaylist      = "MDECK.showPlaylist"
+        static let showEqualizer     = "MDECK.showEqualizer"
     }
 
     init() {
@@ -111,6 +116,7 @@ final class AppSettings: ObservableObject {
         if let raw = d.string(forKey: Key.layoutDensity),
            let density = LayoutDensity(rawValue: raw) { layoutDensity = density }
         if d.object(forKey: Key.showPlaylist) != nil { showPlaylist = d.bool(forKey: Key.showPlaylist) }
+        if d.object(forKey: Key.showEqualizer) != nil { showEqualizer = d.bool(forKey: Key.showEqualizer) }
 
         applyAccentOverride()
     }
@@ -152,5 +158,6 @@ final class AppSettings: ObservableObject {
         d.set(showSpectrum,             forKey: Key.showSpectrum)
         d.set(layoutDensity.rawValue,   forKey: Key.layoutDensity)
         d.set(showPlaylist,             forKey: Key.showPlaylist)
+        d.set(showEqualizer,            forKey: Key.showEqualizer)
     }
 }

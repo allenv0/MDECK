@@ -14,6 +14,7 @@
 		0F02C26905E88DB11F747E8D /* VolumeDots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BF3D3894A09C66D12ECD06 /* VolumeDots.swift */; };
 		1C40391BD2D90111B0586EF4 /* MDInsertAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02739CF3A78473EE28B34D11 /* MDInsertAnimation.swift */; };
 		25038ECFE631182346CAFF93 /* Panel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE6E3817D813CB3F917CA4F /* Panel.swift */; };
+		361152E4A45E99EBAC00FCEB /* EqualizerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A780E5C44835F462AF9C4F04 /* EqualizerView.swift */; };
 		45A7C5BA33F2A484924B89B4 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5083AD8D74EA04196C453EB3 /* SettingsView.swift */; };
 		471B2ABAF869E9D9CC8638F7 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9799FA56A15E995A8354EB76 /* Fonts.swift */; };
 		508B524CCE38C64151C83F97 /* MDECKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ABF877F1C383A1321DC5CD /* MDECKTests.swift */; };
@@ -36,6 +37,7 @@
 		E164BC612F8D2C69D12CAB72 /* Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E613F1A231184FD5130DF296 /* Formatting.swift */; };
 		E27EF5607280844AF7256895 /* PowerLED.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41994A31CE869E2EA3039DB0 /* PowerLED.swift */; };
 		EECEA8FE0B78A06CB901606C /* md_insert.wav in Resources */ = {isa = PBXBuildFile; fileRef = 46293BB62B74B24C612C8C6E /* md_insert.wav */; };
+		FB594090F51920F5DFCCA87E /* EQBandKnob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2045A9FC9E9C1712774966 /* EQBandKnob.swift */; };
 		FDE171422B5E1F32F9F5EADF /* mdeck.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5110AF490D33945A4BFBF1E4 /* mdeck.icns */; };
 /* End PBXBuildFile section */
 
@@ -71,11 +73,13 @@
 		5F82C28BD7CDE12CE4D208B3 /* Scrubber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scrubber.swift; sourceTree = "<group>"; };
 		6A4588C43D90EE66710E68A0 /* ReorderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReorderDelegate.swift; sourceTree = "<group>"; };
 		6A6D17B7E6276AE9FA124F5D /* FFTAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FFTAnalyzer.swift; sourceTree = "<group>"; };
+		6C2045A9FC9E9C1712774966 /* EQBandKnob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EQBandKnob.swift; sourceTree = "<group>"; };
 		6D6043B3F3D39351866D84DF /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		8767A92F9C4B50B05429DAC9 /* MDECKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MDECKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9799FA56A15E995A8354EB76 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		9CACAAC891359A18494E639B /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
 		9E7E96B156F8B2CEF03AC63A /* GlyphButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlyphButton.swift; sourceTree = "<group>"; };
+		A780E5C44835F462AF9C4F04 /* EqualizerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EqualizerView.swift; sourceTree = "<group>"; };
 		AB5C994E4F7C5B559A6D0E76 /* GridToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridToggle.swift; sourceTree = "<group>"; };
 		BABA88B3DEC5667D6F522133 /* AudioEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioEngine.swift; sourceTree = "<group>"; };
 		D0BE72C4583C80A66FE3604C /* MiniDiscView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniDiscView.swift; sourceTree = "<group>"; };
@@ -168,6 +172,8 @@
 			isa = PBXGroup;
 			children = (
 				5F6DF89257F15BBF0C715BC8 /* DotText.swift */,
+				6C2045A9FC9E9C1712774966 /* EQBandKnob.swift */,
+				A780E5C44835F462AF9C4F04 /* EqualizerView.swift */,
 				9E7E96B156F8B2CEF03AC63A /* GlyphButton.swift */,
 				AB5C994E4F7C5B559A6D0E76 /* GridToggle.swift */,
 				02739CF3A78473EE28B34D11 /* MDInsertAnimation.swift */,
@@ -304,6 +310,8 @@
 				7E69E1656C1F0F82364E5BC1 /* ContentView.swift in Sources */,
 				50DF335AD52AA3F2195CB743 /* DesignTokens.swift in Sources */,
 				7B08BBF7D490297C64A9942C /* DotText.swift in Sources */,
+				FB594090F51920F5DFCCA87E /* EQBandKnob.swift in Sources */,
+				361152E4A45E99EBAC00FCEB /* EqualizerView.swift in Sources */,
 				98E105FC4A3A4A430503734A /* FFTAnalyzer.swift in Sources */,
 				471B2ABAF869E9D9CC8638F7 /* Fonts.swift in Sources */,
 				E164BC612F8D2C69D12CAB72 /* Formatting.swift in Sources */,

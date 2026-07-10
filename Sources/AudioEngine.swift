@@ -34,6 +34,17 @@ final class AudioEngine: ObservableObject {
     @Published var shuffle: Bool = false { didSet { if !restoring { savePlaylist() } } }
     @Published var levels: [Float] = []
     @Published var trackTransitionCount = 0
+
+    // Equalizer (10-band graphic EQ)
+    static let eqBandCount = 10
+    static let eqFrequencies: [Float] = [32, 64, 125, 250, 500, 1000, 2000, 4000, 8000, 16000]
+    @Published var eqGains: [Float] = Array(repeating: 0, count: eqBandCount) {
+        didSet { applyEQ(); saveEQ() }
+    }
+    @Published var eqEnabled: Bool = true {
+        didSet { applyEQ(); saveEQ() }
+    }
+
     private var restoring = false
     let levelCapacity = 80
     private var tickCount = 0
@@ -42,6 +53,7 @@ final class AudioEngine: ObservableObject {
 
     private let engine = AVAudioEngine()
     private let player = AVAudioPlayerNode()
+    private let eq = AVAudioUnitEQ(numberOfBands: eqBandCount)
     private var mixer: AVAudioMixerNode { engine.mainMixerNode }
     private var file: AVAudioFile?
     private var sampleRate: Double = 44100
@@ -85,14 +97,57 @@ final class AudioEngine: ObservableObject {
 
     init() {
         engine.attach(player)
-        engine.connect(player, to: mixer, format: nil)
+        engine.attach(eq)
+        configureEQ()
+        engine.connect(player, to: eq, format: nil)
+        engine.connect(eq, to: mixer, format: nil)
         mixer.outputVolume = volume
 
         if UserDefaults.standard.object(forKey: "MDECK.volume") != nil {
             volume = UserDefaults.standard.float(forKey: "MDECK.volume")
         }
+        restoreEQ()
+        applyEQ()
 
         loadPlaylist()
+    }
+
+    // MARK: - Equalizer
+
+    private func configureEQ() {
+        for (i, freq) in Self.eqFrequencies.enumerated() {
+            let band = eq.bands[i]
+            band.filterType = .parametric
+            band.frequency = Float(freq)
+            band.bandwidth = 1.0
+            band.gain = 0
+            band.bypass = false
+        }
+        eq.globalGain = 0
+    }
+
+    private func applyEQ() {
+        for i in 0..<Self.eqBandCount {
+            eq.bands[i].gain = Float(eqGains[i])
+            eq.bands[i].bypass = !eqEnabled
+        }
+    }
+
+    private func saveEQ() {
+        guard !restoring else { return }
+        let d = UserDefaults.standard
+        d.set(eqGains.map { Double($0) }, forKey: "MDECK.eqGains")
+        d.set(eqEnabled, forKey: "MDECK.eqEnabled")
+    }
+
+    private func restoreEQ() {
+        let d = UserDefaults.standard
+        if let saved = d.array(forKey: "MDECK.eqGains") as? [Double], saved.count == Self.eqBandCount {
+            eqGains = saved.map { Float($0) }
+        }
+        if d.object(forKey: "MDECK.eqEnabled") != nil {
+            eqEnabled = d.bool(forKey: "MDECK.eqEnabled")
+        }
     }
 
     // MARK: - Persistence
