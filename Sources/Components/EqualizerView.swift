@@ -215,20 +215,20 @@ private struct EQResponseCurve: View {
             }
         }
         .background(
-            RoundedRectangle(cornerRadius: Radius.input, style: .continuous)
+            RoundedRectangle(cornerRadius: Radius.panel, style: .continuous)
                 .fill(Theme.bg.opacity(0.3))
         )
         .overlay(
-            RoundedRectangle(cornerRadius: Radius.input, style: .continuous)
+            RoundedRectangle(cornerRadius: Radius.panel, style: .continuous)
                 .stroke(Color.white.opacity(OpacityToken.ghost), lineWidth: 1)
         )
         .overlay(
-            RoundedRectangle(cornerRadius: Radius.input, style: .continuous)
+            RoundedRectangle(cornerRadius: Radius.panel, style: .continuous)
                 .inset(by: 0.5)
                 .stroke(Color.black.opacity(OpacityToken.panelBorder), lineWidth: 1)
                 .offset(y: 1)
         )
-        .clipShape(RoundedRectangle(cornerRadius: Radius.input, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: Radius.panel, style: .continuous))
     }
 
     private static func bandColor(at index: Int, total: Int) -> Color {

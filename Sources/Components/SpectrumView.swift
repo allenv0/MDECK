@@ -19,6 +19,7 @@ struct SpectrumView: View {
                 drawWaveform(ctx: &ctx, size: size)
             }
         }
+        .clipShape(RoundedRectangle(cornerRadius: Radius.panel, style: .continuous))
     }
 
     // MARK: - Bars

@@ -45,12 +45,12 @@ enum ThemeCatalog {
         accent: 0xBD93F9, accent2: 0xFF79C6,
         bandLow: 0x8BE9FD, bandMid: 0x50FA7B, bandHigh: 0xF1FA8C, bandPeak: 0xFF79C6)
 
-    static let solarized = Palette(
-        id: "solarized", name: "Solarized",
-        bg: 0x002B36, panel: 0x073642, grid: 0x0A3A45, grain: 0x16505D,
-        cream: 0x93A1A1, muted: 0x586E75, faint: 0x0A3A45,
-        accent: 0x268BD2, accent2: 0x2AA198,
-        bandLow: 0x268BD2, bandMid: 0x859900, bandHigh: 0xB58900, bandPeak: 0xDC322F)
+    static let silver = Palette(
+        id: "silver", name: "Silver",
+        bg: 0xE4E6E9, panel: 0xEEF0F2, grid: 0xD0D3D7, grain: 0xB4B8BD,
+        cream: 0x2C2F33, muted: 0x767B82, faint: 0xA2A6AC,
+        accent: 0x5B8BAA, accent2: 0x8DABBF,
+        bandLow: 0x758795, bandMid: 0x5B8BAA, bandHigh: 0x3B7798, bandPeak: 0xCC5544)
 
     static let ayuDark = Palette(
         id: "ayudark", name: "Ayu Dark",
@@ -59,8 +59,19 @@ enum ThemeCatalog {
         accent: 0xF29718, accent2: 0x39BAE6,
         bandLow: 0x39BAE6, bandMid: 0xAAD94C, bandHigh: 0xF29718, bandPeak: 0xF07178)
 
+    // ── Braun ──────────────────────────────────────────────────
+    // Inspired by Dieter Rams / 1970s German audio equipment.
+    // Matte charcoal chassis, warm cream type, iconic orange accent,
+    // and copper/amber spectrum tones for an analog, tactile feel.
+    static let braun = Palette(
+        id: "braun", name: "Braun",
+        bg: 0x1A1C1E, panel: 0x26282B, grid: 0x303337, grain: 0x3E4044,
+        cream: 0xDED5BE, muted: 0x898370, faint: 0x4D4942,
+        accent: 0xD4792B, accent2: 0x6B8B9E,
+        bandLow: 0x8A6E47, bandMid: 0xD4792B, bandHigh: 0xDA9E48, bandPeak: 0xCC3F32)
+
     static let all: [Palette] = [
-        mono, classic, solarized, iris, amber, dracula, ayuDark
+        mono, classic, silver, iris, amber, dracula, ayuDark, braun
     ]
 
     static func byID(_ id: String) -> Palette { all.first { $0.id == id } ?? classic }
