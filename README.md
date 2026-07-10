@@ -24,12 +24,15 @@
 
 - Persistent playlists
 - Artwork support
+- EqualizerView
 - More color themes
 
 
 ## Demos
 
 <div align="center">
+
+![MDECK playing a track](app-assets/g0.png)
 
 ![MDECK playing a track](app-assets/g.png)
 
