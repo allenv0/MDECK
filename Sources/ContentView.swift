@@ -304,12 +304,6 @@ struct ContentView: View {
                 Image(nsImage: defaultArtwork)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .opacity(artHovered ? 0.7 : 0.5)
-                    .phaseAnimator([false, true]) { content, pulse in
-                        content.opacity(pulse ? 0.55 : 0.45)
-                    } animation: { _ in
-                            Animation.easeInOut(duration: 3).repeatForever(autoreverses: true)
-                    }
             }
         }
         .clipShape(RoundedRectangle(cornerRadius: Radius.art))
