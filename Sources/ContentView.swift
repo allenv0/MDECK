@@ -280,7 +280,7 @@ struct ContentView: View {
                         .id(mdAnimTrigger)
                         .transition(.opacity)
                         .frame(width: 260, height: 260)
-                        .clipShape(RoundedRectangle(cornerRadius: Radius.art))
+                        .clipShape(RoundedRectangle(cornerRadius: Radius.panel, style: .continuous))
                     }
                 }
                 .frame(width: 260, height: 260)
@@ -306,9 +306,9 @@ struct ContentView: View {
                     .aspectRatio(contentMode: .fit)
             }
         }
-        .clipShape(RoundedRectangle(cornerRadius: Radius.art))
+        .clipShape(RoundedRectangle(cornerRadius: Radius.panel, style: .continuous))
         .overlay(
-            RoundedRectangle(cornerRadius: Radius.art)
+            RoundedRectangle(cornerRadius: Radius.panel, style: .continuous)
                 .stroke(artDropTargeted ? Theme.accent : (artHovered ? Theme.inkDim : Theme.panelStroke), lineWidth: artDropTargeted ? 2 : (artHovered ? 1.5 : 1))
         )
         .overlay(alignment: .bottom) {
@@ -319,7 +319,7 @@ struct ContentView: View {
                     .padding(.vertical, 4)
                     .frame(maxWidth: .infinity)
                     .background(.ultraThinMaterial.opacity(0.5))
-                    .clipShape(RoundedRectangle(cornerRadius: Radius.art - 1))
+                    .clipShape(RoundedRectangle(cornerRadius: Radius.panel - 1, style: .continuous))
             }
         }
         .onHover { h in
