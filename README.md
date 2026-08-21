@@ -7,7 +7,7 @@
 
 <div align="center">
 
-<img src="app-assets/MDECK-mac.png" width="128" alt="MDECK icon" />
+<img src="app-assets/MDECK2.png" width="128" alt="MDECK icon" />
 
 ---
 
