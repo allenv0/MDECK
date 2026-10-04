@@ -21,10 +21,6 @@
 
 <div align="center">
 
-```bash
-brew tap allenv0/mdeck && brew trust allenv0/mdeck && brew install --cask mdeck
-```
-
 </div>
 
 
