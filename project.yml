@@ -1,6 +1,6 @@
 name: MDECK
 options:
-  bundleIdPrefix: com.moerdowo
+  bundleIdPrefix: com.allenv0
   deploymentTarget:
     macOS: "14.0"
   createIntermediateGroups: true
@@ -54,7 +54,7 @@ targets:
         com.apple.security.assets.music.read-only: true
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.moerdowo.MDECK
+        PRODUCT_BUNDLE_IDENTIFIER: com.allenv0.MDECK
         PRODUCT_MODULE_NAME: MDECK
         GENERATE_INFOPLIST_FILE: NO
         COMBINE_HIDPI_IMAGES: YES
@@ -69,5 +69,5 @@ targets:
       - target: MDECK
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.moerdowo.MDECKTests
+        PRODUCT_BUNDLE_IDENTIFIER: com.allenv0.MDECKTests
         GENERATE_INFOPLIST_FILE: YES

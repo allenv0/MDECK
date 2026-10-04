@@ -840,7 +840,7 @@ final class AudioEnginePlaylistTests: XCTestCase {
             try? fm.removeItem(at: tmp.appendingPathComponent(name))
         }
         let musicDir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-            .appendingPathComponent("com.moerdowo.MDECK/Music", isDirectory: true)
+            .appendingPathComponent("com.allenv0.MDeck/Music", isDirectory: true)
         try? FileManager.default.removeItem(at: musicDir.appendingPathComponent("playlist.json"))
         Theme.current = ThemeCatalog.classic
         UserDefaults.standard.removeObject(forKey: "MDECK.volume")

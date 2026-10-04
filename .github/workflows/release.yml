@@ -1,0 +1,64 @@
+name: Release
+
+# Tag-driven release: push a tag like `v1.0.0` to build, zip, and publish MDECK.app.
+# The cask in allenv0/homebrew-mdeck points at the ZIP uploaded here.
+on:
+  push:
+    tags:
+      - "v[0-9]*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-14
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Derive version from tag
+        id: version
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          VERSION="${TAG#v}"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "zip=MDeck-${VERSION}.zip" >> "$GITHUB_OUTPUT"
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Generate project
+        run: xcodegen generate
+
+      # NOTE: builds the app target only. The scheme also contains MDECKTests,
+      # which cannot compile in Release (@testable import needs testability).
+      - name: Build Release
+        run: |
+          xcodebuild -project MDECK.xcodeproj \
+            -target MDECK \
+            -configuration Release \
+            MARKETING_VERSION="${{ steps.version.outputs.version }}" \
+            CURRENT_PROJECT_VERSION="${{ github.run_number }}" \
+            build
+
+      - name: Verify bundle
+        run: |
+          /usr/libexec/PlistBuddy -c "Print CFBundleIdentifier" build/Release/MDECK.app/Contents/Info.plist
+          codesign -dv build/Release/MDECK.app 2>&1 | head -n 5
+
+      - name: Zip and checksum
+        run: |
+          ditto -c -k --keepParent build/Release/MDECK.app "${{ steps.version.outputs.zip }}"
+          shasum -a 256 "${{ steps.version.outputs.zip }}" | tee "${{ steps.version.outputs.zip }}.sha256"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.version.outputs.tag }}" \
+            --title "MDeck ${{ steps.version.outputs.version }}" \
+            --notes "Install via Homebrew: \`brew tap allenv0/mdeck && brew install --cask mdeck\`" \
+            "${{ steps.version.outputs.zip }}" \
+            "${{ steps.version.outputs.zip }}.sha256"

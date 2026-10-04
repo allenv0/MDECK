@@ -364,7 +364,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.moerdowo.MDECK;
+				PRODUCT_BUNDLE_IDENTIFIER = com.allenv0.MDECK;
 				PRODUCT_MODULE_NAME = MDECK;
 				SDKROOT = macosx;
 			};
@@ -381,7 +381,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.moerdowo.MDECKTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.allenv0.MDECKTests;
 				SDKROOT = macosx;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MDECK.app/Contents/MacOS/MDECK";
 			};
@@ -468,7 +468,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.moerdowo.MDECK;
+				PRODUCT_BUNDLE_IDENTIFIER = com.allenv0.MDECK;
 				PRODUCT_MODULE_NAME = MDECK;
 				SDKROOT = macosx;
 			};
@@ -546,7 +546,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.moerdowo.MDECKTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.allenv0.MDECKTests;
 				SDKROOT = macosx;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MDECK.app/Contents/MacOS/MDECK";
 			};

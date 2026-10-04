@@ -47,6 +47,20 @@
 - [XcodeGen](https://github.com/yonatankra/xcodegen) (`brew install xcodegen`) to generate
   the project
 
+## Install
+
+Via Homebrew:
+
+```bash
+brew tap allenv0/mdeck
+brew trust allenv0/mdeck
+brew install --cask mdeck
+```
+
+> MDeck is ad-hoc signed (not notarized), so Gatekeeper blocks the first
+> launch. Right-click `MDECK.app` in Finder and choose **Open**, or run
+> `xattr -dr com.apple.quarantine /Applications/MDECK.app`.
+
 ## Build & run
 
 ```bash

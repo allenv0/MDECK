@@ -89,11 +89,28 @@ final class AudioEngine: ObservableObject {
 
     // MARK: - Persistence Paths
 
+    /// Application Support subdirectory for persisted audio data.
+    /// Matches the bundle identifier (`com.allenv0.MDeck`).
+    static let appSupportSubdirectory = "com.allenv0.MDeck"
+    /// Previous subdirectory inherited from the DotMP3 fork, migrated once on first launch.
+    private static let legacyAppSupportSubdirectory = "com.moerdowo.MDECK"
+
     private var musicDirectory: URL {
         let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        let dir = appSupport.appendingPathComponent("com.moerdowo.MDECK/Music", isDirectory: true)
+        let parent = appSupport.appendingPathComponent(Self.appSupportSubdirectory, isDirectory: true)
+        migrateLegacySupportDirectoryIfNeeded(appSupport: appSupport, parent: parent)
+        let dir = parent.appendingPathComponent("Music", isDirectory: true)
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true, attributes: nil)
         return dir
+    }
+
+    /// Moves data from the fork's old support directory exactly once.
+    private func migrateLegacySupportDirectoryIfNeeded(appSupport: URL, parent: URL) {
+        let fm = FileManager.default
+        guard !fm.fileExists(atPath: parent.path) else { return }
+        let legacy = appSupport.appendingPathComponent(Self.legacyAppSupportSubdirectory, isDirectory: true)
+        guard fm.fileExists(atPath: legacy.path) else { return }
+        try? fm.moveItem(at: legacy, to: parent)
     }
 
     private var playlistFile: URL {
