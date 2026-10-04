@@ -12,10 +12,17 @@ permissions:
 
 jobs:
   release:
-    runs-on: macos-14
+    # macos-15 carries a newer Xcode than macos-14; we still select the newest
+    # installed one because the xcodegen output requires a recent project format.
+    runs-on: macos-15
     steps:
       - name: Check out
         uses: actions/checkout@v4
+
+      - name: Select newest Xcode
+        run: |
+          sudo xcode-select -s "$(ls -d /Applications/Xcode*.app | sort -V | tail -n 1)"
+          xcodebuild -version
 
       - name: Derive version from tag
         id: version
