@@ -19,6 +19,14 @@
     <img src="assets/MD-Anim.gif" alt="demo animation" width="700" />
 </div>
 
+<div align="center">
+
+```bash
+brew tap allenv0/mdeck && brew trust allenv0/mdeck && brew install --cask mdeck
+```
+
+</div>
+
 
 ## New Features:
 
